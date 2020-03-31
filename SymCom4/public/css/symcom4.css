@@ -1,0 +1,37 @@
+/* Couleur de background */
+.sc4-bg-red
+{
+    background-color: #D9230F;
+}
+
+/* Couleur de background */
+.sc4-bold
+{
+    font-weight: bold;
+}
+
+/* Couleur du texte */
+.sc4-white
+{
+    color: white;
+}
+.sc4-black
+{
+    color: black;
+}
+
+/* Taille du texte */
+.sc4-size-2
+{
+    font-size: 1.2em;
+}
+
+.sc4-size-3
+{
+    font-size: 1.3em;
+}
+
+.sc4-size-4
+{
+    font-size: 1.4em;
+}

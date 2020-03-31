@@ -1,0 +1,56 @@
+{% extends '_base.html.twig' %}
+
+{% block title %}
+    {{ parent() }}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/bootstrap_simplex.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/header.css') }}">
+{% endblock %}
+
+{% block header %}
+    {{ parent() }}
+    {% include 'symcom4/partials/_header.html.twig' %}
+{% endblock %}
+
+{% block content %}
+    {{ parent() }}
+{% endblock %}
+
+{% block footer %}
+    {{ parent() }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script type="text/javascript">
+        $(window).scroll(function (event) 
+        {
+            var scroll = $(window).scrollTop();
+            if(scroll != 0)
+            {
+                $( "#header_logo" ).removeClass("sc4-header-big-logo");
+                $( "#header_logo" ).addClass("sc4-header-logo");
+                $( "#header_back" ).removeClass("sc4-header-big-background");
+                $( "#header_back" ).addClass("sc4-header-background");
+                $( "#header_body" ).addClass("sc4-header-fixe");     
+            }
+            else
+            {
+                $( "#header_logo" ).removeClass("sc4-header-logo");
+                $( "#header_logo" ).addClass("sc4-header-big-logo");
+                $( "#header_back" ).removeClass("sc4-header-background");
+                $( "#header_back" ).addClass("sc4-header-big-background");
+                $( "#header_body" ).removeClass("sc4-header-fixe");
+            }
+        }
+    );
+    
+    </script>
+    
+
+
+{% endblock %}

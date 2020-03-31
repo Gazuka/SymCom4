@@ -1,0 +1,54 @@
+/* Permet de fixer le menu en haut de la page */
+.sc4-header-fixe
+{
+    position : fixed;
+    width: 100%;
+}
+
+/* Positionnement du menu */
+#header_top
+{
+    position: relative;
+}
+
+/* Mise en forme du diaporama */
+.sc4-header-diaporama
+{
+    width: 100%;
+    height: 300px;
+    background-image: url('../templates/photo.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
+/******************************************/
+/*AJUSTEMENT POUR LES TELEPHONES **********/
+/******************************************/
+
+/* xs - telephone - <768px */
+@media (min-width: 0px) 
+{
+    #header_body_XS
+    {
+        background-color: #D9230F;
+    }
+    #header_body
+    {
+        visibility: hidden;
+    }
+    .sc4-header-guesnain
+    {
+        font-size: 1.5em;
+        color: white;
+    }
+    .sc4-header-logo
+    {
+        background-image: url('../templates/logo_guesnain.jpg');
+        background-size: contain;
+        background-position: right;
+        background-repeat: no-repeat;
+        width: 50px;;
+        height: 50px;
+    }
+}
