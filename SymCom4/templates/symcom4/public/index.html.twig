@@ -1,4 +1,4 @@
-{% extends 'symcom4/partials/_base_public.html.twig' %}
+{% extends 'symcom4/public/partials/_base_public.html.twig' %}
 
 {% block title %}
     {{ parent() }} - Accueil
@@ -14,6 +14,11 @@
 
 {% block content %}
     {{ parent() }}
+    {# Zone avec le diaporama #}
+    <div class="row">
+        <div class="col-12 sc4-header-diaporama"></div>
+    </div>
+     <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
 {% endblock %}
 
 {% block footer %}
@@ -22,4 +27,5 @@
 
 {% block javascripts %}
     {{ parent() }}
+    <script type="text/javascript" src="{{asset('js/public/header_accueil.js')}}"></script>
 {% endblock %}

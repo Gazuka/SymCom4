@@ -1,0 +1,62 @@
+{% extends 'symcom4/admin/partials/_base_admin.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - Associations
+{% endblock %}
+
+{% block content %}
+
+<div class="row mb-3">
+    <div class="col-4">
+        <div class="card">
+            <div class="card-body">
+                Nombre d'associations : <strong>{{ associations | length }}</strong>
+            </div>
+        </div>
+    </div>
+    <div class="col-8">
+        <div class="card">
+            <div class="card-body">
+                {% include 'symcom4/admin/partials/_liensrapides.html.twig' %}  
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                
+                <table class="table">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Nom</th>
+                            <th scope="col">Sigle</th>
+                            <th scope="col">Descriptif</th>
+                            <th scope="col">Guesninoise</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for association in associations %}
+                            <tr>
+                                <td>{{ association.id }}</td>
+                                <td>{{ association.structure.nom }}</td>
+                                <td>{{ association.sigle }}</td>
+                                <td>{{ association.structure.presentation }}</td>
+                                <td>{% if association.structure.local == true %}OUI{% else %}NON{% endif %}</td>
+                                <td>
+                                    <a class="btn btn-primary" href="{{ path('admin_association_edit', {'id': association.id}) }}"><i class="fas fa-edit"></i> Modifier</a>
+                                    <a class="btn btn-danger" href="{{ path('admin_association_delete', {'id': association.id}) }}"><i class="fas fa-trash"></i> Supprimer</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

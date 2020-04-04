@@ -1,0 +1,30 @@
+{% extends '_base.html.twig' %}
+
+{% block title %}
+    {{ parent() }}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/public/bootstrap_simplex.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/public/header.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="container-fluid p-0">
+        <header id="header">
+            {% include 'symcom4/public/partials/_header.html.twig' %}
+            {% block header %}{% endblock %}
+        </header>
+        <section id="content">
+            {% block content %}{% endblock %}
+        </content>
+        <footer>
+            {% block footer %}{% endblock %}
+        </footer>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

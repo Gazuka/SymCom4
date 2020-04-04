@@ -10,11 +10,7 @@
         
     </head>
     <body>
-        <div class="container-fluid p-0">
-            <header>{% block header %}{% endblock %}</header>
-            <content>{% block content %}{% endblock %}</content>
-            <footer>{% block footer %}{% endblock %}</footer>
-        </div>
+        {% block body %}{% endblock %}
 
         <script src="{{ asset('js/jquery.min.js') }}"></script>
         <script src="{{ asset('js/bootstrap.min.js') }}"></script>

@@ -1,0 +1,22 @@
+{% extends 'symcom4/admin/partials/_base_admin.html.twig' %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-body">
+            <h1 class="h4">Création d'une nouvelle association</h1>
+            <p>Veuillez compléter le formulaire ci-dessous :</p>
+            {{ form_start(form) }}
+            {{ form_row(form.type) }}
+            {{ form_row(form.structure.nom) }}
+            {{ form_row(form.sigle) }}
+            {{ form_row(form.structure.presentation) }}
+            {{ form_row(form.structure.local) }}
+            {{ form_widget(form.structure.lien) }}
+            
+            <button type="submit" class="btn btn-success">
+                <i class="fas fa-check"></i> Enregistrer
+            </button>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}
