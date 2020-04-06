@@ -40,14 +40,6 @@ class NewStructureType extends AbstractType
             [
                 'required' => false
             ])
-            /*->add('image', EntityType::class,
-            [
-                'class' => Image::class,
-                'choice_label' => 'media.recupAsset',
-                'expanded' => true,
-                'multiple' => false,
-                'required' => false
-            ])*/
             ->add('image', EntityType::class,
             [
                 'class' => Image::class,

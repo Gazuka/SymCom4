@@ -29,11 +29,6 @@ class Contact
     private $adresse;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $titre;
-
-    /**
      * @ORM\OneToOne(targetEntity="App\Entity\Mail", mappedBy="contact", cascade={"persist", "remove"})
      */
     private $mail;
@@ -44,7 +39,7 @@ class Contact
     private $telephone;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Lieu", mappedBy="contacts")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Lieu", mappedBy="contacts", cascade={"persist", "remove"})
      */
     private $lieux;
 
@@ -107,18 +102,6 @@ class Contact
         if ($adresse->getContact() !== $this) {
             $adresse->setContact($this);
         }
-
-        return $this;
-    }
-
-    public function getTitre(): ?string
-    {
-        return $this->titre;
-    }
-
-    public function setTitre(string $titre): self
-    {
-        $this->titre = $titre;
 
         return $this;
     }
@@ -295,5 +278,23 @@ class Contact
         }
 
         return $this;
+    }
+
+    public function getType()
+    {
+        $type = null;
+        if($this->mail != null)
+        {
+            $type = 'mail';
+        }
+        if($this->telephone != null)
+        {
+            $type = 'telephone';
+        }
+        if($this->adresse != null)
+        {
+            $type = 'adresse';
+        }
+        return $type;
     }
 }

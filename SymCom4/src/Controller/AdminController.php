@@ -80,7 +80,7 @@ class AdminController extends SymCom4Controller
         $variables['request'] = $request;
         $variables['manager'] = $manager;
         $variables['element'] = $service;
-        $variables['classType'] = newServiceType::class;
+        $variables['classType'] = NewServiceType::class;
         $variables['pagedebase'] = 'symcom4/admin/services/new_service.html.twig';
         $variables['pagederesultat'] = 'admin_services';
         $variables['texteConfirmation'] = "Le service ### a bien été modifié !"; 

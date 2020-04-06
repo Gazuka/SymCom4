@@ -29,11 +29,6 @@ class Humain
     private $prenom;
 
     /**
-     * @ORM\Column(type="boolean", nullable=true)
-     */
-    private $sexe;
-
-    /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Contact", inversedBy="humains")
      */
     private $contacts;
@@ -47,6 +42,11 @@ class Humain
      * @ORM\OneToOne(targetEntity="App\Entity\Image", inversedBy="humain", cascade={"persist", "remove"})
      */
     private $photo;
+
+    /**
+     * @ORM\Column(type="string", length=1)
+     */
+    private $sexe;
 
     public function __construct()
     {
@@ -79,18 +79,6 @@ class Humain
     public function setPrenom(?string $prenom): self
     {
         $this->prenom = $prenom;
-
-        return $this;
-    }
-
-    public function getSexe(): ?bool
-    {
-        return $this->sexe;
-    }
-
-    public function setSexe(?bool $sexe): self
-    {
-        $this->sexe = $sexe;
 
         return $this;
     }
@@ -160,6 +148,18 @@ class Humain
     public function setPhoto(?Image $photo): self
     {
         $this->photo = $photo;
+
+        return $this;
+    }
+
+    public function getSexe(): ?string
+    {
+        return $this->sexe;
+    }
+
+    public function setSexe(string $sexe): self
+    {
+        $this->sexe = $sexe;
 
         return $this;
     }

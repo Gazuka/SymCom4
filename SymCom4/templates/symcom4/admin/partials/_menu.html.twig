@@ -39,6 +39,14 @@
                     <li><a href="{{ path('admin_medias') }}"><i class="far fa-eye"></i> Voir les médias</a></li>
                     <li><a href="{{ path('admin_medias_dossiers') }}"><i class="far fa-eye"></i> Voir les dossiers</a></li>
                 </ul>
+
+                <li  data-toggle="collapse" data-target="#sc4-humains" class="collapsed active">
+                  <a href="#"><i class="fa fa-gift fa-lg"></i> Personnes <span class="arrow"></span></a>
+                </li>
+                
+                <ul class="sub-menu collapse" id="sc4-humains">
+                    <li><a href="{{ path('admin_humains') }}"><i class="far fa-eye"></i> Voir les personnes</a></li>
+                </ul>
 {#
                 <li  data-toggle="collapse" data-target="#products" class="collapsed active">
                   <a href="#"><i class="fa fa-gift fa-lg"></i> UI Elements <span class="arrow"></span></a>

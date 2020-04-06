@@ -54,6 +54,11 @@ class SymCom4Controller extends OutilsController
                 $this->addLienRapide('admin_medias_dossier_new', 'Ajouter un dossier', 'success', 'fas fa-plus');
                 $this->addLienRapide('admin_medias_new', 'Ajouter un média', 'success', 'fas fa-plus');
             break;
+            case 'humains':
+                $this->defineParamTwig('nav_titre', 'Personnes');
+                //Création d'un lien vers la page Nouveau dossier
+                $this->addLienRapide('admin_humain_new', 'Ajouter une personne', 'success', 'fas fa-plus');
+            break;
             default:
                 $this->defineParamTwig('nav_titre', '');
             break;
