@@ -48,17 +48,11 @@ class SymCom4Controller extends OutilsController
                 //Création d'un lien vers la page Nouveau type d'association
                 $this->addLienRapide('admin_associations_type_new', "Ajouter un type d'association", 'success', 'fas fa-plus');
             break;
-            case 'associations':
-                $this->defineParamTwig('nav_titre', 'Les associations');
-                //Création d'un lien vers la page Nouvelle association
-                $this->addLienRapide('admin_association_new', 'Ajouter une association', 'success', 'fas fa-plus');
-                //Création d'un lien vers la page Nouveau type d'association
-                $this->addLienRapide('admin_associations_type_new', "Ajouter un type d'association", 'success', 'fas fa-plus');
-            break;
             case 'medias':
                 $this->defineParamTwig('nav_titre', 'Médias');
                 //Création d'un lien vers la page Nouveau dossier
                 $this->addLienRapide('admin_medias_dossier_new', 'Ajouter un dossier', 'success', 'fas fa-plus');
+                $this->addLienRapide('admin_medias_new', 'Ajouter un média', 'success', 'fas fa-plus');
             break;
             default:
                 $this->defineParamTwig('nav_titre', '');

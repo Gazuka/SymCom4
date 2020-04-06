@@ -47,7 +47,7 @@ class Lien
     private $page;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Structure", mappedBy="site", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="App\Entity\Structure", mappedBy="lien", cascade={"persist", "remove"})
      */
     private $structure;
 
@@ -100,7 +100,10 @@ class Lien
     public function setUrl(?string $url): self
     {
         $this->url = $url;
-
+        if($this->label == null)
+        {
+            $this->label = $url;
+        }
         return $this;
     }
 

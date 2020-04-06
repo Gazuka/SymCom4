@@ -61,12 +61,12 @@ class Structure
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\Lien", inversedBy="structure", cascade={"persist", "remove"})
      */
-    private $site;
+    private $lien;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Illustration", inversedBy="structures")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Image", inversedBy="structures")
      */
-    private $illustration;
+    private $image;
 
     public function __construct()
     {
@@ -223,26 +223,26 @@ class Structure
         return $this;
     }
 
-    public function getSite(): ?Lien
+    public function getLien(): ?Lien
     {
-        return $this->site;
+        return $this->lien;
     }
 
-    public function setSite(?Lien $site): self
+    public function setLien(?Lien $lien): self
     {
-        $this->site = $site;
+        $this->lien = $lien;
 
         return $this;
     }
 
-    public function getIllustration(): ?Illustration
+    public function getImage(): ?Image
     {
-        return $this->illustration;
+        return $this->image;
     }
 
-    public function setIllustration(?Illustration $illustration): self
+    public function setImage(?Image $image): self
     {
-        $this->illustration = $illustration;
+        $this->image = $image;
 
         return $this;
     }

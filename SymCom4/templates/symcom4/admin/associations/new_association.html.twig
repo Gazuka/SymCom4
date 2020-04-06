@@ -13,6 +13,22 @@
             {{ form_row(form.structure.local) }}
             {{ form_widget(form.structure.lien) }}
             
+            <div class="row">
+                {% for image in form.structure.image %}
+                    <div class="col-2">
+                        {% if image.vars.label != 'None' %}
+                            <img class="col-12" src="{{ asset(image.vars.label) }}" alt="vignette">
+                        {% else %}
+                            <img class="col-12" src="" alt="Image par defaut">
+                        {% endif %}
+                        {{ form_widget(image) }}
+                    </div>
+                {% endfor %}
+            </div>
+            
+            
+
+
             <button type="submit" class="btn btn-success">
                 <i class="fas fa-check"></i> Enregistrer
             </button>

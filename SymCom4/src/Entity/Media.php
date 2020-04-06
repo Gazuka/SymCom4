@@ -2,9 +2,12 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use DateTime;
+use App\Entity\Image;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Filesystem\Filesystem;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\MediaRepository")
@@ -32,7 +35,7 @@ class Media
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $entension;
+    private $extension;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -50,9 +53,9 @@ class Media
     private $public;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Image", mappedBy="media", orphanRemoval=true)
+     * @ORM\OneToOne(targetEntity="App\Entity\Image", mappedBy="media", cascade={"persist", "remove"})
      */
-    private $images;
+    private $image;
 
     public function __construct()
     {
@@ -76,26 +79,26 @@ class Media
         return $this;
     }
 
-    public function getNom(): ?string
+    public function getNom()
     {
         return $this->nom;
     }
 
-    public function setNom(string $nom): self
+    public function setNom($nom): self
     {
         $this->nom = $nom;
 
         return $this;
     }
 
-    public function getEntension(): ?string
+    public function getExtension(): ?string
     {
-        return $this->entension;
+        return $this->extension;
     }
 
-    public function setEntension(string $entension): self
+    public function setExtension(string $extension): self
     {
-        $this->entension = $entension;
+        $this->extension = $extension;
 
         return $this;
     }
@@ -136,34 +139,77 @@ class Media
         return $this;
     }
 
-    /**
-     * @return Collection|Image[]
-     */
-    public function getImages(): Collection
+    public function getImage(): ?Image
     {
-        return $this->images;
+        return $this->image;
     }
 
-    public function addImage(Image $image): self
+    public function setImage(Image $image): self
     {
-        if (!$this->images->contains($image)) {
-            $this->images[] = $image;
+        $this->image = $image;
+
+        // set the owning side of the relation if necessary
+        if ($image->getMedia() !== $this) {
             $image->setMedia($this);
         }
 
         return $this;
     }
 
-    public function removeImage(Image $image): self
+    public function upload($dossiers)
     {
-        if ($this->images->contains($image)) {
-            $this->images->removeElement($image);
-            // set the owning side to null (unless already changed)
-            if ($image->getMedia() === $this) {
-                $image->setMedia(null);
-            }
+        $fichier = $this->getNom();
+
+        $this->nom = strtolower($fichier->getClientOriginalName());
+        $this->extension = $fichier->getClientOriginalExtension();
+        $now = new DateTime(); 
+        $now->format('Y-m-d H:i:s'); 
+        $this->date = $now;
+        if($this->titre == null)
+        {
+            $this->titre = $this->nom;
+        } 
+
+        switch($this->extension)
+        {
+            case 'jpg':
+            case 'jpeg':
+                //On enregistre une image
+                $image = new Image();
+                $image->setDescriptif("...");
+                $this->setImage($image);
+                $this->setDossier($dossiers['dossierImages']);
+                
+            break;
+            case 'pdf':
+                //On enregistre un pdf
+            break;
+            default:
+                //Type de fichier inconnu
+            break;
         }
 
-        return $this;
+        $this->nom = $now->getTimestamp().$this->nom;
+        $fichier->move(str_replace ( "/", "\\", getcwd()."\medias\\".$this->dossier->getChemin()), $this->nom);
+    }
+
+    public function recupAsset()
+    {
+        return 'medias/'.$this->dossier->getChemin().$this->nom;
+    }
+
+    public function deplacer($dossier)
+    {
+        //On créer un fichier Filesystem
+        $filesystem = new Filesystem();
+        //On récupére le dossier actuel du fichier
+        $dossierActuel = $this->dossier->getChemin();
+        //On récupére le chemin actuel du fichier
+        $fichier = $this->recupAsset();
+        //On défini le nouveau dossier
+        $this->setDossier($dossier);
+        //On copy le fichier puis on le supprime
+        $filesystem->copy($fichier, "medias/".$this->dossier->getChemin().$this->nom);
+        $filesystem->remove($fichier, $dossierActuel);
     }
 }

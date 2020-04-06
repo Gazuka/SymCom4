@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -17,12 +19,6 @@ class Image
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Media", inversedBy="images")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $media;
-
-    /**
      * @ORM\Column(type="string", length=255)
      */
     private $descriptif;
@@ -32,21 +28,35 @@ class Image
      */
     private $illustration;
 
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Media", inversedBy="image", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $media;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Structure", mappedBy="image")
+     */
+    private $structures;
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Humain", mappedBy="photo", cascade={"persist", "remove"})
+     */
+    private $humain;
+
+    public function __construct()
+    {
+        $this->structures = new ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return $this->media->getTitre();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getMedia(): ?Media
-    {
-        return $this->media;
-    }
-
-    public function setMedia(?Media $media): self
-    {
-        $this->media = $media;
-
-        return $this;
     }
 
     public function getDescriptif(): ?string
@@ -73,6 +83,67 @@ class Image
         // set the owning side of the relation if necessary
         if ($illustration->getImage() !== $this) {
             $illustration->setImage($this);
+        }
+
+        return $this;
+    }
+
+    public function getMedia(): ?Media
+    {
+        return $this->media;
+    }
+
+    public function setMedia(Media $media): self
+    {
+        $this->media = $media;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Structure[]
+     */
+    public function getStructures(): Collection
+    {
+        return $this->structures;
+    }
+
+    public function addStructure(Structure $structure): self
+    {
+        if (!$this->structures->contains($structure)) {
+            $this->structures[] = $structure;
+            $structure->setImage($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStructure(Structure $structure): self
+    {
+        if ($this->structures->contains($structure)) {
+            $this->structures->removeElement($structure);
+            // set the owning side to null (unless already changed)
+            if ($structure->getImage() === $this) {
+                $structure->setImage(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getHumain(): ?Humain
+    {
+        return $this->humain;
+    }
+
+    public function setHumain(?Humain $humain): self
+    {
+        $this->humain = $humain;
+
+        // set (or unset) the owning side of the relation if necessary
+        $newPhoto = null === $humain ? null : $this;
+        if ($humain->getPhoto() !== $newPhoto) {
+            $humain->setPhoto($newPhoto);
         }
 
         return $this;

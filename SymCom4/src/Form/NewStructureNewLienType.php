@@ -6,7 +6,7 @@ use App\Entity\Lien;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 class NewStructureNewLienType extends AbstractType
@@ -16,7 +16,7 @@ class NewStructureNewLienType extends AbstractType
         $builder
             //->add('label')
             //->add('fontAwesome')
-            ->add('url', TextType::class,
+            ->add('url', UrlType::class,
             [
                 'label' => "Adresse complète du site Internet :"
             ])

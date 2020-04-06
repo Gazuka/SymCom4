@@ -2,9 +2,10 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Filesystem\Filesystem;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\DossierRepository")
@@ -167,5 +168,12 @@ class Dossier
         }
         $chemin .= $this->titre."/";
         return strtolower($chemin);
+    }
+
+    public function creerDossierPhysique()
+    {
+        $filesystem = new Filesystem();
+        $current_dir_path = getcwd();
+        $filesystem->mkdir($current_dir_path.'/medias/'.$this->getChemin());
     }
 }

@@ -24,11 +24,6 @@ class Illustration
      */
     private $image;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Structure", mappedBy="illustration")
-     */
-    private $structures;
-
     public function __construct()
     {
         $this->structures = new ArrayCollection();
@@ -51,34 +46,5 @@ class Illustration
         return $this;
     }
 
-    /**
-     * @return Collection|Structure[]
-     */
-    public function getStructures(): Collection
-    {
-        return $this->structures;
-    }
-
-    public function addStructure(Structure $structure): self
-    {
-        if (!$this->structures->contains($structure)) {
-            $this->structures[] = $structure;
-            $structure->setIllustration($this);
-        }
-
-        return $this;
-    }
-
-    public function removeStructure(Structure $structure): self
-    {
-        if ($this->structures->contains($structure)) {
-            $this->structures->removeElement($structure);
-            // set the owning side to null (unless already changed)
-            if ($structure->getIllustration() === $this) {
-                $structure->setIllustration(null);
-            }
-        }
-
-        return $this;
-    }
+    
 }

@@ -2,10 +2,13 @@
 
 namespace App\Form;
 
+use App\Entity\Image;
 use App\Entity\Structure;
+use App\Repository\ImageRepository;
 use App\Form\NewStructureNewLienType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -15,6 +18,9 @@ class NewStructureType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        /*$repoImage = $this->getDoctrine()->getRepository(Image::class);
+        $imagesDispos = $repoImage->findAll();*/
+
         $builder
             ->add('nom', TextType::class,
             [
@@ -28,9 +34,32 @@ class NewStructureType extends AbstractType
             [
                 'label_attr' => ['class' => 'switch-custom'],
                 'label' => "Cette structure est Guesninoise.",
+                'required' => false
             ])
             ->add('lien', NewStructureNewLienType::class,
-            [])
+            [
+                'required' => false
+            ])
+            /*->add('image', EntityType::class,
+            [
+                'class' => Image::class,
+                'choice_label' => 'media.recupAsset',
+                'expanded' => true,
+                'multiple' => false,
+                'required' => false
+            ])*/
+            ->add('image', EntityType::class,
+            [
+                'class' => Image::class,
+                'choice_label' => 'media.recupAsset',
+                'expanded' => true,
+                'multiple' => false,
+                'required' => false,
+                'query_builder' => function (ImageRepository $repo)
+                {
+                    return $repo->form_FindAll('images');
+                }
+            ])
             //->add('contacts')
         ;
     }

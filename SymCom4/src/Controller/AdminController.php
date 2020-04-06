@@ -9,6 +9,7 @@ use App\Entity\TypeAssociation;
 use App\Form\NewAssociationType;
 use App\Form\NewTypeAssociationType;
 use App\Controller\SymCom4Controller;
+use App\Repository\DossierRepository;
 use App\Repository\ServiceRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\AssociationRepository;
@@ -123,8 +124,10 @@ class AdminController extends SymCom4Controller
     /**
      * @Route("/admin/association/new", name="admin_association_new")
      */
-    public function newAssociation(Request $request, EntityManagerInterface $manager):Response
+    public function newAssociation(Request $request, EntityManagerInterface $manager, DossierRepository $repoDossier):Response
     {
+        $dossierAssociations = $repoDossier->findOneBy(['titre' => 'associations']);
+
         //Préparation et traitement du formulaire
         $variables['request'] = $request;
         $variables['manager'] = $manager;
@@ -134,6 +137,9 @@ class AdminController extends SymCom4Controller
         $variables['pagederesultat'] = 'admin_associations';
         $variables['texteConfirmation'] = "L'association ### a bien été créé !"; 
         $options['texteConfirmationEval'] = ["###" => '$element->getStructure()->getNom();'];
+        $options['actions'] = array(['name' => 'action_newStructure', 'params' => []], ['name' => 'action_newAssociation', 'params' => ['dossierAssociations' => $dossierAssociations]]);
+        
+
         $this->afficherFormulaire($variables, $options);
         //Prépare le Twig
         $this->initTwig('associations');
@@ -156,6 +162,7 @@ class AdminController extends SymCom4Controller
         $variables['pagederesultat'] = 'admin_associations';
         $variables['texteConfirmation'] = "L'association ### a bien été modifié !"; 
         $options['texteConfirmationEval'] = ["###" => '$element->getStructure()->getNom();'];
+        $options['actions'] = array(['name' => 'action_newStructure', 'params' => []]);
         $this->afficherFormulaire($variables, $options);
         //Prépare le Twig
         $this->initTwig('associations');
@@ -247,5 +254,29 @@ class AdminController extends SymCom4Controller
         $this->initTwig('associations');
         //Affiche la redirection
         return $this->Afficher();
+    }
+
+    protected function action_newStructure($structureChild, $params, $request)
+    {
+        $structure = $structureChild->getStructure();
+        if($structure->getLien() != null)
+        {
+            if($structure->getLien()->getLabel() == null)
+            {
+                $structure->setLien(null);
+            }
+        }
+        return $structureChild;
+    }
+
+    protected function action_newAssociation($association, $params, $request)
+    {
+        $dossier = $params['dossierAssociations'];
+        //On recupere le media
+        $media = $association->getStructure()->getImage()->getMedia();
+        //On change son dossier
+        $media->deplacer($dossier, $request);
+        //On déplace le média
+        return $association;
     }
 }

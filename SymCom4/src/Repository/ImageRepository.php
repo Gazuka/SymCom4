@@ -22,19 +22,18 @@ class ImageRepository extends ServiceEntityRepository
     // /**
     //  * @return Image[] Returns an array of Image objects
     //  */
-    /*
-    public function findByExampleField($value)
+    
+    public function form_findAll($dossierTitre)
     {
-        return $this->createQueryBuilder('i')
-            ->andWhere('i.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('i.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
+        return $this->createQueryBuilder('image')
+            ->join('image.media', 'media')
+            ->join('media.dossier', 'dossier')
+            ->Where("dossier.titre = '".$dossierTitre."'")
+            ->orderBy('image.id', 'ASC')
+            //->getQuery()
+            //->getResult()
         ;
     }
-    */
 
     /*
     public function findOneBySomeField($value): ?Image

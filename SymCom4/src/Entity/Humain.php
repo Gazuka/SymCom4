@@ -29,11 +29,6 @@ class Humain
     private $prenom;
 
     /**
-     * @ORM\Column(type="date", nullable=true)
-     */
-    private $dateNaissance;
-
-    /**
      * @ORM\Column(type="boolean", nullable=true)
      */
     private $sexe;
@@ -47,6 +42,11 @@ class Humain
      * @ORM\OneToMany(targetEntity="App\Entity\Responsable", mappedBy="humain", orphanRemoval=true)
      */
     private $responsables;
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Image", inversedBy="humain", cascade={"persist", "remove"})
+     */
+    private $photo;
 
     public function __construct()
     {
@@ -79,18 +79,6 @@ class Humain
     public function setPrenom(?string $prenom): self
     {
         $this->prenom = $prenom;
-
-        return $this;
-    }
-
-    public function getDateNaissance(): ?\DateTimeInterface
-    {
-        return $this->dateNaissance;
-    }
-
-    public function setDateNaissance(?\DateTimeInterface $dateNaissance): self
-    {
-        $this->dateNaissance = $dateNaissance;
 
         return $this;
     }
@@ -160,6 +148,18 @@ class Humain
                 $responsable->setHumain(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPhoto(): ?Image
+    {
+        return $this->photo;
+    }
+
+    public function setPhoto(?Image $photo): self
+    {
+        $this->photo = $photo;
 
         return $this;
     }

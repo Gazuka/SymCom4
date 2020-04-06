@@ -187,7 +187,6 @@ abstract class OutilsController extends AbstractController
         return $element;
     }
 
-    
     /* ====================================================================================================== */
 
     /** Permet de dynamiser des emplacements spécifiques d'un message
