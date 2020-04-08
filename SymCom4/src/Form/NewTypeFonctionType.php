@@ -2,28 +2,25 @@
 
 namespace App\Form;
 
-use App\Entity\Telephone;
+use App\Entity\TypeFonction;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\TelType;
 
-class NewTelephoneHumainType extends AbstractType
+class NewTypeFonctionType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('numero', TelType::class)
-            ->add('contact', NewContactType::class,
-            [
-            ])
+            ->add('titre')
+            ->add('titreFeminin')
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Telephone::class,
+            'data_class' => TypeFonction::class,
         ]);
     }
 }

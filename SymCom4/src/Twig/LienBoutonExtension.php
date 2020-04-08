@@ -9,7 +9,11 @@ class LienBoutonExtension extends AbstractExtension
 {
     public function getFilters()
     {
-        return [new TwigFilter('LienBouton', [$this, 'afficheLienBouton'], ['is_safe' => ['html', 'twig']])];
+        return [
+            new TwigFilter('LienBouton', [$this, 'afficheLienBouton'], ['is_safe' => ['html', 'twig']]),
+            new TwigFilter('ModifierBouton', [$this, 'afficheModifierBouton'], ['is_safe' => ['html', 'twig']]),
+            new TwigFilter('SupprimerBouton', [$this, 'afficheSupprimerBouton'], ['is_safe' => ['html', 'twig']])
+        ];
     }
 
     public function afficheLienBouton($lien)
@@ -54,5 +58,17 @@ class LienBoutonExtension extends AbstractExtension
         $html = "<a class='btn btn-%s' href='%s'>%s %s</a>";
         
         return \sprintf($html, $couleur, $url, $logo, $label);
+    }
+
+    public function afficheModifierBouton($url)
+    {
+        $html = "<a class='btn btn-primary' href='".$url."'><i class='fas fa-edit'></i> Modifier</a>";
+        return $html;
+    }
+
+    public function afficheSupprimerBouton($url)
+    {
+        $html = "<a class='btn btn-danger' href='".$url."'><i class='fas fa-trash'></i> Supprimer</a>";
+        return $html;
     }
 }

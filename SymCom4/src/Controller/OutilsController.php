@@ -18,6 +18,7 @@ abstract class OutilsController extends AbstractController
     protected $paramTwig = array();
     protected $redirect;
     protected $paramRedirect = array();
+    protected $pageService = null;
 
     /** Création d'un formulaire pour un nouveau element (objet entity)
      * 
@@ -287,6 +288,11 @@ abstract class OutilsController extends AbstractController
      */
     protected function Afficher():Response
     {
+        //Si un objet page est défini, on l'enregistre
+        if($this->pageService != null)
+        {
+            $this->pageService->Enregistrer();
+        }
         if($this->redirect != null)
         {
             return $this->redirectToRoute($this->redirect, $this->paramRedirect);

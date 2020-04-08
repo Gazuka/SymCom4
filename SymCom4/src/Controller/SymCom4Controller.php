@@ -3,7 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\Lien;
+use App\Entity\Mail;
 use App\Entity\Page;
+use App\Entity\Adresse;
+use App\Entity\Telephone;
+use App\Form\NewMailType;
+use App\Form\NewAdresseType;
+use App\Form\NewTelephoneType;
 use App\Controller\OutilsController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -36,17 +42,22 @@ class SymCom4Controller extends OutilsController
         //Prépare les données suivant la categorie
         switch($categ)
         {
-            case 'services':
+            case 'service':
                 $this->defineParamTwig('nav_titre', 'Les services');
                 //Création d'un lien vers la page Nouveau service
-                $this->addLienRapide('admin_service_new', 'Ajouter un service', 'success', 'fas fa-plus');
+                $this->addLienRapide('admin_structures_service_new', 'Ajouter un service', 'success', 'fas fa-plus');
             break;
             case 'associations':
                 $this->defineParamTwig('nav_titre', 'Les associations');
                 //Création d'un lien vers la page Nouvelle association
-                $this->addLienRapide('admin_association_new', 'Ajouter une association', 'success', 'fas fa-plus');
+                $this->addLienRapide('admin_structures_association_new', 'Ajouter une association', 'success', 'fas fa-plus');
                 //Création d'un lien vers la page Nouveau type d'association
-                $this->addLienRapide('admin_associations_type_new', "Ajouter un type d'association", 'success', 'fas fa-plus');
+                $this->addLienRapide('admin_structures_associations_type_new', "Ajouter un type d'association", 'success', 'fas fa-plus');
+            break;
+            case 'fonctions':
+                $this->defineParamTwig('nav_titre', 'Les fonctions');
+                //Création d'un lien vers la page nouveau type de fonction
+                $this->addLienRapide('admin_fonctions_type_new', "Ajouter un type de fonction", 'success', 'fas fa-plus');
             break;
             case 'medias':
                 $this->defineParamTwig('nav_titre', 'Médias');
@@ -88,5 +99,65 @@ class SymCom4Controller extends OutilsController
         $lien->setFontAwesome($icon);
         $lien->setPage($page);
         array_push($this->liensRapides, $lien);
+    }
+
+    /**
+     * Factorisation pour l'ajout d'un contact suivant le type
+     *
+     * @param [type] $type
+     * @return array
+     */
+    protected function factor_addcontact($type):array
+    {
+        //A utiliser avant l'ajout des autres "$variables[]" !
+        switch($type)
+        {
+            case 'tel':
+                $tel = new Telephone();
+                $variables['classType'] = NewTelephoneType::class;
+                $variables['element'] = $tel;
+            break;
+            case 'mail':
+                $mail = new Mail();
+                $variables['classType'] = NewMailType::class;
+                $variables['element'] = $mail;
+            break;
+            case 'adresse':
+                $adresse = new Adresse();
+                $variables['classType'] = NewAdresseType::class;
+                $variables['element'] = $adresse;
+            break;
+        }  
+
+        return $variables;
+    }
+
+    /**
+     * Factorisation pour l'edit d'un contact suivant le type
+     *
+     * @param [type] $type
+     * @return array
+     */
+    protected function factor_editContact($contact, $objet):array
+    {
+        //A utiliser avant l'ajout des autres "$variables[]" !
+        $type = $contact->getType();
+        switch($type)
+        {
+            case 'telephone':
+                $variables['classType'] = NewTelephoneType::class;
+                $variables['element'] = $contact->getTelephone();
+            break;
+            case 'mail':
+                $variables['classType'] = NewMailType::class;
+                $variables['element'] = $contact->getMail();
+            break;
+            case 'adresse':
+                $variables['classType'] = NewAdresseType::class;
+                $variables['element'] = $contact->getAdresse();
+            break;
+        }  
+        $this->defineParamTwig('type', $type);
+        return $variables;
     }
 }

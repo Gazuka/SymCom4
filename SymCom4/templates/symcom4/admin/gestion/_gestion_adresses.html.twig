@@ -1,0 +1,40 @@
+{% extends 'symcom4/admin/_text.html.twig' %}
+{% block all %}
+    <div class="card mb-3"> 
+        <div class="card-body">
+            <h5 class="card-title">{{ text_service_contact_adresse }}</h5>
+            {% if adresses|length > 0 %}
+                <table class="table">
+                    <thead class="thead-light">
+                        <tr>
+                            <th style="width:5%;" scope="col">{{ text_id }}</th>
+                            <th style="width:50%;" scope="col">{{ text_service_contact_adresse_adresse }}</th>
+                            <th style="width:45%;" scope="col">{{ text_actions }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for adresse in adresses %}
+                            <tr>
+                                <td>{{ adresse.id }}</td>
+                                <td>
+                                    <address>
+                                        {{ adresse.numero }} {{ adresse.rue }}<br>
+                                        {{ adresse.complement }} {% if adresse.complement != null %}<br>{% endif %}
+                                        {{ adresse.codePostal }} {{ adresse.ville }}
+                                    </address>
+                                </td>
+                                <td>
+                                    {{ path('admin_structure_editcontact', {'idstructure': parent.id, 'idcontact': adresse.contact.id, 'idpage': idPage }) | ModifierBouton }}
+                                    {{ path('admin_structure_deletecontact', {'idstructure': parent.id, 'idcontact': adresse.contact.id}) | SupprimerBouton }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p class="text-danger">{{ text_no_adresse }}</p>
+            {% endif %}
+            {{ path('admin_structure_addcontact', {'id': parent.id, 'type': 'adresse'}) | AddContacts('adresse', text_add_adresse)}}
+        </div>
+    </div>
+{% endblock %}

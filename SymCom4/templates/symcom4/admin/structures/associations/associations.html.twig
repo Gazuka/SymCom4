@@ -36,6 +36,7 @@
                             <th scope="col">Sigle</th>
                             <th scope="col">Descriptif</th>
                             <th scope="col">Guesninoise</th>
+                            <th scope="col">Contacts</th>
                             <th scope="col">Actions</th>
                         </tr>
                     </thead>
@@ -47,9 +48,13 @@
                                 <td>{{ association.sigle }}</td>
                                 <td>{{ association.structure.presentation }}</td>
                                 <td>{% if association.structure.local == true %}OUI{% else %}NON{% endif %}</td>
+                                <td>{{ association.structure.contacts | NbrContacts }}</td>
                                 <td>
-                                    <a class="btn btn-primary" href="{{ path('admin_association_edit', {'id': association.id}) }}"><i class="fas fa-edit"></i> Modifier</a>
-                                    <a class="btn btn-danger" href="{{ path('admin_association_delete', {'id': association.id}) }}"><i class="fas fa-trash"></i> Supprimer</a>
+                                    {{ path('admin_structure_addcontact', {'id': association.structure.id, 'type': 'tel'}) | AddContacts('tel')}}
+                                    {{ path('admin_structure_addcontact', {'id': association.structure.id, 'type': 'mail'}) | AddContacts('mail')}}
+                                    {{ path('admin_structure_addcontact', {'id': association.structure.id, 'type': 'adresse'}) | AddContacts('adresse')}}
+                                    {{ path('admin_structures_association_edit', {'id': association.id}) | ModifierBouton }}
+                                    {{ path('admin_structures_association_delete', {'id': association.id}) | SupprimerBouton }}
                                 </td>
                             </tr>
                         {% endfor %}

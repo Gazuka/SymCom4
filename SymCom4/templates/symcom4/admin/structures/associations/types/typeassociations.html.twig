@@ -1,7 +1,7 @@
 {% extends 'symcom4/admin/partials/_base_admin.html.twig' %}
 
 {% block title %}
-    {{ parent() }} - Services
+    {{ parent() }} - Associations
 {% endblock %}
 
 {% block content %}
@@ -10,14 +10,14 @@
     <div class="col-4">
         <div class="card">
             <div class="card-body">
-                Nombre de services : <strong>{{ services | length }}</strong>
+                Nombre de types d'associations : <strong>{{ typeassociations | length }}</strong>
             </div>
         </div>
     </div>
     <div class="col-8">
         <div class="card">
             <div class="card-body">
-                {% include 'symcom4/admin/partials/_liensrapides.html.twig' %}    
+                {% include 'symcom4/admin/partials/_liensrapides.html.twig' %}  
             </div>
         </div>
     </div>
@@ -33,21 +33,17 @@
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">Nom</th>
-                            <th scope="col">Descriptif</th>
-                            <th scope="col">Guesninois</th>
                             <th scope="col">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for service in services %}
+                        {% for typeassociation in typeassociations %}
                             <tr>
-                                <td>{{ service.id }}</td>
-                                <td>{{ service.structure.nom }}</td>
-                                <td>{{ service.structure.presentation }}</td>
-                                <td>{% if service.structure.local == true %}OUI{% else %}NON{% endif %}</td>
+                                <td>{{ typeassociation.id }}</td>
+                                <td>{{ typeassociation.nom }}</td>
                                 <td>
-                                    <a class="btn btn-primary" href="{{ path('admin_service_edit', {'id': service.id}) }}"><i class="fas fa-edit"></i> Modifier</a>
-                                    <a class="btn btn-danger" href="{{ path('admin_service_delete', {'id': service.id}) }}"><i class="fas fa-trash"></i> Supprimer</a>
+                                    {{ path('admin_structures_associations_type_edit', {'id': typeassociation.id}) | ModifierBouton }}
+                                    {{ path('admin_structures_associations_type_delete', {'id': typeassociation.id}) | SupprimerBouton }}
                                 </td>
                             </tr>
                         {% endfor %}

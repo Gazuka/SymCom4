@@ -12,23 +12,13 @@
                 </li>
 
                 <li  data-toggle="collapse" data-target="#sc4-services" class="collapsed active">
-                  <a href="#"><i class="fa fa-gift fa-lg"></i> Services municipaux <span class="arrow"></span></a>
+                  <a href="#"><i class="fa fa-gift fa-lg"></i> Structures <span class="arrow"></span></a>
                 </li>
                 
                 <ul class="sub-menu collapse" id="sc4-services">
-                    <li><a href="{{ path('admin_services') }}"><i class="fas fa-plus"></i> Voir les services</a></li>
-                    <li><a href="{{ path('admin_service_new') }}"><i class="fas fa-plus"></i> Ajouter un service</a></li>
-                </ul>
-
-                <li  data-toggle="collapse" data-target="#sc4-associations" class="collapsed active">
-                  <a href="#"><i class="fa fa-gift fa-lg"></i> Associations <span class="arrow"></span></a>
-                </li>
-                
-                <ul class="sub-menu collapse" id="sc4-associations">
-                    <li><a href="{{ path('admin_associations') }}"><i class="far fa-eye"></i> Voir les associations</a></li>
-                    <!--<li><a href="{{ path('admin_association_new') }}"><i class="fas fa-plus"></i> Ajouter une association</a></li>-->
-                    <li><a href="{{ path('admin_associations_types') }}"><i class="far fa-eye"></i> Voir les types associations</a></li>
-                    <!--<li><a href="{{ path('admin_associations_type_new') }}"><i class="fas fa-plus"></i> Ajouter un type d'association</a></li>-->
+                    <li><a href="{{ path('admin_structures_services') }}"><i class="fas fa-eye"></i> Voir les services</a></li>
+                    <li><a href="{{ path('admin_structures_associations') }}"><i class="far fa-eye"></i> Voir les associations</a></li>
+                    <li><a href="{{ path('admin_fonctions') }}"><i class="far fa-eye"></i> Voir les fonctions</a></li>
                 </ul>
 
                 <li  data-toggle="collapse" data-target="#sc4-medias" class="collapsed active">
@@ -46,6 +36,15 @@
                 
                 <ul class="sub-menu collapse" id="sc4-humains">
                     <li><a href="{{ path('admin_humains') }}"><i class="far fa-eye"></i> Voir les personnes</a></li>
+                </ul>
+
+                <li  data-toggle="collapse" data-target="#sc4-gestion" class="collapsed active">
+                  <a href="#"><i class="fa fa-gift fa-lg"></i> Gestion des Types <span class="arrow"></span></a>
+                </li>
+                
+                <ul class="sub-menu collapse" id="sc4-gestion">
+                    <li><a href="{{ path('admin_structures_associations_types') }}"><i class="far fa-eye"></i> Voir les types d'associations</a></li>
+                    <li><a href="{{ path('admin_fonctions_types') }}"><i class="far fa-eye"></i> Voir les types de fonctions</a></li>
                 </ul>
 {#
                 <li  data-toggle="collapse" data-target="#products" class="collapsed active">

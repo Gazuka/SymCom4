@@ -36,15 +36,16 @@ class PageRepository extends ServiceEntityRepository
     }
     */
 
-    /*
-    public function findOneBySomeField($value): ?Page
+    
+    public function findOneByCheminParam($chemin, $params): ?Page
     {
         return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
+            ->andWhere('p.nomChemin = :chemin')
+            ->andWhere('p.params = :params')
+            ->setParameter('chemin', $chemin)
+            ->setParameter('params', $params)
             ->getQuery()
             ->getOneOrNullResult()
         ;
     }
-    */
 }

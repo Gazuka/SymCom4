@@ -45,31 +45,14 @@
                                 <td>{{ humain.nom }}</td>
                                 <td>{{ humain.prenom }}</td>
                                 <td>
-                                    {% set tel = 0 %}{% set mail = 0 %}{% set home = 0 %}
-                                    {% for contact in humain.contacts %}
-                                        {% set type = contact.getType %}
-                                        {% if type == 'mail' %}{% set mail = mail + 1 %}{% endif %}
-                                        {% if type == 'telephone' %}{% set tel = tel + 1 %}{% endif %}
-                                        {% if type == 'adresse' %}{% set home = home + 1 %}{% endif %}
-                                    {% endfor %}
-                                    {% if humain.contacts | length == 0 %}
-                                        <div class='text-danger'>
-                                            <i class="fas fa-phone"></i> x {{ tel }} /
-                                            <i class="fas fa-at"></i> x {{ mail }} /
-                                            <i class="fas fa-home"></i> x {{ home }}
-                                        </div>
-                                    {% else %} 
-                                        <i class="fas fa-phone"></i> x {{ tel }} /
-                                        <i class="fas fa-at"></i> x {{ mail }} /
-                                        <i class="fas fa-home"></i> x {{ home }}
-                                    {% endif %}
+                                    {{ humain.contacts | nbrContacts }}
                                 </td>
                                 <td>
-                                    <a class="btn btn-success" href="{{ path('admin_humain_addcontact', {'id': humain.id, 'type': 'tel'}) }}"><i class="fas fa-plus"></i> <i class="fas fa-phone"></i> </a>
-                                    <a class="btn btn-success" href="{{ path('admin_humain_addcontact', {'id': humain.id, 'type': 'mail'}) }}"><i class="fas fa-plus"></i> <i class="fas fa-at"></i> </a>
-                                    <a class="btn btn-success" href="{{ path('admin_humain_addcontact', {'id': humain.id, 'type': 'adresse'}) }}"><i class="fas fa-plus"></i> <i class="fas fa-home"></i> </a>
-                                    <a class="btn btn-primary" href="{{ path('admin_humain_edit', {'id': humain.id}) }}"><i class="fas fa-edit"></i> Modifier</a>
-                                    <a class="btn btn-danger" href="{{ path('admin_humain_delete', {'id': humain.id}) }}"><i class="fas fa-trash"></i> Supprimer</a>
+                                    {{ path('admin_humain_addcontact', {'id': humain.id, 'type': 'telephone'}) | addContacts('telephone')}}
+                                    {{ path('admin_humain_addcontact', {'id': humain.id, 'type': 'mail'}) | addContacts('mail')}}
+                                    {{ path('admin_humain_addcontact', {'id': humain.id, 'type': 'adresse'}) | addContacts('adresse')}}
+                                    {{ path('admin_humain_edit', {'id': humain.id}) | ModifierBouton }}
+                                    {{ path('admin_humain_delete', {'id': humain.id}) | SupprimerBouton }}
                                 </td>
                             </tr>
                         {% endfor %}

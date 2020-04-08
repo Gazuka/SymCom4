@@ -246,4 +246,22 @@ class Structure
 
         return $this;
     }
+
+    public function getType()
+    {
+        $type = null;
+        if($this->association != null)
+        {
+            $type = 'association';
+        }
+        if($this->service != null)
+        {
+            $type = 'service';
+        }
+        if($this->entreprise != null)
+        {
+            $type = 'entreprise';
+        }
+        return $type;
+    }
 }

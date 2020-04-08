@@ -2,21 +2,18 @@
 
 namespace App\Form;
 
-use App\Entity\Mail;
+use App\Entity\Telephone;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\TelType;
 
-class NewMailHumainType extends AbstractType
+class NewTelephoneType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('adresse', EmailType::class,
-            [
-                'label' => 'Adresse e-mail :'
-            ])
+            ->add('numero', TelType::class)
             ->add('contact', NewContactType::class,
             [
             ])
@@ -26,7 +23,7 @@ class NewMailHumainType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Mail::class,
+            'data_class' => Telephone::class,
         ]);
     }
 }

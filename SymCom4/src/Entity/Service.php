@@ -25,7 +25,6 @@ class Service
 
     public function __construct()
     {
-        //$this->structure = new Structure();
     }
 
     public function getId(): ?int

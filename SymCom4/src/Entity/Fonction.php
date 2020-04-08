@@ -19,16 +19,6 @@ class Fonction
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $titre;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $titreFeminin;
-
-    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Structure", inversedBy="fonctions")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -49,6 +39,12 @@ class Fonction
      */
     private $responsables;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\TypeFonction", inversedBy="fonction")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $typeFonction;
+
     public function __construct()
     {
         $this->contacts = new ArrayCollection();
@@ -58,30 +54,6 @@ class Fonction
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getTitre(): ?string
-    {
-        return $this->titre;
-    }
-
-    public function setTitre(string $titre): self
-    {
-        $this->titre = $titre;
-
-        return $this;
-    }
-
-    public function getTitreFeminin(): ?string
-    {
-        return $this->titreFeminin;
-    }
-
-    public function setTitreFeminin(string $titreFeminin): self
-    {
-        $this->titreFeminin = $titreFeminin;
-
-        return $this;
     }
 
     public function getStructure(): ?Structure
@@ -161,6 +133,18 @@ class Fonction
                 $responsable->setFonction(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getTypeFonction(): ?TypeFonction
+    {
+        return $this->typeFonction;
+    }
+
+    public function setTypeFonction(?TypeFonction $typeFonction): self
+    {
+        $this->typeFonction = $typeFonction;
 
         return $this;
     }
