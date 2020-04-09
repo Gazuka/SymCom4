@@ -91,6 +91,11 @@ abstract class OutilsController extends AbstractController
             }
             //On prépare la redirection
             $this->defineRedirect($pagederesultat);
+            //On vérifie si on veut récupérer l'id de l'objet en cours
+            if(isset($pagederesultatConfig_NewObjectId))
+            {
+                $pagederesultatConfig['id'] = $element->getId();
+            }
             $this->defineParamRedirect($pagederesultatConfig);
         }
         //On défini les données à envoyer à Twig

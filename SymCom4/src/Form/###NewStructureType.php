@@ -18,8 +18,6 @@ class NewStructureType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        /*$repoImage = $this->getDoctrine()->getRepository(Image::class);
-        $imagesDispos = $repoImage->findAll();*/
 
         $builder
             ->add('nom', TextType::class,
@@ -36,12 +34,13 @@ class NewStructureType extends AbstractType
                 'label' => "Cette structure est Guesninoise.",
                 'required' => false
             ])
-            ->add('lien', NewStructureNewLienType::class,
+            /*->add('lien', NewStructureNewLienType::class,
             [
                 'required' => false
-            ])
+            ])*/
             ->add('image', EntityType::class,
             [
+                'label' => 'Illustration de la structure :',
                 'class' => Image::class,
                 'choice_label' => 'media.recupAsset',
                 'expanded' => true,
@@ -52,7 +51,6 @@ class NewStructureType extends AbstractType
                     return $repo->form_FindAll('images');
                 }
             ])
-            //->add('contacts')
         ;
     }
 

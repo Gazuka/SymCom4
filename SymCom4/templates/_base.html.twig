@@ -12,11 +12,10 @@
             
         </head>
         <body>
-            {{ text_service_lien }}
             {% block body %}{% endblock %}
 
             <script src="{{ asset('js/jquery.min.js') }}"></script>
-            <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+            <script src="{{ asset('js/bootstrap.min.js') }}"></script>            
             {% block javascripts %}{% endblock %}
         </body>
     </html>

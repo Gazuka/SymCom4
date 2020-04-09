@@ -24,7 +24,10 @@
                         {% include 'symcom4/admin/partials/_navbar.html.twig' %}
                         {% block header %}{% endblock %}
                     </div>
-                    <div id="admin_content" class="mt-3 col-12">{% block content %}{% endblock %}</div>
+                    <div id="admin_content" class="mt-3 col-12">
+                        {% include 'symcom4/admin/partials/_flash.html.twig' %}
+                        {% block content %}{% endblock %}
+                    </div>
                 </div>
             </div>
         </div>

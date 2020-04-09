@@ -9,14 +9,22 @@ use App\Entity\Adresse;
 use App\Entity\Telephone;
 use App\Form\NewMailType;
 use App\Form\NewAdresseType;
+use App\Service\PageService;
 use App\Form\NewTelephoneType;
 use App\Controller\OutilsController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class SymCom4Controller extends OutilsController
 {
     protected $liensRapides = array();
+    protected $request;
+
+    public function __construct(PageService $pageService)
+    {
+        $this->pageService = $pageService;
+    }
 
     /**
      * @Route("/", name="symcom4")
@@ -99,65 +107,5 @@ class SymCom4Controller extends OutilsController
         $lien->setFontAwesome($icon);
         $lien->setPage($page);
         array_push($this->liensRapides, $lien);
-    }
-
-    /**
-     * Factorisation pour l'ajout d'un contact suivant le type
-     *
-     * @param [type] $type
-     * @return array
-     */
-    protected function factor_addcontact($type):array
-    {
-        //A utiliser avant l'ajout des autres "$variables[]" !
-        switch($type)
-        {
-            case 'tel':
-                $tel = new Telephone();
-                $variables['classType'] = NewTelephoneType::class;
-                $variables['element'] = $tel;
-            break;
-            case 'mail':
-                $mail = new Mail();
-                $variables['classType'] = NewMailType::class;
-                $variables['element'] = $mail;
-            break;
-            case 'adresse':
-                $adresse = new Adresse();
-                $variables['classType'] = NewAdresseType::class;
-                $variables['element'] = $adresse;
-            break;
-        }  
-
-        return $variables;
-    }
-
-    /**
-     * Factorisation pour l'edit d'un contact suivant le type
-     *
-     * @param [type] $type
-     * @return array
-     */
-    protected function factor_editContact($contact, $objet):array
-    {
-        //A utiliser avant l'ajout des autres "$variables[]" !
-        $type = $contact->getType();
-        switch($type)
-        {
-            case 'telephone':
-                $variables['classType'] = NewTelephoneType::class;
-                $variables['element'] = $contact->getTelephone();
-            break;
-            case 'mail':
-                $variables['classType'] = NewMailType::class;
-                $variables['element'] = $contact->getMail();
-            break;
-            case 'adresse':
-                $variables['classType'] = NewAdresseType::class;
-                $variables['element'] = $contact->getAdresse();
-            break;
-        }  
-        $this->defineParamTwig('type', $type);
-        return $variables;
     }
 }

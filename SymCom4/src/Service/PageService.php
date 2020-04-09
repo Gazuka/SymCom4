@@ -7,17 +7,27 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class PageService {
 
-    private $route;
-    private $params = array();
     private $repo;
     private $manager;
+    //Page actuelle :
+    private $route;
+    private $params = array();
     private $page;
+    //Page mère :
+    private $pageMere;
+
+    //===================================================================================//
+    //** Fonctions magiques **************************************************************/
 
     public function __construct(EntityManagerInterface $manager)
     {
         $this->manager = $manager;
         $this->repo = $manager->getRepository(Page::class);
     }
+
+    //===================================================================================//
+    //** GETs et SETs ********************************************************************/
+
     public function getRoute()
     {
         return $this->route;
@@ -35,7 +45,14 @@ class PageService {
         $this->params[$cle] = $valeur;
     }
 
-    public function getPageId()
+    //===================================================================================//
+    //** Page acutellle ******************************************************************/
+
+    /** Retourne la page actuelle
+     *
+     * @return void
+     */
+    public function getPage()
     {
         //Si l'objet page n'est pas encore créé
         if($this->page == null)
@@ -52,15 +69,22 @@ class PageService {
                 $this->manager->flush();
             }
         }
-        return $this->page->getId();
-    }
-
-    public function setId($id)
-    {
-        $this->page = $this->repo->findOneById($id);
         return $this->page;
     }
 
+    /** Retourne l'Id de la page actuelle
+     *
+     * @return void
+     */
+    public function getPageId()
+    {
+        return $this->getPage()->getId();
+    }
+
+    /** Permet l'enregistrement de la page en BDD
+     *
+     * @return void
+     */
     public function Enregistrer()
     {
         if($this->page != null)
@@ -68,5 +92,19 @@ class PageService {
             $this->manager->persist($this->page);
             $this->manager->flush();
         }
+    }
+
+    //===================================================================================//
+    //** Page mère ***********************************************************************/
+    
+    /** Récupère la page mère à partir de son Id
+     *
+     * @param [type] $id
+     * @return void
+     */
+    public function recupPageMere($id)
+    {
+        $this->pageMere = $this->repo->findOneById($id);
+        return $this->pageMere;
     }
 }

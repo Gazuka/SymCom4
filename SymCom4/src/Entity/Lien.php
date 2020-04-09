@@ -141,9 +141,9 @@ class Lien
         $this->structure = $structure;
 
         // set (or unset) the owning side of the relation if necessary
-        $newSite = null === $structure ? null : $this;
-        if ($structure->getSite() !== $newSite) {
-            $structure->setSite($newSite);
+        $newLien = null === $structure ? null : $this;
+        if ($structure->getLien() !== $newLien) {
+            $structure->setLien($newLien);
         }
 
         return $this;

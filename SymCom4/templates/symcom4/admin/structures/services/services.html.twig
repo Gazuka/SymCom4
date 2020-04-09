@@ -48,11 +48,7 @@
                                 <td>{% if service.structure.local == true %}OUI{% else %}NON{% endif %}</td>
                                 <td>{{ service.structure.contacts | NbrContacts }}</td>
                                 <td>
-                                    {{ path('admin_structure_addcontact', {'id': service.structure.id, 'type': 'tel'}) | AddContacts('telephone')}}
-                                    {{ path('admin_structure_addcontact', {'id': service.structure.id, 'type': 'mail'}) | AddContacts('mail')}}
-                                    {{ path('admin_structure_addcontact', {'id': service.structure.id, 'type': 'adresse'}) | AddContacts('adresse')}}
-                                    {{ path('admin_structures_service_edit', {'id': service.id}) | ModifierBouton }}
-                                    {{ path('admin_structures_service_delete', {'id': service.id}) | SupprimerBouton }}
+                                    {{ path('admin_structures_service', {'id': service.id}) | ModifierBouton }}
                                 </td>
                             </tr>
                         {% endfor %}

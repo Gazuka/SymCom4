@@ -8,6 +8,7 @@ use App\Form\NewMediaType;
 use App\Entity\Illustration;
 use App\Form\NewDossierType;
 use App\Form\NewIllustrationType;
+use App\Controller\AdminController;
 use App\Repository\DossierRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,7 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class AdminMediaController extends SymCom4Controller
+class AdminMediaController extends AdminController
 {
     /**
      * @Route("/admin/medias", name="admin_medias")

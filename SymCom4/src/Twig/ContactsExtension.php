@@ -11,7 +11,8 @@ class ContactsExtension extends AbstractExtension
     {
         return [
                     new TwigFilter('NbrContacts', [$this, 'afficheNbrContacts'], ['is_safe' => ['html', 'twig']]),
-                    new TwigFilter('AddContacts', [$this, 'afficheAddContacts'], ['is_safe' => ['html', 'twig']])
+                    new TwigFilter('AddContacts', [$this, 'afficheAddContacts'], ['is_safe' => ['html', 'twig']]),
+                    new TwigFilter('AddLien', [$this, 'afficheAddLien'], ['is_safe' => ['html', 'twig']])
                 ];
     }
 
@@ -63,6 +64,12 @@ class ContactsExtension extends AbstractExtension
                 $html = "<a class='btn btn-success' href='".$url."'><i class='fas fa-plus'></i> <i class='fas fa-home'></i> ".$texte."</a>";
             break;
         }
+        return $html;
+    }
+
+    public function afficheAddLien($url, $texte = "")
+    {
+        $html = "<a class='btn btn-success' href='".$url."'><i class='fas fa-plus'></i> <i class='fas fa-phone'></i> ".$texte."</a>";
         return $html;
     }
 }

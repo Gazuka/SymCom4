@@ -2,89 +2,31 @@
 
 namespace App\Service;
 
+use App\Entity\Mail;
 use Twig\Environment;
+use App\Entity\Adresse;
+use App\Entity\Telephone;
+use App\Form\NewMailType;
+use App\Form\NewAdresseType;
+use App\Form\NewTelephoneType;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class ContactService {
-    //private $entityClass;
-    //private $manager;
-    private $twig;
-    private $parent; //Le parent des contacts
-    private $idPage; //L'id de la page de base pour eventuellement y revenir par la suite
-
-    /*public function __construct(ObjectManager $manager, Environment $twig, RequestStack $request)
-    {
-        $this->manager = $manager;
-        $this->route = $request->getCurrentRequest()->attributes->get('_route');
-    }*/
-
-    public function __construct(Environment $twig, RequestStack $request)
-    {
-        $this->twig = $twig;
-        $this->routeActuelle = $request->getCurrentRequest()->attributes->get('_route');
-    }
-
-    public function setIdPage($id)
-    {
-        $this->idPage = $id;
-    }
-    public function getParent()
-    {
-        return $this->parent;
-    }
-    public function setParent($object)
-    {
-        $this->parent = $object;
-    }
-    /***********************************/
-
-    /** Affiche dans TWIG un tableau pour voir les adresses, les modifier ou en ajouter
-     *
-     * @return void
-     */
-    public function gestionAdresses()
-    {
-        $this->twig->display('symcom4/admin/gestion/_gestion_adresses.html.twig',
-        [
-            'parent' => $this->parent,
-            'adresses' => $this->getAdresses(),
-            'idPage' => $this->idPage
-        ]); 
-    }
-    /** Affiche dans TWIG un tableau pour voir les e-mails, les modifier ou en ajouter
-     *
-     * @return void
-     */
-    public function gestionMails()
-    {
-        $this->twig->display('symcom4/admin/gestion/_gestion_mails.html.twig',
-        [
-            'parent' => $this->parent,
-            'mails' => $this->getMails(),
-            'idPage' => $this->idPage
-        ]); 
-    }
-    /** Affiche dans TWIG un tableau pour voir les téléphones, les modifier ou en ajouter
-     *
-     * @return void
-     */
-    public function gestionTelephones()
-    {
-        $this->twig->display('symcom4/admin/gestion/_gestion_telephones.html.twig',
-        [
-            'parent' => $this->parent,
-            'telephones' => $this->getTelephones(),
-            'idPage' => $this->idPage
-        ]); 
-    }
     
-    
-
-    public function getAdresses()
+    /************************************************************************************/
+    public function __construct()
+    {
+    }
+    /************************************************************************************/
+    /** Retourne toutes les adresses d'un objet
+     *
+     * @return void
+     */
+    public function getAdresses($parent)
     {
         $resultat = array();
-        $contacts = $this->parent->getContacts();
+        $contacts = $parent->getContacts();
         
         foreach($contacts as $contact)
         {
@@ -95,10 +37,14 @@ class ContactService {
         }
         return $resultat;
     }
-    public function getTelephones()
+    /** Retourne tous les telephones d'un objet
+     *
+     * @return void
+     */
+    public function getTelephones($parent)
     {
         $resultat = array();
-        $contacts = $this->parent->getContacts();
+        $contacts = $parent->getContacts();
         
         foreach($contacts as $contact)
         {
@@ -109,10 +55,14 @@ class ContactService {
         }
         return $resultat;
     }
-   public function getMails()
+    /** Retourne tous les mails d'un objet
+     *
+     * @return void
+     */
+   public function getMails($parent)
     {
         $resultat = array();
-        $contacts = $this->parent->getContacts();
+        $contacts = $parent->getContacts();
         
         foreach($contacts as $contact)
         {
@@ -122,5 +72,60 @@ class ContactService {
             }
         }
         return $resultat;
+    }
+
+    /** Permet de configurer le formulaire en fonction du type de contact
+     *
+     * @param [type] $type
+     * @return void
+     */
+    public function addContactConfigForm($type)
+    {
+        switch($type)
+        {
+            case 'telephone':
+                $tel = new Telephone();
+                $variables['classType'] = NewTelephoneType::class;
+                $variables['element'] = $tel;
+            break;
+            case 'mail':
+                $mail = new Mail();
+                $variables['classType'] = NewMailType::class;
+                $variables['element'] = $mail;
+            break;
+            case 'adresse':
+                $adresse = new Adresse();
+                $variables['classType'] = NewAdresseType::class;
+                $variables['element'] = $adresse;
+            break;
+        }  
+
+        return $variables;
+    }
+
+    /** Permet de configurer le formulaire en fonction du type de contact
+     *
+     * @param [type] $type
+     * @return void
+     */
+    public function editContactConfigForm($contact)
+    {
+        $type = $contact->getType();
+        switch($type)
+        {
+            case 'telephone':
+                $variables['classType'] = NewTelephoneType::class;
+                $variables['element'] = $contact->getTelephone();
+            break;
+            case 'mail':
+                $variables['classType'] = NewMailType::class;
+                $variables['element'] = $contact->getMail();
+            break;
+            case 'adresse':
+                $variables['classType'] = NewAdresseType::class;
+                $variables['element'] = $contact->getAdresse();
+            break;
+        }  
+        return $variables;
     }
 }

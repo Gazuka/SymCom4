@@ -6,57 +6,30 @@
 
 {% block content %}
 
-<div class="row mb-3">
-    <div class="col-6">
-        <div class="card mb-3">
-            <div class="card-body">
-                <h1 class="h3">{{ service.structure.nom }}</h1>
+    <div class="row mb-3">
+        <div class="col-6">
+            {{ gestionService.gestionServiceBase }}
+            <div class="card mb-3">
+                <div class="card-body">
+                    {% include 'symcom4/admin/partials/_liensrapides.html.twig' %}    
+                </div>
             </div>
+            {{ gestionService.gestionLien }}
         </div>
-        <div class="card mb-3">
-            <div class="card-body">
-                {% include 'symcom4/admin/partials/_liensrapides.html.twig' %}    
-            </div>
+        <div class="col-6">
+            {{ gestionService.gestionAdresses }}
+            {{ gestionService.gestionTelephones }}
+            {{ gestionService.gestionMails }}
         </div>
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">{{ text_service_lien }}</h5>
-                <table class="table">
-                    <thead class="thead-light">
-                        <tr>
-                            <th style="width:5%;" scope="col">{{ text_id }}</th>
-                            <th style="width:50%;" scope="col">{{ text_service_lien_url }}</th>
-                            <th style="width:45%;" scope="col">{{ text_actions }}</th>
-                        </tr>
-                    </thead>
-                    {% if service.structure.lien != null %}
-                        <tbody>
-                            <tr>
-                                <td>{{ service.structure.lien.id }}</td>
-                                <td><a href="{{ service.structure.lien.url }}" target="_blank">{{ service.structure.lien.label }}</a></td>
-                                <td>
-                                    {{ path('admin_structure_editlien', {'idstructure': service.structure.id, 'idlien': service.structure.lien.id}) | ModifierBouton }}
-                                    {{ path('admin_structure_deletelien', {'idstructure': service.structure.id, 'idlien': service.structure.lien.id}) | SupprimerBouton }}
-                                </td>
-                            </tr>   
-                        </tbody>
-                    {% endif %}
-                </table>
+    </div>
+
+    <!-- Affichage du bouton de suppression du service -->
+    <div class="row">
+        <div class="card col-12">
+            <div class="card-body text-center">
+                {{ path('admin_structures_service_delete', {'id': service.id}) | SupprimerBouton(service.structure.nom) }}
             </div>
         </div>
     </div>
-    <div class="col-6">
-        {{ contactService.gestionAdresses }}
-        {{ contactService.gestionTelephones }}
-        {{ contactService.gestionMails }}
 
-        
-
-
-
-        
-
-        
-    </div>
-</div>
 {% endblock %}

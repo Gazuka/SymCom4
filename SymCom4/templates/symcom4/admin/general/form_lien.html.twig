@@ -3,13 +3,11 @@
 {% block content %}
     <div class="card">
         <div class="card-body">
-            <h1 class="h4">Edition d'un lien</h1>
-            <p>Veuillez compléter le formulaire ci-dessous :</p>
+            <h1 class="h4">{{ text_form_add_lien }} {{ structure.nom }}</h1>
+            <p>{{ text_complete_form }}</p>
             {{ form_start(form) }}
             {{ form_row(form.url) }}
-            <button type="submit" class="btn btn-success">
-                <i class="fas fa-check"></i> Enregistrer
-            </button>
+            {{ text_enregistrer | BtnSubmit }}
             {{ form_end(form) }}
         </div>
     </div>

@@ -9,13 +9,11 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
-class NewStructureNewLienType extends AbstractType
+class NewLienType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            //->add('label')
-            //->add('fontAwesome')
             ->add('url', UrlType::class,
             [
                 'label' => "Adresse complète du site Internet :"
@@ -25,9 +23,6 @@ class NewStructureNewLienType extends AbstractType
             [
                 'data' => true,
             ])
-            //->add('colorBoot')
-            //->add('page')
-            //->add('structure')
         ;
     }
 

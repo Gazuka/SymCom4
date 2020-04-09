@@ -19,7 +19,7 @@
                                 <td>{{ telephone.numero }}</td>
                                 <td>
                                     {{ path('admin_structure_editcontact', {'idstructure': parent.id, 'idcontact': telephone.contact.id, 'idpage': idPage }) | ModifierBouton }}
-                                    {{ path('admin_structure_deletecontact', {'idstructure': parent.id, 'idcontact': telephone.contact.id}) | SupprimerBouton }}
+                                    {{ path('admin_structure_deletecontact', {'idstructure': parent.id, 'idcontact': telephone.contact.id, 'idpage': idPage}) | SupprimerBouton }}
                                 </td>
                             </tr>
                         {% endfor %}
@@ -28,7 +28,7 @@
             {% else %}
                 <p class="text-danger">{{ text_no_telephone }}</p>
             {% endif %}
-            {{ path('admin_structure_addcontact', {'id': parent.id, 'type': 'telephone'}) | AddContacts('telephone', text_add_tel)}}
+            {{ path('admin_structure_addcontact', {'idstructure': parent.id, 'type': 'telephone', 'idpage': idPage}) | AddContacts('telephone', text_add_tel)}}
         </div>
     </div>
 {% endblock %}

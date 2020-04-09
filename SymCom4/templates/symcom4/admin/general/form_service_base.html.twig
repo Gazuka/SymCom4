@@ -3,17 +3,17 @@
 {% block content %}
     <div class="card">
         <div class="card-body">
-            <h1 class="h4">Création d'un nouveau service</h1>
-            <p>Veuillez compléter le formulaire ci-dessous :</p>
+            {% if structure is defined %}
+                <h1 class="h4">Edition du service : {{ structure.nom }}</h1>
+            {% else %}
+                <h1 class="h4">Création d'un nouveau service</h1>
+            {% endif %}
+            <p>{{ text_complete_form }}</p>
             {{ form_start(form) }}
             {{ form_row(form.structure.nom) }}
             {{ form_row(form.structure.presentation) }}
             {{ form_row(form.structure.local) }}
-            {#{{ form_widget(form.structure.lien) }}#}
-            {{ form_row(form.structure.image) }}
-            <button type="submit" class="btn btn-success">
-                <i class="fas fa-check"></i> Enregistrer
-            </button>
+            {{ text_enregistrer | BtnSubmit }}
             {{ form_end(form) }}
         </div>
     </div>

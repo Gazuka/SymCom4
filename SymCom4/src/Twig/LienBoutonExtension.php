@@ -12,7 +12,8 @@ class LienBoutonExtension extends AbstractExtension
         return [
             new TwigFilter('LienBouton', [$this, 'afficheLienBouton'], ['is_safe' => ['html', 'twig']]),
             new TwigFilter('ModifierBouton', [$this, 'afficheModifierBouton'], ['is_safe' => ['html', 'twig']]),
-            new TwigFilter('SupprimerBouton', [$this, 'afficheSupprimerBouton'], ['is_safe' => ['html', 'twig']])
+            new TwigFilter('SupprimerBouton', [$this, 'afficheSupprimerBouton'], ['is_safe' => ['html', 'twig']]),
+            new TwigFilter('BtnSubmit', [$this, 'afficheBtnSubmit'], ['is_safe' => ['html', 'twig']])
         ];
     }
 
@@ -66,9 +67,47 @@ class LienBoutonExtension extends AbstractExtension
         return $html;
     }
 
-    public function afficheSupprimerBouton($url)
+    /** Affiche un bouton de suppression avec un modal avant de rediriger vers la page de suppression
+     *
+     * @param [string] $url //L'url de la page de suppression
+     * @param string $text //Texte à ajouter (nom de l'objet à supprimer)
+     * @return void
+     */
+    public function afficheSupprimerBouton($url, $text = '')
     {
-        $html = "<a class='btn btn-danger' href='".$url."'><i class='fas fa-trash'></i> Supprimer</a>";
+        if($text != '')
+        {
+            $text = ': '.$text;
+        }
+        $idUnique = rand(0, 500000);
+        $html = "";
+        $html .= "<button type='button' class='btn btn-danger' data-toggle='modal' data-target='#modal_".$idUnique."'>";
+        $html .= "<i class='fas fa-trash'></i> Supprimer ".$text."</a>";
+        $html .= "</button>";
+        $html .= "<div class='modal fade' id='modal_".$idUnique."' tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true'>";
+        $html .= " <div class='modal-dialog' role='document'>";
+        $html .= "  <div class='modal-content'>";
+        $html .= "   <div class='modal-header'>";
+        $html .= "    <h5 class='modal-title' id='exampleModalLabel'>Attention, suppression définitive !</h5>";
+        $html .= "    <button type='button' class='close' data-dismiss='modal' aria-label='Close'>";
+        $html .= "     <span aria-hidden='true'>&times;</span>";
+        $html .= "    </button>";
+        $html .= "   </div>";
+        $html .= "   <div class='modal-body'>";
+        $html .= "    Dernière chance, êtes-vous bien certain de vouloir supprimer ".$text." ?";
+        $html .= "   </div>";
+        $html .= "   <div class='modal-footer'>";
+        $html .= "    <button type='button' class='btn btn-primary' data-dismiss='modal'>Close</button>";
+        $html .= "    <a class='btn btn-danger' href='".$url."'><i class='fas fa-trash'></i> Supprimer ".$text."</a>";
+        $html .= "   </div>";
+        $html .= "  </div>";
+        $html .= " </div>";
+        $html .= "</div>";
         return $html;
+    }
+
+    public function afficheBtnSubmit($text)
+    {
+        return "<button type='submit' class='btn btn-success'><i class='fas fa-check'></i> ".$text."</button>";
     }
 }

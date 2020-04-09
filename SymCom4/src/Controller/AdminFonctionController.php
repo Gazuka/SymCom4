@@ -6,6 +6,7 @@ use App\Entity\Fonction;
 use App\Entity\TypeFonction;
 use App\Form\NewFonctionType;
 use App\Form\NewTypeFonctionType;
+use App\Controller\AdminController;
 use App\Repository\FonctionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\TypeFonctionRepository;
@@ -14,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class AdminFonctionController extends SymCom4Controller
+class AdminFonctionController extends AdminController
 {
     /******************************************************************************************/
     /****************************************Les fonctions ************************************/
