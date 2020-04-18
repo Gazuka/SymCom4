@@ -1,0 +1,55 @@
+{% extends 'symcom4/admin/_text.html.twig' %}
+{% block all %}
+    <div id='gestion_structure_fonctions' class="card mb-3"> 
+        <div class="card-body">
+            <h4 class="card-title">Gestion des fonctions</h4>
+            {% if fonctions|length > 0 %}
+                {% for fonction in fonctions %}     
+                    <div class="card mb-3"> 
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <div class='row'>
+                                    <div class="col-8">
+                                        #{{ fonction.id }} - {{ fonction.typeFonction.titre }}
+                                        {% if fonction.secteur != null %}
+                                            - {{ fonction.secteur }}
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-4">
+                                        {{ path('admin_structure_editfonction', {'idstructure': parent.id, 'idfonction': fonction.id, 'idpage': idPage }) | ModifierBouton }}
+                                        {{ path('admin_structure_deletefonction', {'idstructure': parent.id, 'idfonction': fonction.id, 'idpage': idPage}) | SupprimerBouton }}
+                                    </div>
+                                </div>
+                            </h5>
+                            <div class="row mb-3">
+                                <div class="col-8">
+                                    {% if fonction.humain != null %}
+                                        {{ fonction.humain.nom }} {{ fonction.humain.prenom }} 
+                                    {% else %}
+                                        {{ path('admin_structure_fonction_addhumain', {'idstructure': parent.id, 'idfonction': fonction.id, 'idpage': idPage}) | AddHumain("Ajouter un responsable")}}
+                                    {% endif %}
+                                </div>
+                                <div class="col-4">
+                                    {% if fonction.humain != null %}
+                                        {{ path('admin_structure_fonction_deletehumain', {'idstructure': parent.id, 'idfonction': fonction.id, 'idpage': idPage}) | SupprimerBouton(fonction.humain.nom ~ ' ' ~ fonction.humain.prenom)}} 
+                                    {% endif %}
+                                </div>
+                            </div> 
+                            <div class="row">
+                                <div class="col-6">
+                                    {{ gestionService.gestionTelephones(fonction) }}
+                                </div>
+                                <div class="col-6">
+                                    {{ gestionService.gestionMails(fonction) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-danger">Aucune fonction n'est renseignée</p>
+            {% endif %}
+            {{ path('admin_structure_addfonction', {'idstructure': parent.id, 'idpage': idPage}) | AddFonction("Ajouter une fonction")}}
+        </div>
+    </div>
+{% endblock %}

@@ -4,11 +4,13 @@ namespace App\Service;
 
 use App\Entity\Page;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class PageService {
 
-    private $repo;
+    private $repoPage;
     private $manager;
+    private $request;
     //Page actuelle :
     private $route;
     private $params = array();
@@ -19,10 +21,17 @@ class PageService {
     //===================================================================================//
     //** Fonctions magiques **************************************************************/
 
-    public function __construct(EntityManagerInterface $manager)
+    public function __construct(EntityManagerInterface $manager, RequestStack $requestStack)
     {
         $this->manager = $manager;
-        $this->repo = $manager->getRepository(Page::class);
+        $this->request = $requestStack->getCurrentRequest();
+        $this->repoPage = $manager->getRepository(Page::class);
+        $this->route = $this->request->get('_route');
+        $params = $this->request->attributes->get('_route_params');
+        if(isset($params['idpagemere']))
+        {
+            $this->recupPageMere($params['idpagemere']);
+        }
     }
 
     //===================================================================================//
@@ -40,9 +49,13 @@ class PageService {
     {
         return $this->params;
     }
-    public function addParam($cle, $valeur)
+    public function addParam($cle, $valeur) //A supprimer par la suite ?
     {
         $this->params[$cle] = $valeur;
+    }
+    public function setParams($params)
+    {
+        $this->params = $params;
     }
 
     //===================================================================================//
@@ -58,7 +71,7 @@ class PageService {
         if($this->page == null)
         {
             //On vérifi si il existe dans la BDD et on le récupère
-            $this->page = $this->repo->findOneByCheminParam($this->route, serialize($this->params));
+            $this->page = $this->repoPage->findOneByCheminParam($this->route, serialize($this->params));
             //Sinon, on le crée
             if($this->page == null)
             {
@@ -104,7 +117,12 @@ class PageService {
      */
     public function recupPageMere($id)
     {
-        $this->pageMere = $this->repo->findOneById($id);
+        $this->pageMere = $this->repoPage->findOneById($id);
+        return $this->pageMere;
+    }
+
+    public function getPageMere()
+    {
         return $this->pageMere;
     }
 }

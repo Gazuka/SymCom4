@@ -12,7 +12,9 @@ class ContactsExtension extends AbstractExtension
         return [
                     new TwigFilter('NbrContacts', [$this, 'afficheNbrContacts'], ['is_safe' => ['html', 'twig']]),
                     new TwigFilter('AddContacts', [$this, 'afficheAddContacts'], ['is_safe' => ['html', 'twig']]),
-                    new TwigFilter('AddLien', [$this, 'afficheAddLien'], ['is_safe' => ['html', 'twig']])
+                    new TwigFilter('AddLien', [$this, 'afficheAddLien'], ['is_safe' => ['html', 'twig']]),
+                    new TwigFilter('AddFonction', [$this, 'afficheAddFonction'], ['is_safe' => ['html', 'twig']]),
+                    new TwigFilter('AddHumain', [$this, 'afficheAddHumain'], ['is_safe' => ['html', 'twig']])
                 ];
     }
 
@@ -69,7 +71,17 @@ class ContactsExtension extends AbstractExtension
 
     public function afficheAddLien($url, $texte = "")
     {
-        $html = "<a class='btn btn-success' href='".$url."'><i class='fas fa-plus'></i> <i class='fas fa-phone'></i> ".$texte."</a>";
+        $html = "<a class='btn btn-success' href='".$url."'><i class='fas fa-plus'></i> <i class='fas fa-globe-americas'></i> ".$texte."</a>";
+        return $html;
+    }
+    public function afficheAddFonction($url, $texte = "")
+    {
+        $html = "<a class='btn btn-success' href='".$url."'><i class='fas fa-plus'></i> <i class='fas fa-chair'></i> ".$texte."</a>";
+        return $html;
+    }
+    public function afficheAddHumain($url, $texte = "")
+    {
+        $html = "<a class='btn btn-success' href='".$url."'><i class='fas fa-plus'></i> <i class='fas fa-restroom'></i> ".$texte."</a>";
         return $html;
     }
 }

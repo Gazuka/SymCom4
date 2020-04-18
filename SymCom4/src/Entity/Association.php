@@ -25,12 +25,6 @@ class Association
     private $structure;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\TypeAssociation", inversedBy="associations")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $type;
-
-    /**
      * @ORM\OneToMany(targetEntity="App\Entity\Groupe", mappedBy="association", orphanRemoval=true)
      */
     private $groupes;
@@ -40,9 +34,15 @@ class Association
      */
     private $sigle;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\TypeAssociation", inversedBy="associations")
+     */
+    private $types;
+
     public function __construct()
     {
         $this->groupes = new ArrayCollection();
+        $this->types = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -58,18 +58,6 @@ class Association
     public function setStructure(Structure $structure): self
     {
         $this->structure = $structure;
-
-        return $this;
-    }
-
-    public function getType(): ?TypeAssociation
-    {
-        return $this->type;
-    }
-
-    public function setType(?TypeAssociation $type): self
-    {
-        $this->type = $type;
 
         return $this;
     }
@@ -113,6 +101,32 @@ class Association
     public function setSigle(?string $sigle): self
     {
         $this->sigle = $sigle;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|TypeAssociation[]
+     */
+    public function getTypes(): Collection
+    {
+        return $this->types;
+    }
+
+    public function addType(TypeAssociation $type): self
+    {
+        if (!$this->types->contains($type)) {
+            $this->types[] = $type;
+        }
+
+        return $this;
+    }
+
+    public function removeType(TypeAssociation $type): self
+    {
+        if ($this->types->contains($type)) {
+            $this->types->removeElement($type);
+        }
 
         return $this;
     }

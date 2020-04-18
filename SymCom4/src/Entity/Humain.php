@@ -34,11 +34,6 @@ class Humain
     private $contacts;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Responsable", mappedBy="humain", orphanRemoval=true)
-     */
-    private $responsables;
-
-    /**
      * @ORM\OneToOne(targetEntity="App\Entity\Image", inversedBy="humain", cascade={"persist", "remove"})
      */
     private $photo;
@@ -48,10 +43,26 @@ class Humain
      */
     private $sexe;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Fonction", mappedBy="humain")
+     */
+    private $fonctions;
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Utilisateur", mappedBy="humain", cascade={"persist", "remove"})
+     */
+    private $utilisateur;
+
     public function __construct()
     {
         $this->contacts = new ArrayCollection();
         $this->responsables = new ArrayCollection();
+        $this->fonctions = new ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return $this->nom." ".$this->prenom;
     }
 
     public function getId(): ?int
@@ -109,37 +120,6 @@ class Humain
         return $this;
     }
 
-    /**
-     * @return Collection|Responsable[]
-     */
-    public function getResponsables(): Collection
-    {
-        return $this->responsables;
-    }
-
-    public function addResponsable(Responsable $responsable): self
-    {
-        if (!$this->responsables->contains($responsable)) {
-            $this->responsables[] = $responsable;
-            $responsable->setHumain($this);
-        }
-
-        return $this;
-    }
-
-    public function removeResponsable(Responsable $responsable): self
-    {
-        if ($this->responsables->contains($responsable)) {
-            $this->responsables->removeElement($responsable);
-            // set the owning side to null (unless already changed)
-            if ($responsable->getHumain() === $this) {
-                $responsable->setHumain(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getPhoto(): ?Image
     {
         return $this->photo;
@@ -160,6 +140,54 @@ class Humain
     public function setSexe(string $sexe): self
     {
         $this->sexe = $sexe;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Fonction[]
+     */
+    public function getFonctions(): Collection
+    {
+        return $this->fonctions;
+    }
+
+    public function addFonction(Fonction $fonction): self
+    {
+        if (!$this->fonctions->contains($fonction)) {
+            $this->fonctions[] = $fonction;
+            $fonction->setHumain($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFonction(Fonction $fonction): self
+    {
+        if ($this->fonctions->contains($fonction)) {
+            $this->fonctions->removeElement($fonction);
+            // set the owning side to null (unless already changed)
+            if ($fonction->getHumain() === $this) {
+                $fonction->setHumain(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getUtilisateur(): ?Utilisateur
+    {
+        return $this->utilisateur;
+    }
+
+    public function setUtilisateur(Utilisateur $utilisateur): self
+    {
+        $this->utilisateur = $utilisateur;
+
+        // set the owning side of the relation if necessary
+        if ($utilisateur->getHumain() !== $this) {
+            $utilisateur->setHumain($this);
+        }
 
         return $this;
     }

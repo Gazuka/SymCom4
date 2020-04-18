@@ -3,7 +3,11 @@
 {% block content %}
     <div class="card">
         <div class="card-body">
-            <h1 class="h4">Ajout d'un contact à {{ structure.nom }}</h1>
+            {% if fonction is defined %}
+                <h1 class="h4">Ajout d'un contact à {{ fonction.typefonction.titre }} de {{fonction.structure.nom}}</h1>
+            {% else %}
+                <h1 class="h4">Ajout d'un contact à {{ structure.nom }}</h1>
+            {% endif %}
             <p>Veuillez compléter le formulaire ci-dessous :</p>
             {{ form_start(form) }}
                 {% if type == 'telephone' %}

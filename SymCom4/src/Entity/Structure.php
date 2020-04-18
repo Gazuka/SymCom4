@@ -74,6 +74,11 @@ class Structure
         $this->fonctions = new ArrayCollection();
     }
 
+    public function __toString()
+    {
+        return $this->nom;
+    }
+
     public function getId(): ?int
     {
         return $this->id;

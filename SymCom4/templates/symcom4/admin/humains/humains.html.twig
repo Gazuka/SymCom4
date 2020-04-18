@@ -35,6 +35,7 @@
                             <th scope="col">Nom</th>
                             <th scope="col">Prénom</th>
                             <th scope="col">Contacts</th>
+                            <th scope="col">Pseudo</th>
                             <th scope="col">Actions</th>
                         </tr>
                     </thead>
@@ -45,14 +46,21 @@
                                 <td>{{ humain.nom }}</td>
                                 <td>{{ humain.prenom }}</td>
                                 <td>
-                                    {{ humain.contacts | nbrContacts }}
+                                    {{ humain.contacts | NbrContacts }}
                                 </td>
                                 <td>
-                                    {{ path('admin_humain_addcontact', {'id': humain.id, 'type': 'telephone'}) | addContacts('telephone')}}
-                                    {{ path('admin_humain_addcontact', {'id': humain.id, 'type': 'mail'}) | addContacts('mail')}}
-                                    {{ path('admin_humain_addcontact', {'id': humain.id, 'type': 'adresse'}) | addContacts('adresse')}}
-                                    {{ path('admin_humain_edit', {'id': humain.id}) | ModifierBouton }}
-                                    {{ path('admin_humain_delete', {'id': humain.id}) | SupprimerBouton }}
+                                    {% if humain.utilisateur != null %}
+                                        {{ humain.utilisateur.pseudo}}
+                                    {% else %}
+                                        {{ path('admin_humain_utilisateur_new', {'idhumain': humain.id, 'idpage': idpage}) | AddContacts('telephone')}}
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {{ path('admin_humain_addcontact', {'id': humain.id, 'type': 'telephone'}) | AddContacts('telephone')}}
+                                    {{ path('admin_humain_addcontact', {'id': humain.id, 'type': 'mail'}) | AddContacts('mail')}}
+                                    {{ path('admin_humain_addcontact', {'id': humain.id, 'type': 'adresse'}) | AddContacts('adresse')}}
+                                    {{ path('admin_humain_edit', {'idhumain': humain.id}) | ModifierBouton }}
+                                    {{ path('admin_humain_delete', {'idhumain': humain.id}) | SupprimerBouton }}
                                 </td>
                             </tr>
                         {% endfor %}

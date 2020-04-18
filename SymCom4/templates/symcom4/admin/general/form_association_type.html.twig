@@ -1,0 +1,14 @@
+{% extends 'symcom4/admin/partials/_base_admin.html.twig' %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-body">
+            <h1 class="h4">Edition des types de l'association : {{ structure.nom }}</h1>
+            <p>{{ text_complete_form }}</p>
+            {{ form_start(form) }}
+            {{ form_widget(form.types) }}
+            {{ text_enregistrer | BtnSubmit }}
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

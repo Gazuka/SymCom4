@@ -11,6 +11,9 @@ use App\Form\NewMailType;
 use App\Form\NewAdresseType;
 use App\Service\PageService;
 use App\Form\NewTelephoneType;
+use App\Service\OutilsService;
+use App\Service\GestionService;
+use App\Service\FormulaireService;
 use App\Controller\OutilsController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -18,12 +21,19 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class SymCom4Controller extends OutilsController
 {
-    protected $liensRapides = array();
-    protected $request;
+    protected $formulaireService;
+    protected $gestionService;
+    protected $outilsService;
 
-    public function __construct(PageService $pageService)
+    protected $liensRapides = array();
+    protected $request;    
+
+    public function __construct(PageService $pageService, FormulaireService $formulaireService, GestionService $gestionService, OutilsService $outilsService)
     {
         $this->pageService = $pageService;
+        $this->formulaireService = $formulaireService;
+        $this->gestionService = $gestionService;
+        $this->outilsService = $outilsService;
     }
 
     /**
@@ -55,15 +65,24 @@ class SymCom4Controller extends OutilsController
                 //Création d'un lien vers la page Nouveau service
                 $this->addLienRapide('admin_structures_service_new', 'Ajouter un service', 'success', 'fas fa-plus');
             break;
-            case 'associations':
+            case 'association':
                 $this->defineParamTwig('nav_titre', 'Les associations');
                 //Création d'un lien vers la page Nouvelle association
                 $this->addLienRapide('admin_structures_association_new', 'Ajouter une association', 'success', 'fas fa-plus');
                 //Création d'un lien vers la page Nouveau type d'association
                 $this->addLienRapide('admin_structures_associations_type_new', "Ajouter un type d'association", 'success', 'fas fa-plus');
             break;
-            case 'fonctions':
+            case 'entreprise':
+                $this->defineParamTwig('nav_titre', 'Les entreprises');
+                //Création d'un lien vers la page Nouvelle association
+                $this->addLienRapide('admin_structures_entreprise_new', 'Ajouter une entreprise', 'success', 'fas fa-plus');
+                //Création d'un lien vers la page Nouveau type d'association
+                $this->addLienRapide('admin_structures_entreprises_type_new', "Ajouter un type d'entreprise", 'success', 'fas fa-plus');
+            break;
+            case 'fonction':
                 $this->defineParamTwig('nav_titre', 'Les fonctions');
+                //Création d'un lien vers la page Nouvelle fonction
+                //$this->addLienRapide('admin_fonction_new', 'Ajouter une fonction', 'success', 'fas fa-plus');
                 //Création d'un lien vers la page nouveau type de fonction
                 $this->addLienRapide('admin_fonctions_type_new', "Ajouter un type de fonction", 'success', 'fas fa-plus');
             break;

@@ -97,7 +97,7 @@ class LienBoutonExtension extends AbstractExtension
         $html .= "    Dernière chance, êtes-vous bien certain de vouloir supprimer ".$text." ?";
         $html .= "   </div>";
         $html .= "   <div class='modal-footer'>";
-        $html .= "    <button type='button' class='btn btn-primary' data-dismiss='modal'>Close</button>";
+        $html .= "    <button type='button' class='btn btn-primary' data-dismiss='modal'>Annuler</button>";
         $html .= "    <a class='btn btn-danger' href='".$url."'><i class='fas fa-trash'></i> Supprimer ".$text."</a>";
         $html .= "   </div>";
         $html .= "  </div>";

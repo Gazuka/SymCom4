@@ -35,15 +35,15 @@ class Fonction
     private $secteur;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Responsable", mappedBy="fonction", orphanRemoval=true)
-     */
-    private $responsables;
-
-    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\TypeFonction", inversedBy="fonction")
      * @ORM\JoinColumn(nullable=false)
      */
     private $typeFonction;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Humain", inversedBy="fonctions")
+     */
+    private $humain;
 
     public function __construct()
     {
@@ -106,37 +106,6 @@ class Fonction
         return $this;
     }
 
-    /**
-     * @return Collection|Responsable[]
-     */
-    public function getResponsables(): Collection
-    {
-        return $this->responsables;
-    }
-
-    public function addResponsable(Responsable $responsable): self
-    {
-        if (!$this->responsables->contains($responsable)) {
-            $this->responsables[] = $responsable;
-            $responsable->setFonction($this);
-        }
-
-        return $this;
-    }
-
-    public function removeResponsable(Responsable $responsable): self
-    {
-        if ($this->responsables->contains($responsable)) {
-            $this->responsables->removeElement($responsable);
-            // set the owning side to null (unless already changed)
-            if ($responsable->getFonction() === $this) {
-                $responsable->setFonction(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getTypeFonction(): ?TypeFonction
     {
         return $this->typeFonction;
@@ -145,6 +114,18 @@ class Fonction
     public function setTypeFonction(?TypeFonction $typeFonction): self
     {
         $this->typeFonction = $typeFonction;
+
+        return $this;
+    }
+
+    public function getHumain(): ?Humain
+    {
+        return $this->humain;
+    }
+
+    public function setHumain(?Humain $humain): self
+    {
+        $this->humain = $humain;
 
         return $this;
     }

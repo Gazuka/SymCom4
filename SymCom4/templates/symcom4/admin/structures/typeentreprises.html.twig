@@ -1,0 +1,56 @@
+{% extends 'symcom4/admin/partials/_base_admin.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - Entreprises
+{% endblock %}
+
+{% block content %}
+
+<div class="row mb-3">
+    <div class="col-4">
+        <div class="card">
+            <div class="card-body">
+                Nombre de types d'entreprises : <strong>{{ typeEntreprises | length }}</strong>
+            </div>
+        </div>
+    </div>
+    <div class="col-8">
+        <div class="card">
+            <div class="card-body">
+                {% include 'symcom4/admin/partials/_liensrapides.html.twig' %}  
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                
+                <table class="table">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Nom</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for typeEntreprise in typeEntreprises %}
+                            <tr>
+                                <td>{{ typeEntreprise.id }}</td>
+                                <td>{{ typeEntreprise.nom }}</td>
+                                <td>
+                                    {{ path('admin_structures_entreprises_type_edit', {'idtypeentreprise': typeEntreprise.id}) | ModifierBouton }}
+                                    {{ path('admin_structures_entreprises_type_delete', {'idtypeentreprise': typeEntreprise.id}) | SupprimerBouton }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

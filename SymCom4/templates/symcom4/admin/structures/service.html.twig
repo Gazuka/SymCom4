@@ -1,0 +1,37 @@
+{% extends 'symcom4/admin/partials/_base_admin.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - {{ service.structure.nom }}
+{% endblock %}
+
+{% block content %}
+
+    <div class="row mb-3">
+        <div class="col-6">
+            {{ gestionService.gestionServiceBase(service.structure) }}
+            {# {% include 'symcom4/admin/partials/_liensrapides.html.twig' %} #}
+            {{ gestionService.gestionLien(service.structure) }}
+        </div>
+        <div class="col-6">
+            {{ gestionService.gestionAdresses(service.structure) }}
+            {{ gestionService.gestionTelephones(service.structure) }}
+            {{ gestionService.gestionMails(service.structure) }}
+        </div>
+    </div>
+    
+    <div class="row mb-3">
+        <div class="col-12">
+            {{ gestionService.gestionStructureFonctions(service.structure) }}
+        </div>
+    </div>
+
+    <!-- Affichage du bouton de suppression du service -->
+    <div class="row">
+        <div class="card col-12">
+            <div class="card-body text-center">
+                {{ path('admin_structures_service_delete', {'idservice': service.id}) | SupprimerBouton(service.structure.nom) }}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

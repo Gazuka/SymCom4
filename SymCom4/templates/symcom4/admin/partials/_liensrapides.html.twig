@@ -1,3 +1,9 @@
-{% for lien in liensRapides %}
-    {{ lien | LienBouton() }}
-{% endfor %}
+{% if liensRapides | length > 0 %}
+    <div class="card mb-3">
+        <div class="card-body">
+            {% for lien in liensRapides %}
+                {{ lien | LienBouton() }}
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}

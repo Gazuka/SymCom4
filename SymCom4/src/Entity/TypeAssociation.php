@@ -24,24 +24,48 @@ class TypeAssociation
     private $nom;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Association", mappedBy="type")
-     */
-    private $associations;
-
-    /**
      * @ORM\OneToMany(targetEntity="App\Entity\Groupe", mappedBy="type")
      */
     private $groupes;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\TypeAssociation", inversedBy="enfants")
+     */
+    private $parent;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\TypeAssociation", mappedBy="parent")
+     */
+    private $enfants;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Association", mappedBy="types")
+     */
+    private $associations;
+
     public function __construct()
     {
-        $this->associations = new ArrayCollection();
         $this->groupes = new ArrayCollection();
+        $this->enfants = new ArrayCollection();
+        $this->associations = new ArrayCollection();
     }
 
     public function __toString()
     {
-        return $this->nom;
+        return $this->getParentName().$this->nom;
+    }
+
+    public function getParentName()
+    {
+        if($this->parent != null)
+        {
+            $ParentName = $this->parent->getParentName().$this->parent->getNom()." > ";
+        }
+        else
+        {
+            $ParentName = '';
+        }
+        return $ParentName;
     }
 
     public function getId(): ?int
@@ -61,36 +85,6 @@ class TypeAssociation
         return $this;
     }
 
-    /**
-     * @return Collection|Association[]
-     */
-    public function getAssociations(): Collection
-    {
-        return $this->associations;
-    }
-
-    public function addAssociation(Association $association): self
-    {
-        if (!$this->associations->contains($association)) {
-            $this->associations[] = $association;
-            $association->setType($this);
-        }
-
-        return $this;
-    }
-
-    public function removeAssociation(Association $association): self
-    {
-        if ($this->associations->contains($association)) {
-            $this->associations->removeElement($association);
-            // set the owning side to null (unless already changed)
-            if ($association->getType() === $this) {
-                $association->setType(null);
-            }
-        }
-
-        return $this;
-    }
 
     /**
      * @return Collection|Groupe[]
@@ -118,6 +112,77 @@ class TypeAssociation
             if ($groupe->getType() === $this) {
                 $groupe->setType(null);
             }
+        }
+
+        return $this;
+    }
+
+    public function getParent(): ?self
+    {
+        return $this->parent;
+    }
+
+    public function setParent(?self $parent): self
+    {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|self[]
+     */
+    public function getEnfants(): Collection
+    {
+        return $this->enfants;
+    }
+
+    public function addEnfant(self $enfant): self
+    {
+        if (!$this->enfants->contains($enfant)) {
+            $this->enfants[] = $enfant;
+            $enfant->setParent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEnfant(self $enfant): self
+    {
+        if ($this->enfants->contains($enfant)) {
+            $this->enfants->removeElement($enfant);
+            // set the owning side to null (unless already changed)
+            if ($enfant->getParent() === $this) {
+                $enfant->setParent(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Association[]
+     */
+    public function getAssociations(): Collection
+    {
+        return $this->associations;
+    }
+
+    public function addAssociation(Association $association): self
+    {
+        if (!$this->associations->contains($association)) {
+            $this->associations[] = $association;
+            $association->addType($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAssociation(Association $association): self
+    {
+        if ($this->associations->contains($association)) {
+            $this->associations->removeElement($association);
+            $association->removeType($this);
         }
 
         return $this;

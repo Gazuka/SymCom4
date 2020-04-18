@@ -19,6 +19,8 @@ abstract class OutilsController extends AbstractController
     protected $redirect;
     protected $paramRedirect = array();
     protected $pageService = null;
+    //protected $idPageMere = null; //Plus utile, le pageService le récupére automatiquement
+    protected $idPageActuelle = null;
 
     /** Création d'un formulaire pour un nouveau element (objet entity)
      * 
@@ -94,7 +96,7 @@ abstract class OutilsController extends AbstractController
             //On vérifie si on veut récupérer l'id de l'objet en cours
             if(isset($pagederesultatConfig_NewObjectId))
             {
-                $pagederesultatConfig['id'] = $element->getId();
+                $pagederesultatConfig[$pagederesultatConfig_NewObjectId] = $element->getId();
             }
             $this->defineParamRedirect($pagederesultatConfig);
         }
@@ -286,6 +288,27 @@ abstract class OutilsController extends AbstractController
         $this->paramRedirect = $valeur;
     }
 
+    /** ==================================================================== */
+    /** GESTION DU FORMULAIRE SERVICE */
+
+    /** Permet de générer un form dans un controller pour le FormulaireService */
+    protected function createFormService()
+    {
+        $this->formulaireService->setForm($this->createForm($this->formulaireService->getClassType(), $this->formulaireService->getElement()));
+        $this->formulaireService->creerFormulaire();
+    }
+
+    /** Permet de récupérer les informations de la page mère pour les fournir au Formulaire Service */
+    protected function addPageMereFormService()
+    {
+        $pageMere = $this->pageService->getPageMere();
+        $this->formulaireService->setPageResultat($pageMere->getNomChemin());
+        $this->formulaireService->setPageResultatConfig($pageMere->getParams());
+    }        
+
+    /** ==================================================================== */
+    /** UTILISATION SUR L'ENSEMBLE DES PAGES */
+
     /**
      * Affiche la page requise
      *
@@ -293,15 +316,55 @@ abstract class OutilsController extends AbstractController
      */
     protected function Afficher():Response
     {
+        //On récupère l'id de la page en cours
+        if($this->idPageActuelle == null)
+        {
+            $this->idPageActuelle = $this->pageService->getPageId();
+        }
+
+        //On passe l'id de la page mere à notre GestionService
+        if($this->pageService->getPageMere() != null)
+        {
+            $this->gestionService->setIdPageMere($this->pageService->getPageMere()->getId());
+        }
+        $this->gestionService->setIdPageActuelle($this->idPageActuelle);
+
+        //Si twig est vide c'est que nous devons attendre une réponse de formulaireService
+        if($this->twig == null)
+        {
+            $this->defineTwig($this->formulaireService->getTwigFormulaire());
+            $this->defineParamTwig('form', $this->formulaireService->getForm());
+            $this->defineParamTwig('element', $this->formulaireService->getElement());
+        }
+        
+        //On vérifie si le formulaireService souhaite faire passer des messages flush
+        foreach($this->formulaireService->getMessagesFlash() as $message)
+        {
+            $this->addFlash($message[0], $message[1]);
+        }        
+
+        //On passe le gestionService à Twig
+        $this->defineParamTwig('gestionService', $this->gestionService);
+
         //Si un objet page est défini, on l'enregistre
         if($this->pageService != null)
         {
             $this->pageService->Enregistrer();
         }
+
+        //On vérifie si le formulaireService souhaite effectuer une redirection
+        if($this->formulaireService->getRedirect() != null)
+        {
+            $this->defineRedirect($this->formulaireService->getRedirect());
+            $this->defineParamRedirect($this->formulaireService->getPageResultatConfig());
+        }
+
+        //Si redirect existe on redirige la page
         if($this->redirect != null)
         {
             return $this->redirectToRoute($this->redirect, $this->paramRedirect);
         }
+
         //Affiche la page
         return $this->render($this->twig, $this->paramTwig);
     }

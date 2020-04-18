@@ -9,92 +9,178 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class GestionService {
     private $twig; //Objet permettant l'affichage de Twig directement dans du html
-    private $idPage; //L'id de la page de base pour eventuellement y revenir par la suite
+    private $idPageMere; //L'id de la page de base pour eventuellement y revenir par la suite
+    private $idPageActuelle; //L'id de la page actuelle pour eventuellement y revenir par la suite
     private $contactService; //Utilisé pour récupérer des contacts par type
-    private $parent; //Objet général sur lequel on effectu des gestions
+
+    private $request;
     
     /************************************************************************************/
     public function __construct(Environment $twig, RequestStack $request, ContactService $contactService)
     {
         $this->twig = $twig;
         $this->routeActuelle = $request->getCurrentRequest()->attributes->get('_route');
+
         $this->contactService = $contactService;
+        $this->request = $request;
     }
-    public function setIdPage($id)
+    public function setIdPageMere($id)
     {
-        $this->idPage = $id;
+        $this->idPageMere = $id;
+    }
+    public function setIdPageActuelle($id)
+    {
+        $this->idPageActuelle = $id;
     }
     public function setContactService($contactService)
     {
         $this->contactService = $contactService;
-    }
-    public function setParent($parent)
-    {
-        $this->parent = $parent;
     }
     /************************************************************************************/
     /** Affiche dans TWIG un tableau pour voir les adresses, les modifier ou en ajouter
      *
      * @return void
      */
-    public function gestionAdresses()
+    public function gestionAdresses($parent)
     {
         $this->twig->display('symcom4/admin/gestion/_gestion_adresses.html.twig',
         [
-            'parent' => $this->parent,
-            'adresses' => $this->contactService->getAdresses($this->parent),
-            'idPage' => $this->idPage
+            'parent' => $parent,
+            'adresses' => $this->contactService->getAdresses($parent),
+            'idPage' => $this->idPageActuelle
         ]); 
     }
     /** Affiche dans TWIG un tableau pour voir les e-mails, les modifier ou en ajouter
      *
      * @return void
      */
-    public function gestionMails()
+    public function gestionMails($parent)
     {
-        $this->twig->display('symcom4/admin/gestion/_gestion_mails.html.twig',
+        // Permet de choisir la bonne page twig en fonction du parent
+        switch(substr(strrchr(get_class($parent), "\\"), 1))
+        {
+            case 'Structure':
+                $fichierTwig = 'symcom4/admin/gestion/_gestion_structure_mails.html.twig';
+            break;
+            case 'Fonction':
+                $fichierTwig = 'symcom4/admin/gestion/_gestion_fonction_mails.html.twig';
+            break;
+        }
+        $this->twig->display($fichierTwig,
         [
-            'parent' => $this->parent,
-            'mails' => $this->contactService->getMails($this->parent),
-            'idPage' => $this->idPage
+            'parent' => $parent,
+            'mails' => $this->contactService->getMails($parent),
+            'idPage' => $this->idPageActuelle
         ]); 
     }
     /** Affiche dans TWIG un tableau pour voir les téléphones, les modifier ou en ajouter
      *
      * @return void
      */
-    public function gestionTelephones()
+    public function gestionTelephones($parent)
     {
-        $this->twig->display('symcom4/admin/gestion/_gestion_telephones.html.twig',
+        // Permet de choisir la bonne page twig en fonction du parent
+        switch(substr(strrchr(get_class($parent), "\\"), 1))
+        {
+            case 'Structure':
+                $fichierTwig = 'symcom4/admin/gestion/_gestion_structure_telephones.html.twig';
+            break;
+            case 'Fonction':
+                $fichierTwig = 'symcom4/admin/gestion/_gestion_fonction_telephones.html.twig';
+            break;
+        }
+        $this->twig->display($fichierTwig,
         [
-            'parent' => $this->parent,
-            'telephones' => $this->contactService->getTelephones($this->parent),
-            'idPage' => $this->idPage
+            'parent' => $parent,
+            'telephones' => $this->contactService->getTelephones($parent),
+            'idPage' => $this->idPageActuelle
         ]); 
     }
     /** Affiche dans TWIG un tableau pour voir les liens, les modifier ou en ajouter
      *
      * @return void
      */
-    public function gestionLien()
+    public function gestionLien($parent)
     {
         $this->twig->display('symcom4/admin/gestion/_gestion_lien.html.twig',
         [
-            'parent' => $this->parent,
-            'lien' => $this->parent->getLien(),
-            'idPage' => $this->idPage
+            'parent' => $parent,
+            'lien' => $parent->getLien(),
+            'idPage' => $this->idPageActuelle
         ]); 
     }
     /** Affiche dans TWIG les bases d'un service (nom, presentation, local) et le bouton de modification
      *
      * @return void
      */
-    public function gestionServiceBase()
+    public function gestionServiceBase($parent)
     {
         $this->twig->display('symcom4/admin/gestion/_gestion_service_base.html.twig',
         [
-            'structure' => $this->parent,
-            'idPage' => $this->idPage
+            'structure' => $parent,
+            'idPage' => $this->idPageActuelle
+        ]); 
+    }
+    /** Affiche dans TWIG les bases d'une association (nom, presentation, local, type et sigle) et le bouton de modification
+     *
+     * @return void
+     */
+    public function gestionAssociationBase($parent)
+    {
+        $this->twig->display('symcom4/admin/gestion/_gestion_association_base.html.twig',
+        [
+            'structure' => $parent,
+            'idPage' => $this->idPageActuelle
+        ]); 
+    }
+    /** Affiche dans TWIG les types d'une association et le bouton de modification
+     *
+     * @return void
+     */
+    public function gestionAssociationType($parent)
+    {
+        $this->twig->display('symcom4/admin/gestion/_gestion_association_type.html.twig',
+        [
+            'structure' => $parent,
+            'idPage' => $this->idPageActuelle
+        ]); 
+    }
+    /** Affiche dans TWIG les bases d'une entreprise (nom, presentation, local, type et sigle) et le bouton de modification
+     *
+     * @return void
+     */
+    public function gestionEntrepriseBase($parent)
+    {
+        $this->twig->display('symcom4/admin/gestion/_gestion_entreprise_base.html.twig',
+        [
+            'structure' => $parent,
+            'idPage' => $this->idPageActuelle
+        ]); 
+    }
+    /** Affiche dans TWIG les types d'une entreprise et le bouton de modification
+     *
+     * @return void
+     */
+    public function gestionEntrepriseType($parent)
+    {
+        $this->twig->display('symcom4/admin/gestion/_gestion_entreprise_type.html.twig',
+        [
+            'structure' => $parent,
+            'idPage' => $this->idPageActuelle
+        ]); 
+    }
+    /** Affiche dans TWIG un tableau pour voir les adresses, les modifier ou en ajouter
+     *
+     * @return void
+     */
+    public function gestionStructureFonctions($parent)
+    {
+        $this->twig->display('symcom4/admin/gestion/_gestion_structure_fonctions.html.twig',
+        [
+            'parent' => $parent,
+            'fonctions' => $parent->getFonctions(),
+            'idPage' => $this->idPageActuelle,
+            'gestionService' => $this
         ]); 
     }
 }

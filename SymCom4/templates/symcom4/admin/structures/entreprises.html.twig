@@ -1,0 +1,68 @@
+{% extends 'symcom4/admin/partials/_base_admin.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - Entreprises
+{% endblock %}
+
+{% block content %}
+
+<div class="row mb-3">
+    <div class="col-4">
+        <div class="card">
+            <div class="card-body">
+                Nombre d'entreprises : <strong>{{ entreprises | length }}</strong>
+            </div>
+        </div>
+    </div>
+    <div class="col-8">
+        <div class="card">
+            <div class="card-body">
+                {% include 'symcom4/admin/partials/_liensrapides.html.twig' %}  
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                
+                <table class="table">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Nom</th>
+                            <th scope="col">Descriptif</th>
+                            <th scope="col">Guesninoise</th>
+                            <th scope="col">Contacts</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for entreprise in entreprises %}
+                            <tr>
+                                <td>{{ entreprise.id }}</td>
+                                <td>{{ entreprise.structure.nom }}</td>
+                                <td>{{ entreprise.structure.presentation }}</td>
+                                <td>{% if entreprise.structure.local == true %}OUI{% else %}NON{% endif %}</td>
+                                <td>{{ entreprise.structure.contacts | NbrContacts }}</td>
+                                <td>
+                                {{ path('admin_structures_entreprise', {'identreprise': entreprise.id}) | ModifierBouton }}
+                                {#
+                                    {{ path('admin_structure_addcontact', {'id': entreprise.structure.id, 'type': 'tel'}) | AddContacts('tel')}}
+                                    {{ path('admin_structure_addcontact', {'id': entreprise.structure.id, 'type': 'mail'}) | AddContacts('mail')}}
+                                    {{ path('admin_structure_addcontact', {'id': entreprise.structure.id, 'type': 'adresse'}) | AddContacts('adresse')}}
+                                    
+                                    {{ path('admin_structures_entreprise_delete', {'id': entreprise.id}) | SupprimerBouton }}
+                                    #}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

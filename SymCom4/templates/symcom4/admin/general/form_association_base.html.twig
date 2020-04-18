@@ -1,0 +1,21 @@
+{% extends 'symcom4/admin/partials/_base_admin.html.twig' %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-body">
+            {% if structure is defined %}
+                <h1 class="h4">Edition de l'association : {{ structure.nom }}</h1>
+            {% else %}
+                <h1 class="h4">Création d'une nouvelle association</h1>
+            {% endif %}
+            <p>{{ text_complete_form }}</p>
+            {{ form_start(form) }}
+            {{ form_row(form.structure.nom) }}
+            {{ form_row(form.sigle) }}
+            {{ form_row(form.structure.presentation) }}
+            {{ form_row(form.structure.local) }}
+            {{ text_enregistrer | BtnSubmit }}
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

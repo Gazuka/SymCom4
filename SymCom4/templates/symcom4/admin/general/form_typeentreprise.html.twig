@@ -1,0 +1,14 @@
+{% extends 'symcom4/admin/partials/_base_admin.html.twig' %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-body">
+            <h1 class="h4">Création d'un nouveau type d'entreprises</h1>
+            <p>Veuillez compléter le formulaire ci-dessous :</p>
+            {{ form_start(form) }}
+            {{ form_row(form.nom) }}
+            {{ text_enregistrer | BtnSubmit }}
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

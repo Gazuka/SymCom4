@@ -1,0 +1,25 @@
+{% extends 'symcom4/admin/_text.html.twig' %}
+{% block all %}
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-2">
+                    {% if structure.local == true %}
+                        LOGO Guesnain
+                    {% else %}
+                        Exterieur
+                    {% endif %}
+                </div>
+                <div class="col-10">
+                    <h1 class="h3">{{ structure.nom }}</h1>
+                    <p>{{ structure.presentation }}</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 text-right">
+                    {{ path('admin_structures_entreprise_edit', {'idstructure': structure.id, 'idpage': idPage }) | ModifierBouton }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
