@@ -14,16 +14,27 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class ContactService {
     
-    /************************************************************************************/
+    /*========================================================================================*/
+    /*========================================================================================*/
+    /*========================================================================================*/
+    /** FONCTIONS MAGIQUES ********************************************************************/
+
     public function __construct()
     {
     }
-    /************************************************************************************/
-    /** Retourne toutes les adresses d'un objet
+
+    /*========================================================================================*/
+    /*========================================================================================*/
+    /*========================================================================================*/
+    /** FONCTIONS GET ET SET ******************************************************************/
+
+    /**
+     * Retourne toutes les adresses d'un objet
      *
-     * @return void
+     * @param Object $parent
+     * @return Array
      */
-    public function getAdresses($parent)
+    public function getAdresses(Object $parent):Array
     {
         $resultat = array();
         $contacts = $parent->getContacts();
@@ -37,11 +48,14 @@ class ContactService {
         }
         return $resultat;
     }
-    /** Retourne tous les telephones d'un objet
+
+    /**
+     * Retourne tous les telephones d'un objet
      *
-     * @return void
+     * @param Object $parent
+     * @return Array
      */
-    public function getTelephones($parent)
+    public function getTelephones(Object $parent):Array
     {
         $resultat = array();
         $contacts = $parent->getContacts();
@@ -55,11 +69,14 @@ class ContactService {
         }
         return $resultat;
     }
-    /** Retourne tous les mails d'un objet
+
+    /**
+     * Retourne tous les mails d'un objet
      *
-     * @return void
+     * @param Object $parent
+     * @return Array
      */
-   public function getMails($parent)
+    public function getMails(Object $parent):Array
     {
         $resultat = array();
         $contacts = $parent->getContacts();
@@ -74,58 +91,71 @@ class ContactService {
         return $resultat;
     }
 
-    /** Permet de configurer le formulaire en fonction du type de contact
+    /**
+     * Retourner un objet qui correspond au type demandé
      *
-     * @param [type] $type
-     * @return void
+     * @param string $type
+     * @param Object $contact
+     * @return Object
      */
-    public function addContactConfigForm($type)
+    public function getElementFormulaire(string $type, Object $contact = null):Object
     {
         switch($type)
         {
             case 'telephone':
-                $tel = new Telephone();
-                $variables['classType'] = NewTelephoneType::class;
-                $variables['element'] = $tel;
+                if($contact != null)
+                {
+                    $element = $contact->getTelephone();
+                }
+                else
+                {
+                    $element = new Telephone();
+                }
             break;
             case 'mail':
-                $mail = new Mail();
-                $variables['classType'] = NewMailType::class;
-                $variables['element'] = $mail;
+                if($contact != null)
+                {
+                    $element = $contact->getMail();
+                }
+                else
+                {
+                    $element = new Mail();
+                }
             break;
             case 'adresse':
-                $adresse = new Adresse();
-                $variables['classType'] = NewAdresseType::class;
-                $variables['element'] = $adresse;
+                if($contact != null)
+                {
+                    $element = $contact->getAdresse();
+                }
+                else
+                {
+                    $element = new Adresse();
+                }
             break;
-        }  
-
-        return $variables;
+        }
+        return $element;
     }
 
-    /** Permet de configurer le formulaire en fonction du type de contact
+    /**
+     * Retourner la classType qui correspond au type demandé
      *
-     * @param [type] $type
-     * @return void
+     * @param string $type
+     * @return string
      */
-    public function editContactConfigForm($contact)
+    public function getClassTypeFormulaire(string $type):string
     {
-        $type = $contact->getType();
         switch($type)
         {
             case 'telephone':
-                $variables['classType'] = NewTelephoneType::class;
-                $variables['element'] = $contact->getTelephone();
+                $classType = NewTelephoneType::class;
             break;
             case 'mail':
-                $variables['classType'] = NewMailType::class;
-                $variables['element'] = $contact->getMail();
+                $classType = NewMailType::class;
             break;
             case 'adresse':
-                $variables['classType'] = NewAdresseType::class;
-                $variables['element'] = $contact->getAdresse();
+                $classType = NewAdresseType::class;
             break;
-        }  
-        return $variables;
+        }
+        return $classType;
     }
 }

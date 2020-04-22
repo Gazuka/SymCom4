@@ -51,6 +51,11 @@ class Lien
      */
     private $structure;
 
+    public function __construct()
+    {
+        $this->extern = true;
+    }
+
     public function getId(): ?int
     {
         return $this->id;

@@ -11,10 +11,13 @@ class OutilsControllerStructureTest extends WebTestCase
      *  > Un service doit exister
      *  > Une structure doit exister
      *  > Une page doit exister
+     *  > Un lien doit exister et appartenir à la structure
      */
     private $idservice = 16;
     private $idstructure = 16;
     private $idpagemere = 1;
+    private $idlien = ?;
+    private $idcontact = ?;
 
     public function setUp()
     {
@@ -34,6 +37,60 @@ class OutilsControllerStructureTest extends WebTestCase
     {
         $client = static::createClient();
         $client->request('GET', '/admin/structures/service/edit/'.$this->idstructure.'/'.$this->idpagemere);
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+    }
+
+    /** N°3 - Test d'affichage de la page */
+    public function testChemin_admin_structure_addlien()
+    {
+        $client = static::createClient();
+        $client->request('GET', '/admin/structure/addlien/'.$this->idstructure.'/'.$this->idpagemere);
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+    }
+
+    /** N°4 - Test d'affichage de la page */
+    public function testChemin_admin_structure_editlien()
+    {
+        $client = static::createClient();
+        $client->request('GET', '/admin/structures/lien/edit/'.$this->idstructure.'/'.$this->idlien.'/'.$this->idpage);
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+    }
+
+    /** N°5 - Test d'affichage de la page */
+    public function testChemin_admin_structure_deletelien()
+    {
+        $client = static::createClient();
+        $client->request('GET', '/admin/structures/lien/delete/'.$this->idstructure.'/'.$this->idlien.'/'.$this->idpage);
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+    }
+
+    /** N°6 - Test d'affichage de la page */
+    public function testChemin_admin_structure_addcontact()
+    {
+        $client = static::createClient();
+        $client->request('GET', '/admin/structure/addcontact/'.$this->idstructure.'/'.$this->idpage.'/adresse');
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+
+        $client->request('GET', '/admin/structure/addcontact/'.$this->idstructure.'/'.$this->idpage.'/mail');
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+
+        $client->request('GET', '/admin/structure/addcontact/'.$this->idstructure.'/'.$this->idpage.'/telephone');
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+    }
+
+    /** N°7 - Test d'affichage de la page */
+    public function testChemin_admin_structure_editcontact()
+    {
+        $client = static::createClient();
+        $client->request('GET', '/admin/structure/editcontact/'.$this->idstructure.'/'.$this->idcontact.'/'.$this->idpage);
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+    }
+
+    /** N°8 - Test d'affichage de la page */
+    public function testChemin_admin_structure_deletecontact()
+    {
+        $client = static::createClient();
+        $client->request('GET', '/admin/structure/deletecontact/'.$this->idstructure.'/'.$this->idcontact.'/'.$this->idpage);
         $this->assertSame(200, $client->getResponse()->getStatusCode());
     }
 

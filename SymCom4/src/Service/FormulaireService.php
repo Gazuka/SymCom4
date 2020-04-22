@@ -35,13 +35,21 @@ class FormulaireService {
     private $messagesFlash = array();
     private $redirect = false;
 
-    /** FONCTIONS MAGIQUES *************************************************************************************/
+    /*========================================================================================*/
+    /*========================================================================================*/
+    /*========================================================================================*/
+    /** FONCTIONS MAGIQUES ********************************************************************/
+
     public function __construct(EntityManagerInterface $manager, RequestStack $requestStack)
     {
         $this->manager = $manager;
         $this->request = $requestStack->getCurrentRequest();
     }
-    /** GETTERS ET SETTERS *************************************************************************************/
+    /*========================================================================================*/
+    /*========================================================================================*/
+    /*========================================================================================*/
+    /** FONCTIONS GET ET SET ******************************************************************/
+
     public function setActions($controller, $actions)
     {
         $this->actions = $actions;
@@ -115,7 +123,10 @@ class FormulaireService {
         $this->TwigFormulaire = $twigFormulaire;
     }
     
-    /** FONCTIONS PUBLIQUES ************************************************************************************/
+    /*========================================================================================*/
+    /*========================================================================================*/
+    /*========================================================================================*/
+    /** FONCTIONS PUBLIQUES *******************************************************************/
     
     public function creerFormulaire():void
     {
@@ -164,19 +175,23 @@ class FormulaireService {
         }
     }
 
-    /** FONCTIONS PRIVES ***************************************************************************************/
+    /*========================================================================================*/
+    /*========================================================================================*/
+    /*========================================================================================*/
+    /** FONCTIONS PRIVES **********************************************************************/
 
     /** Permet d'effectuer des actions lors de la validation du formulaire afin de modifier l'element */
-    private function methode_Actions():Object
+    private function methode_Actions()
     {
         foreach($this->actions as $action)
         {
             //On récupére ici les variables : $name, $params
             extract($action);
             //On lance la fonction qui retourne l'élément modifié
-            $this->element = $this->controller->$name($this->element, $params, $this->request); //le request est il encore utile ???
+            $this->element = $this->controller->$name($this->element, $params);
         }
     }
+
     /** Permet de modifier les dépendances d'un élement d'une classe quelconque */
     private function methode_Dependances()
     {
@@ -200,6 +215,7 @@ class FormulaireService {
             }
         }
     }
+
     /** Permet de supprimer les objets orphelins ayant un lien avec notre élément */
     private function methode_Deletes() // ??? revoir l'histoire des repo si possibilité d'automatiser la chose !!!!!!!!!!!!!
     {
@@ -220,6 +236,7 @@ class FormulaireService {
             }
         }
     }
+    
     /** Permet de dynamiser des emplacements spécifiques d'un message */
     private function methode_DynamiseTexte()
     {

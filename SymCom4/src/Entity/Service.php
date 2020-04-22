@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Entity\Structure;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ServiceRepository")
@@ -20,6 +21,7 @@ class Service
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\Structure", inversedBy="service", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\Valid
      */
     private $structure;
 

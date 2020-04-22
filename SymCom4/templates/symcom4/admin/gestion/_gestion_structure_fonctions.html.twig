@@ -16,8 +16,8 @@
                                         {% endif %}
                                     </div>
                                     <div class="col-4">
-                                        {{ path('admin_structure_editfonction', {'idstructure': parent.id, 'idfonction': fonction.id, 'idpage': idPage }) | ModifierBouton }}
-                                        {{ path('admin_structure_deletefonction', {'idstructure': parent.id, 'idfonction': fonction.id, 'idpage': idPage}) | SupprimerBouton }}
+                                        {{ path('admin_structure_editfonction', {'idstructure': parent.id, 'idfonction': fonction.id, 'idpagemere': idPage }) | ModifierBouton }}
+                                        {{ path('admin_structure_deletefonction', {'idstructure': parent.id, 'idfonction': fonction.id, 'idpagemere': idPage}) | SupprimerBouton }}
                                     </div>
                                 </div>
                             </h5>
@@ -26,12 +26,12 @@
                                     {% if fonction.humain != null %}
                                         {{ fonction.humain.nom }} {{ fonction.humain.prenom }} 
                                     {% else %}
-                                        {{ path('admin_structure_fonction_addhumain', {'idstructure': parent.id, 'idfonction': fonction.id, 'idpage': idPage}) | AddHumain("Ajouter un responsable")}}
+                                        {{ path('admin_structure_fonction_addhumain', {'idstructure': parent.id, 'idfonction': fonction.id, 'idpagemere': idPage}) | AddHumain("Ajouter un responsable")}}
                                     {% endif %}
                                 </div>
                                 <div class="col-4">
                                     {% if fonction.humain != null %}
-                                        {{ path('admin_structure_fonction_deletehumain', {'idstructure': parent.id, 'idfonction': fonction.id, 'idpage': idPage}) | SupprimerBouton(fonction.humain.nom ~ ' ' ~ fonction.humain.prenom)}} 
+                                        {{ path('admin_structure_fonction_deletehumain', {'idstructure': parent.id, 'idfonction': fonction.id, 'idpagemere': idPage}) | SupprimerBouton(fonction.humain.nom ~ ' ' ~ fonction.humain.prenom)}} 
                                     {% endif %}
                                 </div>
                             </div> 
@@ -49,7 +49,7 @@
             {% else %}
                 <p class="text-danger">Aucune fonction n'est renseignée</p>
             {% endif %}
-            {{ path('admin_structure_addfonction', {'idstructure': parent.id, 'idpage': idPage}) | AddFonction("Ajouter une fonction")}}
+            {{ path('admin_structure_addfonction', {'idstructure': parent.id, 'idpagemere': idPage}) | AddFonction("Ajouter une fonction")}}
         </div>
     </div>
 {% endblock %}

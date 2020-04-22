@@ -5,7 +5,7 @@
         <div class="card-body">
             <h1 class="h4">Création d'une nouvelle personne</h1>
             <p>Veuillez compléter le formulaire ci-dessous :</p>
-            {{ form_start(form) }}
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
             {{ form_row(form.nom) }}
             {{ form_row(form.prenom) }}
             {{ form_row(form.sexe) }}

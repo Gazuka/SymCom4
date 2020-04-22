@@ -15,7 +15,11 @@ class GestionService {
 
     private $request;
     
-    /************************************************************************************/
+    /*========================================================================================*/
+    /*========================================================================================*/
+    /*========================================================================================*/
+    /** FONCTIONS MAGIQUES ********************************************************************/
+
     public function __construct(Environment $twig, RequestStack $request, ContactService $contactService)
     {
         $this->twig = $twig;
@@ -24,18 +28,32 @@ class GestionService {
         $this->contactService = $contactService;
         $this->request = $request;
     }
+
+    /*========================================================================================*/
+    /*========================================================================================*/
+    /*========================================================================================*/
+    /** FONCTIONS GET ET SET ******************************************************************/
+
     public function setIdPageMere($id)
     {
         $this->idPageMere = $id;
     }
+
     public function setIdPageActuelle($id)
     {
         $this->idPageActuelle = $id;
     }
+
     public function setContactService($contactService)
     {
         $this->contactService = $contactService;
     }
+
+    /*========================================================================================*/
+    /*========================================================================================*/
+    /*========================================================================================*/
+    /** FONCTIONS PUBLIQUES *******************************************************************/
+
     /************************************************************************************/
     /** Affiche dans TWIG un tableau pour voir les adresses, les modifier ou en ajouter
      *
@@ -43,13 +61,14 @@ class GestionService {
      */
     public function gestionAdresses($parent)
     {
-        $this->twig->display('symcom4/admin/gestion/_gestion_adresses.html.twig',
+        $this->twig->display('symcom4/admin/gestion/_gestion_structure_adresses.html.twig',
         [
             'parent' => $parent,
             'adresses' => $this->contactService->getAdresses($parent),
             'idPage' => $this->idPageActuelle
         ]); 
     }
+
     /** Affiche dans TWIG un tableau pour voir les e-mails, les modifier ou en ajouter
      *
      * @return void
@@ -77,6 +96,7 @@ class GestionService {
      *
      * @return void
      */
+
     public function gestionTelephones($parent)
     {
         // Permet de choisir la bonne page twig en fonction du parent
@@ -96,6 +116,7 @@ class GestionService {
             'idPage' => $this->idPageActuelle
         ]); 
     }
+
     /** Affiche dans TWIG un tableau pour voir les liens, les modifier ou en ajouter
      *
      * @return void
@@ -109,6 +130,7 @@ class GestionService {
             'idPage' => $this->idPageActuelle
         ]); 
     }
+
     /** Affiche dans TWIG les bases d'un service (nom, presentation, local) et le bouton de modification
      *
      * @return void
@@ -121,6 +143,7 @@ class GestionService {
             'idPage' => $this->idPageActuelle
         ]); 
     }
+
     /** Affiche dans TWIG les bases d'une association (nom, presentation, local, type et sigle) et le bouton de modification
      *
      * @return void
@@ -133,6 +156,7 @@ class GestionService {
             'idPage' => $this->idPageActuelle
         ]); 
     }
+
     /** Affiche dans TWIG les types d'une association et le bouton de modification
      *
      * @return void
@@ -145,6 +169,7 @@ class GestionService {
             'idPage' => $this->idPageActuelle
         ]); 
     }
+
     /** Affiche dans TWIG les bases d'une entreprise (nom, presentation, local, type et sigle) et le bouton de modification
      *
      * @return void
@@ -157,6 +182,7 @@ class GestionService {
             'idPage' => $this->idPageActuelle
         ]); 
     }
+
     /** Affiche dans TWIG les types d'une entreprise et le bouton de modification
      *
      * @return void
@@ -169,6 +195,7 @@ class GestionService {
             'idPage' => $this->idPageActuelle
         ]); 
     }
+    
     /** Affiche dans TWIG un tableau pour voir les adresses, les modifier ou en ajouter
      *
      * @return void

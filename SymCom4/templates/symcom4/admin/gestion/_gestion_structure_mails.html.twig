@@ -18,8 +18,8 @@
                                 <td>{{ mail.id }}</td>
                                 <td>{{ mail.adresse }}</td>
                                 <td>
-                                    {{ path('admin_structure_editcontact', {'idstructure': parent.id, 'idcontact': mail.contact.id, 'idpage': idPage }) | ModifierBouton }}
-                                    {{ path('admin_structure_deletecontact', {'idstructure': parent.id, 'idcontact': mail.contact.id, 'idpage': idPage}) | SupprimerBouton }}
+                                    {{ path('admin_structure_editcontact', {'idstructure': parent.id, 'idcontact': mail.contact.id, 'idpagemere': idPage }) | ModifierBouton }}
+                                    {{ path('admin_structure_deletecontact', {'idstructure': parent.id, 'idcontact': mail.contact.id, 'idpagemere': idPage}) | SupprimerBouton }}
                                 </td>
                             </tr>
                         {% endfor %}
@@ -28,7 +28,7 @@
             {% else %}
                 <p class="text-danger">{{ text_no_mail }}</p>
             {% endif %}
-            {{ path('admin_structure_addcontact', {'idstructure': parent.id, 'type': 'mail', 'idpage': idPage}) | AddContacts('mail', text_add_mail)}}
+            {{ path('admin_structure_addcontact', {'idstructure': parent.id, 'type': 'mail', 'idpagemere': idPage}) | AddContacts('mail', text_add_mail)}}
         </div>
     </div>
 {% endblock %}

@@ -52,13 +52,14 @@
                                     {% if humain.utilisateur != null %}
                                         {{ humain.utilisateur.pseudo}}
                                     {% else %}
-                                        {{ path('admin_humain_utilisateur_new', {'idhumain': humain.id, 'idpage': idpage}) | AddContacts('telephone')}}
+                                        Pas inscrit sur le site
+                                        {# {{ path('admin_humain_utilisateur_new', {'idhumain': humain.id, 'idpagemere': idpage}) | AddContacts('telephone')}} #}
                                     {% endif %}
                                 </td>
                                 <td>
-                                    {{ path('admin_humain_addcontact', {'id': humain.id, 'type': 'telephone'}) | AddContacts('telephone')}}
-                                    {{ path('admin_humain_addcontact', {'id': humain.id, 'type': 'mail'}) | AddContacts('mail')}}
-                                    {{ path('admin_humain_addcontact', {'id': humain.id, 'type': 'adresse'}) | AddContacts('adresse')}}
+                                    {{ path('admin_humain_addcontact', {'idhumain': humain.id, 'type': 'telephone'}) | AddContacts('telephone')}}
+                                    {{ path('admin_humain_addcontact', {'idhumain': humain.id, 'type': 'mail'}) | AddContacts('mail')}}
+                                    {{ path('admin_humain_addcontact', {'idhumain': humain.id, 'type': 'adresse'}) | AddContacts('adresse')}}
                                     {{ path('admin_humain_edit', {'idhumain': humain.id}) | ModifierBouton }}
                                     {{ path('admin_humain_delete', {'idhumain': humain.id}) | SupprimerBouton }}
                                 </td>

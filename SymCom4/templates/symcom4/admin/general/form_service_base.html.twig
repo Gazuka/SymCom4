@@ -9,7 +9,7 @@
                 <h1 class="h4">Création d'un nouveau service</h1>
             {% endif %}
             <p>{{ text_complete_form }}</p>
-            {{ form_start(form) }}
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
             {{ form_row(form.structure.nom) }}
             {{ form_row(form.structure.presentation) }}
             {{ form_row(form.structure.local) }}

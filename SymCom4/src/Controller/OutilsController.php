@@ -316,56 +316,61 @@ abstract class OutilsController extends AbstractController
      */
     protected function Afficher():Response
     {
-        //On récupère l'id de la page en cours
+        //Récupérer l'id de la page en cours
         if($this->idPageActuelle == null)
         {
             $this->idPageActuelle = $this->pageService->getPageId();
         }
 
-        //On passe l'id de la page mere à notre GestionService
+        //Passer l'id de la page mere à notre GestionService
         if($this->pageService->getPageMere() != null)
         {
             $this->gestionService->setIdPageMere($this->pageService->getPageMere()->getId());
         }
         $this->gestionService->setIdPageActuelle($this->idPageActuelle);
 
-        //Si twig est vide c'est que nous devons attendre une réponse de formulaireService
-        if($this->twig == null)
+        //Vérifier si twig est vide et qu'il n'y a pas encore de redirect, alors c'est que nous devons attendre une réponse de formulaireService
+        if($this->twig == null && $this->redirect == null)
         {
-            $this->defineTwig($this->formulaireService->getTwigFormulaire());
-            $this->defineParamTwig('form', $this->formulaireService->getForm());
-            $this->defineParamTwig('element', $this->formulaireService->getElement());
+            //Vérifier si le formulaireService souhaite effectuer une redirection ou appeler un twig
+            if($this->formulaireService->getRedirect() != null)
+            {
+                $this->defineRedirect($this->formulaireService->getRedirect());
+                $this->defineParamRedirect($this->formulaireService->getPageResultatConfig());
+            }
+            else
+            {
+                $this->defineTwig($this->formulaireService->getTwigFormulaire());
+                $this->defineParamTwig('form', $this->formulaireService->getForm());
+                $this->defineParamTwig('element', $this->formulaireService->getElement());
+            }   
+
+            //Vérifier si le formulaireService souhaite faire passer des messages flush
+            foreach($this->formulaireService->getMessagesFlash() as $message)
+            {
+                $this->addFlash($message[0], $message[1]);
+            } 
         }
         
-        //On vérifie si le formulaireService souhaite faire passer des messages flush
-        foreach($this->formulaireService->getMessagesFlash() as $message)
-        {
-            $this->addFlash($message[0], $message[1]);
-        }        
-
-        //On passe le gestionService à Twig
+        //Donner le gestionService à Twig
         $this->defineParamTwig('gestionService', $this->gestionService);
 
-        //Si un objet page est défini, on l'enregistre
+        //Enregistrer la page
         if($this->pageService != null)
         {
             $this->pageService->Enregistrer();
         }
 
-        //On vérifie si le formulaireService souhaite effectuer une redirection
-        if($this->formulaireService->getRedirect() != null)
-        {
-            $this->defineRedirect($this->formulaireService->getRedirect());
-            $this->defineParamRedirect($this->formulaireService->getPageResultatConfig());
-        }
-
-        //Si redirect existe on redirige la page
+        //Vérifier si redirection ou affichage
         if($this->redirect != null)
         {
+            //Afficher la redirection
             return $this->redirectToRoute($this->redirect, $this->paramRedirect);
         }
-
-        //Affiche la page
-        return $this->render($this->twig, $this->paramTwig);
+        else
+        {
+            //Affiche la page
+            return $this->render($this->twig, $this->paramTwig);
+        }
     }
 }

@@ -17,15 +17,15 @@
                             <td>{{ parent.lien.id }}</td>
                             <td><a href="{{ parent.lien.url }}" target="_blank">{{ parent.lien.label }}</a></td>
                             <td>
-                                {{ path('admin_structure_editlien', {'idstructure': parent.id, 'idlien': parent.lien.id, 'idpage': idPage}) | ModifierBouton }}
-                                {{ path('admin_structure_deletelien', {'idstructure': parent.id, 'idlien': parent.lien.id, 'idpage': idPage}) | SupprimerBouton }}
+                                {{ path('admin_structure_editlien', {'idstructure': parent.id, 'idlien': parent.lien.id, 'idpagemere': idPage}) | ModifierBouton }}
+                                {{ path('admin_structure_deletelien', {'idstructure': parent.id, 'idlien': parent.lien.id, 'idpagemere': idPage}) | SupprimerBouton }}
                             </td>
                         </tr>   
                     </tbody>
                 </table>
             {% else %}
                 <p class="text-danger">{{ text_no_lien }}</p>
-                {{ path('admin_structure_addlien', {'idstructure': parent.id, 'idpage': idPage}) | AddLien(text_add_lien)}}
+                {{ path('admin_structure_addlien', {'idstructure': parent.id, 'idpagemere': idPage}) | AddLien(text_add_lien)}}
             {% endif %}
         </div>
     </div>

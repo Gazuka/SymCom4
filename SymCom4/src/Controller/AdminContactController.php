@@ -28,183 +28,294 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AdminContactController extends AdminController
 {
-    /******************************************************************************************/
-    /****************************************Les humain ***************************************/
+    /*========================================================================================*/
+    /*========================================================================================*/
+    /*========================================================================================*/
+    /** HUMAINS - VOIR, AJOUTER, MODIFIER, SUPPRIMER ******************************************/
+
     /**
+     * Afficher tous les humains
+     * 
      * @Route("/admin/humains", name="admin_humains")
+     *
+     * @return Response
      */
-    public function humains(Request $request, HumainRepository $repoHumain): Response
+    public function humains():Response
     {
-        //On génère la page en cours
-        $this->pageService->setRoute($request->get('_route'));
+        //Récupérer tous les humains
+        $humains = $this->outilsService->findAll(Humain::class);
 
-        //Récupére tous les services
-        $humains = $repoHumain->findAll();
-        //Prépare le Twig
-        $this->initTwig('humains');
-        $this->defineTwig('symcom4/admin/humains/humains.html.twig');        
+        //Obtenir le titre et le menu rapide en fonction du type
+        $this->initTwig('humain');
+
+        //Définir le twig à afficher
+        $this->defineTwig('symcom4/admin/humains/humains.html.twig'); 
+        
+        //Fournir les paramètres requis au Twig
         $this->defineParamTwig('humains', $humains);
-        //Affiche la page
+
+        //Afficher la page
         return $this->Afficher();
     }
+
     /**
+     * Créer un humain
+     * 
      * @Route("/admin/humain/new", name="admin_humain_new")
+     *
+     * @return Response
      */
-    public function newHumain(Request $request, EntityManagerInterface $manager):Response
+    public function newHumain():Response
     {
-        //On génère la page en cours
-        $this->pageService->setRoute($request->get('_route'));
-
-        //Préparation et traitement du formulaire
-        $variables['request'] = $request;
-        $variables['manager'] = $manager;
-        $variables['element'] = new Humain();
-        $variables['classType'] = NewHumainType::class;
-        $variables['pagedebase'] = 'symcom4/admin/humains/new_humain.html.twig';
-        $variables['pagederesultat'] = 'admin_humains';
-        $variables['texteConfirmation'] = "### a bien été créé !"; 
-        $options['texteConfirmationEval'] = ["###" => '$element->getNom()." ".$element->getPrenom();'];
-        $this->afficherFormulaire($variables, $options);
-        //Prépare le Twig
-        $this->initTwig('humains');
-        //Affiche le formulaire ou la redirection
+        //Gérer le formulaire
+        $this->formulaireService->setElement(new Humain());
+        $this->formulaireService->setClassType(NewHumainType::class);
+        $this->formulaireService->setTwigFormulaire('symcom4/admin/humains/new_humain.html.twig');
+        $this->formulaireService->setPageResultat('admin_humains');
+        $this->formulaireService->setTexteConfirmation("### a bien été créé !");
+        $this->formulaireService->setTexteConfirmationEval(["###" => '$this->element->getNom()." ".$this->element->getPrenom();']);
+        $this->createFormService();
+        
+        //Obtenir le titre et le menu rapide en fonction du type
+        $this->initTwig('humain');
+        
+        //Afficher le formulaire ou la redirection
         return $this->Afficher();
     }
+
     /**
+     * Modifier un humain
+     * 
      * @Route("/admin/humain/edit/{idhumain}", name="admin_humain_edit")
+     *
+     * @param integer $idhumain
+     * @return Response
      */
-    public function editHumain(Request $request, $idhumain, HumainRepository $repoHumain, EntityManagerInterface $manager):Response
+    public function editHumain(int $idhumain):Response
     {
-        //On génère la page en cours
-        $this->pageService->setRoute($request->get('_route'));
-        $this->pageService->addParam('idhumain', $idhumain); 
+        //Donner les arguments de la page en cours au PageService
+        $this->pageService->setParams(compact('idhumain'));
 
-        //On recupére le Service
-        $humain = $repoHumain->findOneById($idhumain);
-        //Préparation et traitement du formulaire
-        $variables['request'] = $request;
-        $variables['manager'] = $manager;
-        $variables['element'] = $humain;
-        $variables['classType'] = NewHumainType::class;
-        $variables['pagedebase'] = 'symcom4/admin/humains/new_humain.html.twig';
-        $variables['pagederesultat'] = 'admin_humains';
-        $variables['texteConfirmation'] = "### a bien été modifié !"; 
-        $options['texteConfirmationEval'] = ["###" => '$element->getNom()." ".$element->getPrenom();'];
-        $this->afficherFormulaire($variables, $options);
-        //Prépare le Twig
-        $this->initTwig('humains');
-        //Affiche le formulaire ou la redirection
+        //Récupérer l'objet Humain
+        $humain = $this->outilsService->findById(Humain::class, $idhumain);
+
+        //Gérer le formulaire
+        $this->formulaireService->setElement($humain);
+        $this->formulaireService->setClassType(NewHumainType::class);
+        $this->formulaireService->setTwigFormulaire('symcom4/admin/humains/new_humain.html.twig');
+        $this->formulaireService->setPageResultat('admin_humains');
+        $this->formulaireService->setTexteConfirmation("### a bien été modifié !");
+        $this->formulaireService->setTexteConfirmationEval(["###" => '$this->element->getNom()." ".$this->element->getPrenom();']);
+        $this->createFormService();
+
+        //Obtenir le titre et le menu rapide en fonction du type
+        $this->initTwig('humain');
+
+        //Afficher le formulaire ou la redirection
         return $this->Afficher();
     }
+
     /**
+     * Supprimer un humain
+     * 
      * @Route("/admin/humain/delete/{idhumain}", name="admin_humain_delete")
+     *
+     * @param integer $idhumain
+     * @return Response
      */
-    public function deleteHumain(HumainRepository $repo, EntityManagerInterface $manager, $idhumain):Response
+    public function deleteHumain(int $idhumain):Response
     {
-        //On supprimer le Service
-        $this->delete($repo, $manager, $id);
-        //Défini la page de redirection
+        //Donner les arguments de la page en cours au PageService
+        $this->pageService->setParams(compact('idhumain'));
+
+        //Supprimer le contact de la BDD
+        $this->outilsService->delete(Humain::class, $idhumain);
+        
+        //Afficher un message de validation
+        $this->addFlash('success', 'Cette personne a bien été supprimée !');
+
+        //Obtenir le titre et le menu rapide en fonction du type
+        $this->initTwig('humain');
+
+        //Définir la page de redirection
         $this->defineRedirect('admin_humains');
-        //Prépare le Twig
-        $this->initTwig('humains');
-        //Affiche la redirection
+
+        //Afficher la redirection
         return $this->Afficher();
     }
-    /**
-     * @Route("/admin/humain/addcontact/{id}/{type}", name="admin_humain_addcontact")
-     */
-    public function addcontactHumain(HumainRepository $repo, Request $request, EntityManagerInterface $manager, $id, $type):Response
-    {
-        //On récupère l'humain concerné
-        $humain = $repo->findOneById($id);
 
-        //Selon le type, on crée le type de contact voulu
-        $variables = $this->factor_addcontact($type);
-             
-        //Préparation et traitement du formulaire
-        $variables['request'] = $request;
-        $variables['manager'] = $manager;
-        $variables['pagedebase'] = 'symcom4/admin/humains/add_contact.html.twig';
-        $variables['pagederesultat'] = 'admin_humains';
-        $variables['texteConfirmation'] = "Le contact a bien été modifié !";
-        $options['actions'] = array(['name' => 'action_addcontactHumain', 'params' => ['humain' => $humain]]);
-        $this->afficherFormulaire($variables, $options);
-        //Prépare le Twig
-        $this->initTwig('humains');
+    /*========================================================================================*/
+    /*========================================================================================*/
+    /*========================================================================================*/
+    /** HUMAINS - AJOUTER un CONTACT **********************************************************/
+
+    /**
+     * Ajouter un contact à un humain
+     * 
+     * @Route("/admin/humain/addcontact/{idhumain}/{type}", name="admin_humain_addcontact")
+     *
+     * @param integer $idhumain
+     * @param integer $idpage
+     * @param string $type
+     * @return Response
+     */
+    public function addcontactHumain(int $idhumain, int $idpage, string $type):Response
+    {
+        //Donner les arguments de la page en cours au PageService
+        $this->pageService->setParams(compact('idhumain', 'type'));
+
+        //Récupérer l'objet Humain
+        $humain = $this->outilsService->findById(Humain::class, $idhumain);
+
+        //Gérer le formulaire
+        $this->formulaireService->setElement($contactService->getElementFormulaire($type));
+        $this->formulaireService->setClassType($contactService->getClassTypeFormulaire($type));
+        $this->formulaireService->setTwigFormulaire('symcom4/admin/humains/add_contact.html.twig');
+        $this->formulaireService->setTexteConfirmation("Le contact a bien été modifié !");
+        $this->formulaireService->setActions($this, array(['name' => 'action_addcontactHumain', 'params' => ['humain' => $humain]]));
+        $this->addPageMereFormService();
+        $this->createFormService();
+
+        //Obtenir le titre et le menu rapide en fonction du type
+        $this->initTwig('humain');
+
+        //Fournir les paramètres requis au Twig
         $this->defineParamTwig('type', $type);
         $this->defineParamTwig('humain', $humain);
-        //Affiche la redirection
+
+        //Afficher le formulaire ou la redirection
         return $this->Afficher();
     }
 
-    protected function action_addcontactHumain(Object $contactChild, $params, $request)
+    /*========================================================================================*/
+    /*========================================================================================*/
+    /*========================================================================================*/
+    /** HUMAINS - AJOUTER un UTILISATEUR ******************************************************/
+
+    /**
+     * Ajouter un utilisateur sur un humain
+     * 
+     * @Route("/admin/humain/utilisateur/new/{idhumain}/{idpagemere}", name="admin_humain_utilisateur_new")
+     *
+     * @param integer $idhumain
+     * @param integer $idpagemere
+     * @return Response
+     */
+    public function addutilisateurHumain(int $idhumain, int $idpagemere):Response
+    {
+        //Donner les arguments de la page en cours au PageService
+        $this->pageService->setParams(compact('idhumain', 'idpagemere'));
+
+        //Récupérer l'objet Structure et l'objet Fonction
+        $humain = $this->outilsService->findById(Humain::class, $idhumain);
+
+        //Gérer le formulaire
+        $this->formulaireService->setElement(new Utilisateur());
+        $this->formulaireService->setClassType(HumainUtilisateurType::class);
+        $this->formulaireService->setTwigFormulaire('symcom4/admin/general/form_utilisateur.html.twig');
+        $this->formulaireService->setTexteConfirmation("### a bien été créé !");
+        $this->formulaireService->setTexteConfirmationEval(["###" => '$this->element->getPseudo();']);
+        $this->formulaireService->setActions($this, array(['name' => 'action_addutilisateurHumain', 'params' => ['humain' => $humain]]));
+        $this->addPageMereFormService();
+        $this->createFormService();
+
+        //Obtenir le titre et le menu rapide en fonction du type
+        $this->initTwig('humain');
+
+        //Afficher le formulaire ou la redirection
+        return $this->Afficher();
+    }
+
+    /*========================================================================================*/
+    /*========================================================================================*/
+    /*========================================================================================*/
+    /** UTILISATEURS - VOIR *******************************************************************/
+
+    /**
+     * Voir les utilisateurs
+     * 
+     * @Route("/admin/utilisateurs", name="admin_utilisateurs")
+     *
+     * @return Response
+     */
+    public function utilisateurs():Response
+    {
+        //Récupérer tous les utilisateurs
+        $utilisateurs = $this->outilsService->findAll(Utilisateur::class);
+
+        //Obtenir le titre et le menu rapide en fonction du type
+        $this->initTwig('humain');
+
+        //Définir le twig à afficher
+        $this->defineTwig('symcom4/admin/humains/utilisateurs.html.twig'); 
+        
+        //Fournir les paramètres requis au Twig
+        $this->defineParamTwig('utilisateurs', $utilisateurs);
+
+        //Afficher la page
+        return $this->Afficher();
+    }
+
+    /*========================================================================================*/
+    /*========================================================================================*/
+    /*========================================================================================*/
+    /** ACTIONS *******************************************************************************/
+
+    /**
+     * Action - Ajouter un contact à un humain
+     *
+     * @param Object $contactChild
+     * @param Array $params
+     * @return Object
+     */
+    public function action_addcontactHumain(Object $contactChild, Array $params):Object
     {
         $contact = $contactChild->getContact();
         $contact->addHumain($params['humain']);
         return $contactChild;
     }
 
-    /******************************************************************************************/
-    /****************************************Les utilisateurs *********************************/
     /**
-     * @Route("/admin/utilisateurs", name="admin_utilisateurs")
+     * Action - Ajouter un utilisateur à un humain
+     *
+     * @param Object $utilisateur
+     * @param Array $params
+     * @return Object
      */
-    public function utilisateurs(Request $request, UtilisateurRepository $repoUtilisateur): Response
-    {
-        //On génére la page en cours
-        $this->pageService->setRoute($request->get('_route'));
-
-        //Récupére tous les utilisateurs
-        $utilisateurs = $repoUtilisateur->findAll();
-        //Prépare le Twig
-        $this->initTwig('humains');
-        $this->defineTwig('symcom4/admin/humains/utilisateurs.html.twig');        
-        $this->defineParamTwig('utilisateurs', $utilisateurs);
-        //Affiche la page
-        return $this->Afficher();
-    }
-
-    /**
-     * @Route("/admin/humain/utilisateur/new/idhumain/idpage", name="admin_humain_utilisateur_new")
-     */
-    public function addutilisateurHumain(Request $request, $idhumain, $idpage, HumainRepository $repoHumain, EntityManagerInterface $manager):Response
-    {
-        //On génére la page en cours
-        $this->pageService->setRoute($request->get('_route'));
-        $this->pageService->addParam('idhumain', $idhumain);
-        $this->pageService->addParam('idpage', $idpage);
-
-        //On récupère l'humain et la page mère
-        $humain = $repoHumain->findOneById($idhumain);
-        $pageMere = $this->pageService->recupPageMere($idpage);
-
-        //Lorsque le contact aura un Id, le formulaire devra l'associer avec la structure
-        $options['actions'] = array(['name' => 'action_addutilisateurHumain', 'params' => ['humain' => $humain]]);
-
-        //Préparation et traitement du formulaire
-        $variables['request'] = $request;
-        $variables['manager'] = $manager;
-        $variables['element'] = new Utilisateur();
-        $variables['classType'] = HumainUtilisateurType::class;
-        $variables['pagedebase'] = 'symcom4/admin/general/form_utilisateur.html.twig';
-        $variables['pagederesultat'] = $pageMere->getNomChemin();
-        $variables['pagederesultatConfig'] = $pageMere->getParams();
-        $variables['texteConfirmation'] = "### a bien été créé !"; 
-        $options['texteConfirmationEval'] = ["###" => '$element->getPseudo();'];
-        $this->afficherFormulaire($variables, $options);
-        //Prépare le Twig
-        $this->initTwig('humains');
-        //Affiche le formulaire ou la redirection
-        return $this->Afficher();
-    }
-
-    /** Action - relative à l'ajout d'un utilisateur sur un humain
-     */
-    protected function action_addutilisateurHumain(Object $utilisateur, $params, $request)
+    public function action_addutilisateurHumain(Object $utilisateur, Array $params):Object
     {
         $utilisateur->setHumain($params['humain']);
         return $utilisateur;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+    
+    
+    
+
+    
+
+    
+    
+
+    
+
+    
 
     
 
@@ -234,7 +345,7 @@ class AdminContactController extends AdminController
     //     $options['texteConfirmationEval'] = ["###" => '$element->getPseudo();'];
     //     $this->afficherFormulaire($variables, $options);
     //     //Prépare le Twig
-    //     $this->initTwig('humains');
+    //     $this->initTwig('humain');
     //     //Affiche le formulaire ou la redirection
     //     return $this->Afficher();
     // }

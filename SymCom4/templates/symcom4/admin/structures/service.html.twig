@@ -29,7 +29,7 @@
     <div class="row">
         <div class="card col-12">
             <div class="card-body text-center">
-                {{ path('admin_structures_service_delete', {'idservice': service.id}) | SupprimerBouton(service.structure.nom) }}
+                {{ path('admin_structures_service_delete', {'idstructure': service.structure.id}) | SupprimerBouton(service.structure.nom) }}
             </div>
         </div>
     </div>
