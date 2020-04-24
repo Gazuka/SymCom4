@@ -21,7 +21,7 @@ class Structure
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\Length(min = 15, max = 100, minMessage = "Le nom doit comporter au minimum 5 caractères.", maxMessage = "Le nom doit comporter au maximum 100 caractères.")
+     * @Assert\Length(min = 5, max = 100, minMessage = "Le nom doit comporter au minimum 5 caractères.", maxMessage = "Le nom doit comporter au maximum 100 caractères.")
      */
     private $nom;
 
