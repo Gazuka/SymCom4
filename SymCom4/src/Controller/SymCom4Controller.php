@@ -17,6 +17,7 @@ use App\Service\FormulaireService;
 use App\Controller\OutilsController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class SymCom4Controller extends OutilsController
@@ -37,7 +38,8 @@ class SymCom4Controller extends OutilsController
     }
 
     /**
-     * @Route("/", name="symcom4")
+     * @Route("/", name="accueil")
+     * @IsGranted("ROLE_USER")
      */
     public function index()
     {

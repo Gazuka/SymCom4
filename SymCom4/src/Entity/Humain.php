@@ -6,6 +6,9 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
+use Cocur\Slugify\Slugify;
+use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
+
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
@@ -15,6 +18,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *      fields={"nom", "prenom"},
  *      message="Cet personne est déjà identifiée sur le site."
  * )
+ * 
+ * @ORM\HasLifecycleCallbacks
  */
 class Humain
 {
@@ -61,6 +66,11 @@ class Humain
      */
     private $utilisateur;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $slug;
+
     public function __construct()
     {
         $this->contacts = new ArrayCollection();
@@ -100,6 +110,11 @@ class Humain
         $this->prenom = $prenom;
 
         return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
     }
 
     /**
@@ -198,5 +213,22 @@ class Humain
         }
 
         return $this;
+    }
+
+    /**
+     * Permet d'initialiser le slug
+     * 
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     *
+     * @return void
+     */
+    public function initSlug():void
+    {
+        if(empty($this->slug))
+        {
+            $slugify = new Slugify();
+            $this->slug = $slugify->slugify($this->nom." ".$this->prenom);
+        }
     }
 }

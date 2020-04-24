@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -39,9 +41,14 @@ class Utilisateur implements UserInterface
     private $email;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\ManyToMany(targetEntity="App\Entity\Role", mappedBy="utilisateurs")
      */
-    private $slug;
+    private $roles;
+
+    public function __construct()
+    {
+        $this->roles = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -72,11 +79,6 @@ class Utilisateur implements UserInterface
         return $this;
     }
 
-    // public function getPassword(): ?string
-    // {
-    //     return $this->password;
-    // }
-
     public function setPassword(string $password): self
     {
         $this->password = $password;
@@ -96,21 +98,15 @@ class Utilisateur implements UserInterface
         return $this;
     }
 
-    public function getSlug(): ?string
-    {
-        return $this->slug;
-    }
-
-    public function setSlug(string $slug): self
-    {
-        $this->slug = $slug;
-
-        return $this;
-    }
-
     public function getRoles()
     {
-        return ['ROLE_USER'];
+        $roles = $this->roles->map(function($role){
+            return $role->getTitre();
+        })->toArray();
+
+        $roles[] = 'ROLE_USER';
+
+        return $roles;
     }
 
     public function getPassword()
@@ -126,5 +122,23 @@ class Utilisateur implements UserInterface
         return $this->pseudo;
     }
 
-    
+    public function addRole(Role $role): self
+    {
+        if (!$this->roles->contains($role)) {
+            $this->roles[] = $role;
+            $role->addUtilisateur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRole(Role $role): self
+    {
+        if ($this->roles->contains($role)) {
+            $this->roles->removeElement($role);
+            $role->removeUtilisateur($this);
+        }
+
+        return $this;
+    }
 }
