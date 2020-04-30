@@ -26,6 +26,20 @@ security:
             logout:
                 path: admin_logout
                 target: admin
+        
+        drive_mediatheque:
+            pattern: ^/mediatheque/drive
+            anonymous: true
+
+            provider: users_in_database
+            form_login: 
+                login_path: drive_mediatheque_login
+                check_path: drive_mediatheque_login
+
+            logout:
+                path: drive_mediatheque_logout
+                target: drive_mediatheque
+        
         main:
             anonymous: lazy
             provider: users_in_database

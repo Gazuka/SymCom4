@@ -19,6 +19,7 @@ use App\Service\PageService;
 use App\Form\ServiceBaseType;
 use App\Entity\TypeEntreprise;
 use App\Form\FonctionBaseType;
+use App\Form\TypeFonctionType;
 use App\Entity\TypeAssociation;
 use App\Service\ContactService;
 use App\Service\GestionService;
@@ -26,12 +27,12 @@ use App\Form\EntrepriseBaseType;
 use App\Form\EntrepriseTypeType;
 use App\Form\FonctionHumainType;
 use App\Form\TypeEntrepriseType;
-use App\Form\AssociationBaseType;
 
+use App\Form\AssociationBaseType;
 use App\Form\AssociationTypeType;
 use App\Form\TypeAssociationType;
-use App\Controller\AdminController;
 
+use App\Controller\AdminController;
 use App\Controller\SymCom4Controller;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\TypeFonctionRepository;
@@ -52,7 +53,7 @@ class AdminStructureController extends AdminController
      *
      * @Route("/admin/structure/addlien/{idstructure}/{idpagemere}", name="admin_structure_addlien")
      * 
-     * (test n°3 : affichage)
+     * (Test n°1 - Assert 6)
      * 
      * @param integer $idstructure
      * @param integer $idpagemere
@@ -90,7 +91,7 @@ class AdminStructureController extends AdminController
      *
      * @Route("/admin/structures/lien/edit/{idstructure}/{idlien}/{idpagemere}", name="admin_structure_editlien")
      * 
-     * (test n°4 : affichage)
+     * (Test n°1 - Assert 7)
      * 
      * @param integer $idstructure
      * @param integer $idlien
@@ -131,7 +132,7 @@ class AdminStructureController extends AdminController
      *
      * @Route("/admin/structures/lien/delete/{idstructure}/{idlien}/{idpagemere}", name="admin_structure_deletelien")
      * 
-     * (test n°5 : affichage)
+     * (Test n°1 - Assert 8)
      * 
      * @param integer $idstructure
      * @param integer $idlien
@@ -180,7 +181,9 @@ class AdminStructureController extends AdminController
      *
      * @Route("/admin/structure/addcontact/{idstructure}/{idpagemere}/{type}", name="admin_structure_addcontact")
      * 
-     * (test n°6 : affichage)
+     * (Test n°1 - Assert 9 - Adresse)
+     * (Test n°1 - Assert 12 - Téléphone)
+     * (Test n°1 - Assert 15 - Mail)
      * 
      * @param integer $idstructure
      * @param integer $idpagemere
@@ -221,7 +224,9 @@ class AdminStructureController extends AdminController
      *
      * @Route("/admin/structure/editcontact/{idstructure}/{idcontact}/{idpagemere}", name="admin_structure_editcontact")
      * 
-     * (test n°7 : affichage)
+     * (Test n°1 - Assert 10 - Adresse)
+     * (Test n°1 - Assert 13 - Téléphone)
+     * (Test n°1 - Assert 16 - Mail)
      * 
      * @param integer $idstructure
      * @param integer $idcontact
@@ -262,6 +267,10 @@ class AdminStructureController extends AdminController
      * Supprimer un contact de la structure
      *
      * @Route("/admin/structure/deletecontact/{idstructure}/{idcontact}/{idpagemere}", name="admin_structure_deletecontact")
+     * 
+     * (Test n°1 - Assert 11 - Adresse)
+     * (Test n°1 - Assert 14 - Téléphone)
+     * (Test n°1 - Assert 17 - Mail)
      * 
      * @param integer $idstructure
      * @param integer $idcontact
@@ -311,6 +320,8 @@ class AdminStructureController extends AdminController
      *
      * @Route("/admin/structure/addfonction/{idstructure}/{idpagemere}", name="admin_structure_addfonction")
      * 
+     * (Test n°1 - Assert 18)
+     * 
      * @param integer $idstructure
      * @param integer $idpagemere
      * @return Response
@@ -346,6 +357,8 @@ class AdminStructureController extends AdminController
      * Modifier une fonction de la structure
      *
      * @Route("/admin/structure/editfonction/{idstructure}/{idfonction}/{idpagemere}", name="admin_structure_editfonction")
+     * 
+     * (Test n°1 - Assert 27)
      * 
      * @param integer $idstructure
      * @param integer $idfonction
@@ -384,6 +397,8 @@ class AdminStructureController extends AdminController
      * Supprimer un contact de la structure
      *
      * @Route("/admin/structure/deletefonction/{idstructure}/{idfonction}/{idpagemere}", name="admin_structure_deletefonction")
+     * 
+     * (Test n°1 - Assert 28)
      * 
      * @param integer $idstructure
      * @param integer $idfonction
@@ -430,8 +445,10 @@ class AdminStructureController extends AdminController
 
     /**
      * Ajouter un humain à une fonction de la structure
-     *
+     * 
      * @Route("/admin/structure/fonction/addhumain/{idstructure}/{idfonction}/{idpagemere}", name="admin_structure_fonction_addhumain")
+     * 
+     * (Test n°1 - Assert 19)
      * 
      * @param integer $idstructure
      * @param integer $idfonction
@@ -470,6 +487,8 @@ class AdminStructureController extends AdminController
      *
      * @Route("/admin/structure/fonction/deletehumain/{idstructure}/{idfonction}/{idpagemere}", name="admin_structure_fonction_deletehumain")
      * 
+     * (Test n°1 - Assert 20)
+     * 
      * @param integer $idstructure
      * @param integer $idfonction
      * @param integer $idpagemere
@@ -485,12 +504,8 @@ class AdminStructureController extends AdminController
         $fonction = $this->outilsService->findById(Fonction::class, $idfonction);
         $pageMere = $this->outilsService->findById(Page::class, $idpagemere);
 
-        //Supprimer l'humain de la fonction'
-        $structure->removeFonction($fonction);
+        //Supprimer l'humain de la fonction
         $fonction->setHumain(null);
-
-        //Supprimer la fonction de la BDD
-        $this->outilsService->delete(Fonction::class, $idfonction);
         
         //Afficher un message de validation
         $this->addFlash('success', 'Le fonction a bien été supprimé !');
@@ -519,6 +534,8 @@ class AdminStructureController extends AdminController
      *
      * @Route("/admin/structures/services", name="admin_structures_services")
      * 
+     * (Test n°1 - Assert 1 - La page s'affiche)
+     * 
      * @return Response
      */
     public function services(): Response
@@ -544,6 +561,8 @@ class AdminStructureController extends AdminController
      *
      * @Route("/admin/structures/service/new", name="admin_structures_service_new")
      * 
+     * (Test n°1 - Assert 5)
+     * 
      * @return Response
      */
     public function newService():Response
@@ -565,11 +584,11 @@ class AdminStructureController extends AdminController
     }
 
     /** 
-     * Gérer d'un service
+     * Gérer un service
      *
      * @Route("/admin/structures/service/{idservice}", name="admin_structures_service")
      * 
-     * (test-ok - n°1)
+     * (Test n°1 - Assert 2 - Affichage d'un service
      * 
      * @param integer $idservice
      * @return Response
@@ -600,7 +619,7 @@ class AdminStructureController extends AdminController
      *
      * @Route("/admin/structures/service/edit/{idstructure}/{idpagemere}", name="admin_structures_service_edit")
      * 
-     * (test-ok - n°2)
+     * (Test n°1 - Assert 3 - Modification des informations de base d'un service)
      * 
      * @param integer $idstructure
      * @param integer $idpagemere
@@ -637,6 +656,8 @@ class AdminStructureController extends AdminController
      *
      * @Route("/admin/structures/service/delete/{idstructure}", name="admin_structures_service_delete")
      * 
+     * (Test n°1 - Assert 4)
+     * 
      * @param integer $idstructure
      * @return Response
      */
@@ -671,6 +692,8 @@ class AdminStructureController extends AdminController
      *
      * @Route("/admin/structures/associations", name="admin_structures_associations")
      * 
+     * (Test n°2 - Assert 1)
+     * 
      * @return Response
      */
     public function associations(): Response
@@ -695,6 +718,8 @@ class AdminStructureController extends AdminController
      * Créer une association
      *
      * @Route("/admin/structures/association/new", name="admin_structures_association_new")
+     * 
+     * (Test n°2 - Assert 5)
      * 
      * @return Response
      */
@@ -721,6 +746,7 @@ class AdminStructureController extends AdminController
      * 
      * @Route("/admin/structures/association/{idassociation}", name="admin_structures_association")
      *
+     * (Test n°2 - Assert 2)
      * @param integer $idassociation
      * @return Response
      */
@@ -750,6 +776,7 @@ class AdminStructureController extends AdminController
      * 
      * @Route("/admin/structures/association/edit/{idstructure}/{idpagemere}", name="admin_structures_association_edit")
      *
+     * (Test n°2 - Assert 3)
      * @param integer $idstructure
      * @param integer $idpagemere
      * @return Response
@@ -785,6 +812,8 @@ class AdminStructureController extends AdminController
      * 
      * @Route("/admin/structures/association/delete/{idstructure}", name="admin_structures_association_delete")
      *
+     * (Test n°2 - Assert 4)
+     * 
      * @param integer $idstructure
      * @return Response
      */
@@ -1425,6 +1454,9 @@ class AdminStructureController extends AdminController
      * 
      * @Route("/admin/structure/fonction/addcontact/{idfonction}/{idpagemere}/{type}", name="admin_structure_fonction_addcontact")
      *
+     * (Test n°1 - Assert 21 - Mail)
+     * (Test n°1 - Assert 22 - Téléphone)
+     * 
      * @param integer $idfonction
      * @param integer $idpagemere
      * @param string $type
@@ -1445,7 +1477,7 @@ class AdminStructureController extends AdminController
         $this->formulaireService->setClassType($contactService->getClassTypeFormulaire($type));
         $this->formulaireService->setTwigFormulaire('symcom4/admin/general/form_contact.html.twig');
         $this->formulaireService->setTexteConfirmation("Le contact a bien été modifié !");
-        $this->formulaireService->setActions($this, array(['name' => 'action_addcontactStructure', 'fonction' => ['structure' => $fonction]]));
+        $this->formulaireService->setActions($this, array(['name' => 'action_addcontactStructureFonction', 'params' => ['fonction' => $fonction]]));
         $this->addPageMereFormService();
         $this->createFormService();
 
@@ -1465,6 +1497,9 @@ class AdminStructureController extends AdminController
      * Modifier le contact d'une fonction
      *
      * @Route("/admin/structure/fonction/editcontact/{idfonction}/{idcontact}/{idpagemere}", name="admin_structure_fonction_editcontact")
+     * 
+     * (Test n°1 - Assert 23 - Mail)
+     * (Test n°1 - Assert 24 - Téléphone)
      * 
      * @param integer $idfonction
      * @param integer $idcontact
@@ -1506,8 +1541,11 @@ class AdminStructureController extends AdminController
     /**
      * Supprimer un contact d'une fonction
      * 
-     * @Route("/admin/structure/fonction/deletecontact/{idfonction}/{idcontact}/{idpage}", name="admin_structure_fonction_deletecontact")
+     * @Route("/admin/structure/fonction/deletecontact/{idfonction}/{idcontact}/{idpagemere}", name="admin_structure_fonction_deletecontact")
      *
+     * (Test n°1 - Assert 25 - Mail)
+     * (Test n°1 - Assert 26 - Téléphone)
+     * 
      * @param integer $idfonction
      * @param integer $idcontact
      * @param integer $idpagemere
@@ -1520,13 +1558,12 @@ class AdminStructureController extends AdminController
 
         //Récupérer l'objet Fonction, l'objet Structure et l'objet Page mere
         $fonction = $this->outilsService->findById(Fonction::class, $idfonction);
+        $contact = $this->outilsService->findById(Contact::class, $idcontact);
         $structure = $fonction->getStructure();
         $pageMere = $this->outilsService->findById(Page::class, $idpagemere);
         
-        
-
-        //Supprimer le contact de la structure
-        $structure->removeContact($contact);
+        //Supprimer le contact de la fonction
+        $fonction->removeContact($contact);
 
         //Supprimer le contact de la BDD
         $this->outilsService->delete(Contact::class, $idcontact);

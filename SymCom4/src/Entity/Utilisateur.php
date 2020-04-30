@@ -41,9 +41,14 @@ class Utilisateur implements UserInterface
     private $email;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Role", mappedBy="utilisateurs")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Role", mappedBy="utilisateurs", cascade={"persist"})
      */
     private $roles;
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\MembreMediatheque", mappedBy="utilisateur", cascade={"persist", "remove"})
+     */
+    private $membreMediatheque;
 
     public function __construct()
     {
@@ -137,6 +142,23 @@ class Utilisateur implements UserInterface
         if ($this->roles->contains($role)) {
             $this->roles->removeElement($role);
             $role->removeUtilisateur($this);
+        }
+
+        return $this;
+    }
+
+    public function getMembreMediatheque(): ?MembreMediatheque
+    {
+        return $this->membreMediatheque;
+    }
+
+    public function setMembreMediatheque(MembreMediatheque $membreMediatheque): self
+    {
+        $this->membreMediatheque = $membreMediatheque;
+
+        // set the owning side of the relation if necessary
+        if ($membreMediatheque->getUtilisateur() !== $this) {
+            $membreMediatheque->setUtilisateur($this);
         }
 
         return $this;

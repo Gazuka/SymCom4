@@ -1,0 +1,15 @@
+{% extends 'drive_mediatheque/_base_drive_mediatheque.html.twig' %}
+
+{% block content %}
+    <h5 class="card-title">Fonctionnement temporaire</h5>
+    <p class="card-text">
+        Les locaux de la Médiathèque étant fermés durant la crise sanitaire actuelle,<br/>nous vous proposons un service temporaire de prêts et retours sur rendez-vous.
+    </p>
+    <p>
+        Laissez-vous guider...
+    </p>
+    <a href="{{ path('drive_mediatheque_etape1') }}" class="btn btn-success">
+        <i class="fas fa-angle-double-right"></i>
+        Démarrer
+    </a>
+{% endblock %}

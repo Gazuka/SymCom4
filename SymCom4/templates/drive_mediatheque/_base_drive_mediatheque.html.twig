@@ -1,0 +1,33 @@
+{% extends '_base.html.twig' %}
+
+{% block title %}
+    Médiathèque de Guesnain
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="card text-center mt-5">
+            <div class="card-header">
+                Médiathèque de Guesnain
+            </div>
+            <div class="card-body">
+                {% include 'symcom4/admin/partials/_flash.html.twig' %}
+                {% block content %}
+                {% endblock %}
+            </div>
+            <div class="card-footer text-muted">
+                03 27 08 20 40
+                <br/>
+                mediatheque@ville-guesnain.fr
+            </div>
+        </div>
+    </div>   
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

@@ -7,7 +7,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class OutilsService {
     
-    private $request;               //Objet Request
     private $manager;               //Objet EntityManagerInterface
 
     /*========================================================================================*/
@@ -15,10 +14,9 @@ class OutilsService {
     /*========================================================================================*/
     /** FONCTIONS MAGIQUES ********************************************************************/
 
-    public function __construct(EntityManagerInterface $manager, RequestStack $requestStack)
+    public function __construct(EntityManagerInterface $manager)
     {
         $this->manager = $manager;
-        $this->request = $requestStack->getCurrentRequest();
     }
 
     /*========================================================================================*/
@@ -39,6 +37,18 @@ class OutilsService {
         return $repo->findOneById($id);
     }
 
+    public function findBy(string $class, array $criteria, array $orderBy = null, $limit = null, $offset = null)
+    {
+        $repo = $this->manager->getRepository($class);
+        return $repo->findBy($criteria, $orderBy, $limit, $offset);
+    }
+
+    public function returnRepo(string $class)
+    {
+        $repo = $this->manager->getRepository($class);
+        return $repo;
+    }
+
     /**
      * Récupérer toutes les entités d'une classe
      *
@@ -49,6 +59,19 @@ class OutilsService {
     {
         $repo = $this->manager->getRepository($class);
         return $repo->findAll();
+    }
+
+    /**
+     * Récupérer une entités au hasard d'une classe
+     *
+     * @param string $class
+     * @return Array
+     */
+    public function findOneofAll(string $class):Array
+    {
+        $entitys = $this->findAll($class);
+        $value = rand(0, sizeof($entitys));
+        return $entitys[$value];
     }
 
     /**

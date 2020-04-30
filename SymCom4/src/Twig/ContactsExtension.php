@@ -71,7 +71,7 @@ class ContactsExtension extends AbstractExtension
 
     public function afficheAddLien($url, $texte = "")
     {
-        $html = "<a class='btn btn-success' href='".$url."'><i class='fas fa-plus'></i> <i class='fas fa-globe-americas'></i> ".$texte."</a>";
+        $html = "<a id='btn_add_lien' class='btn btn-success' href='".$url."'><i class='fas fa-plus'></i> <i class='fas fa-globe-americas'></i> ".$texte."</a>";
         return $html;
     }
     public function afficheAddFonction($url, $texte = "")

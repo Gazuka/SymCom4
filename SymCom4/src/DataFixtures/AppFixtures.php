@@ -29,10 +29,17 @@ class AppFixtures extends Fixture implements FixtureGroupInterface
         $adminRole = new Role();
         $adminRole->setTitre('ROLE_ADMIN');
         $manager->persist($adminRole);
+        $adminMediathequeRole = new Role();
+        $adminMediathequeRole->setTitre('ROLE_ADMIN_MEDIATHEQUE');
+        $manager->persist($adminMediathequeRole);
+        $membreMediathequeRole = new Role();
+        $membreMediathequeRole->setTitre('ROLE_MEMBRE_MEDIATHEQUE');
+        $manager->persist($membreMediathequeRole);
 
         //Ajouter l'utilisateur Admin
         $utilisateur = $this->initAdmin();
         $utilisateur->addRole($adminRole);
+        $utilisateur->addRole($adminMediathequeRole);
         $manager->persist($utilisateur);
 
         //Sauvegarder l'ensemble

@@ -1,0 +1,24 @@
+{% extends 'drive_mediatheque/_base_drive_mediatheque.html.twig' %}
+
+{% block content %}
+    <h5 class="card-title">Mon espace Personnel : {{ app.user.humain.nom | upper }} {{ app.user.humain.prenom | title}}</h5>
+    <p class="card-text">
+        ...
+    </p>
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <p>Je sélectionne dans le catalogue de la Médiathèque.</p>
+            <a href=" {{ path('drive_mediatheque_catalogue') }}" class="btn btn-success">
+                <i class="fas fa-shopping-basket"></i>
+                Voir la catalogue
+            </a>
+        </div>
+        <div class="col-md-6 mb-3">
+            <p>Je laisse les employés de la Médiathèque choisir pour moi.</p>
+            <a href="#" class="btn btn-success">
+                <i class="fas fa-concierge-bell"></i>
+                Surprenez-moi !
+            </a>
+        </div>
+    </div>
+{% endblock %}

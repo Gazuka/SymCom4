@@ -2,107 +2,614 @@
 
 namespace App\Tests\Controller;
 
+use App\Entity\TypeFonction;
+use App\Service\OutilsService;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class OutilsControllerStructureTest extends WebTestCase
 {
+    
+    private $config = array();
+
     /** Prérequis pour la réalisation des tests ===========================
      * 
-     *  > Un service doit exister
-     *  > Une structure doit exister
-     *  > Une page doit exister
-     *  > Un lien doit exister et appartenir à la structure
      */
-    private $idservice = 16;
-    private $idstructure = 16;
-    private $idpagemere = 1;
-    private $idlien = ?;
-    private $idcontact = ?;
 
+    
     public function setUp()
     {
-
+        include 'configTest.php';
     }
 
-    /** N°1 - Test d'affichage de la page */
-    public function testChemin_admin_structure_service()
+    /**
+     * Test n°1 - Scenario sur un service
+     *
+     * @return void
+     */
+    public function testScenarioService()
     {
-        $client = static::createClient();
-        $client->request('GET', '/admin/structures/service/'.$this->idservice);
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        // Scénario - On débute sur la page Services (admin_structures_services)
+            $client = static::createClient();
+            $crawler = $client->request('GET', '/admin/structures/services');
+            //Si le client n'est pas connecté, il est redirigé vers la page login
+            if($client->getResponse()->getStatusCode() == 302)
+            {
+                $crawler = $client->followRedirect();
+                //Le client rempli le formulaire de connexion et le valide
+                $form = $crawler->selectButton('login_connexion')->form();
+                $form['_username'] = 'j.carion';
+                $form['_password'] = 'password';
+                $client->submit($form);
+                $crawler = $client->followRedirect();
+            }
+            /** Assert 1 - La page s'affiche */
+                $this->assertSame(200, $client->getResponse()->getStatusCode());
+
+        //Scénario - On va gérer le premier service disponible
+            $link = $crawler->selectLink('Modifier')->link();
+            $crawler = $client->click($link);
+
+        //Scénario - On arrive sur la page d'un service (admin_structures_service)
+            /** Assert 2 - Affichage d'un service */
+                $this->assertSame(200, $client->getResponse()->getStatusCode());
+
+        //Scénario - On va modifier les informations de base de la structure
+            $link = $crawler->selectLink('Modifier')->link();
+            $crawler = $client->click($link);
+            //Le client rempli le formulaire
+            $form = $crawler->selectButton('Enregistrer')->form();
+            $form['service_base[structure][nom]'] = 'Service de test modifié';
+            $form['service_base[structure][presentation]'] = 'Texte de description modifié';
+            $form['service_base[structure][local]'] = false;
+            //Le client valide le formulaire
+            $client->submit($form);
+            $crawler = $client->followRedirect();
+            /** Assert 3 - Le client reçoit bien un message de confirmation */
+                $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
+        
+        //Scénario - On supprime le service (admin_structures_service_delete)
+            $link = $crawler->filter('#delete_service')->selectLink('Supprimer')->link();
+            $crawler = $client->click($link);
+            $crawler = $client->followRedirect();
+            /** Assert 4 - Le client reçoit bien un message de confirmation */
+                $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
+
+        //Scénario - On crée un nouveau service (admin_structures_service_new)
+            $link = $crawler->selectLink('Ajouter un service')->link();
+            $crawler = $client->click($link);
+            $form = $crawler->selectButton('Enregistrer')->form();
+            $form['service_base[structure][nom]'] = 'Service test';
+            $form['service_base[structure][presentation]'] = 'Mon texte de description de test';
+            $form['service_base[structure][local]'] = true;
+            $client->submit($form);
+            $crawler = $client->followRedirect();
+            /** Assert 5 - Le client reçoit bien un message de confirmation */
+                $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
+
+        //Scénario - On ajoute un site internet (admin_structure_addlien)
+            $link = $crawler->filter('#gestion_lien')->selectLink('Ajouter un site Internet')->link();
+            $crawler = $client->click($link);
+            $form = $crawler->selectButton('Enregistrer')->form();
+            $form['lien_base[url]'] = 'http://www.ville-guesnain.fr';
+            $client->submit($form);
+            $crawler = $client->followRedirect();
+            /** Assert 6 - Le client reçoit bien un message de confirmation */
+                $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
+        
+        //Scénario - On modifie un site internet (admin_structure_editlien)
+            $link = $crawler->filter('#gestion_lien')->selectLink('Modifier')->link();
+            $crawler = $client->click($link);
+            $form = $crawler->selectButton('Enregistrer')->form();
+            $form['lien_base[url]'] = 'http://www.ville-guesnain2.fr';
+            $client->submit($form);
+            $crawler = $client->followRedirect();
+            /** Assert 7 - Le client reçoit bien un message de confirmation */
+                $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
+        
+        //Scénario - On supprime un site internet (admin_structure_deletelien)
+            $link = $crawler->filter('#gestion_lien')->selectLink('Supprimer')->link();
+            $crawler = $client->click($link);
+            $crawler = $client->followRedirect();
+            /** Assert 8 - Le client reçoit bien un message de confirmation */
+                $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
+        
+        //Scénario - On ajoute une adresse (admin_structure_addcontact)
+            $link = $crawler->filter('#gestion_adresses')->selectLink('Ajouter une adresse')->link();
+            $crawler = $client->click($link);
+            $form = $crawler->selectButton('Enregistrer')->form();
+            $form['new_adresse[numero]'] = '13';
+            $form['new_adresse[rue]'] = 'rue du Bois';
+            $form['new_adresse[complement]'] = 'chemin du lac';
+            $form['new_adresse[codePostal]'] = '59287';
+            $form['new_adresse[ville]'] = 'Guesnain';
+            $form['new_adresse[contact][prive]'] = false;
+            $client->submit($form);
+            $crawler = $client->followRedirect();
+            /** Assert 9 - Le client reçoit bien un message de confirmation */
+                $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
+        
+        //Scénario - On modifie une adresse (admin_structure_editcontact)
+            $link = $crawler->filter('#gestion_adresses')->selectLink('Modifier')->link();
+            $crawler = $client->click($link);
+            $form = $crawler->selectButton('Enregistrer')->form();
+            $form['new_adresse[numero]'] = '14';
+            $form['new_adresse[rue]'] = 'rue du Peuple';
+            $form['new_adresse[complement]'] = null;
+            $form['new_adresse[codePostal]'] = '59500';
+            $form['new_adresse[ville]'] = 'Douai';
+            $form['new_adresse[contact][prive]'] = true;
+            $client->submit($form);
+            $crawler = $client->followRedirect();
+            /** Assert 10 - Le client reçoit bien un message de confirmation */
+                $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
+
+        //Scénario - On supprime une adresse (admin_structure_deletecontact)
+            $link = $crawler->filter('#gestion_adresses')->selectLink('Supprimer')->link();
+            $crawler = $client->click($link);
+            $crawler = $client->followRedirect();
+            /** Assert 11 - Le client reçoit bien un message de confirmation */
+                $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
+        
+       //Scénario - On ajoute un numero de téléphone (admin_structure_addcontact)
+            $link = $crawler->selectLink('Ajouter un numéro de téléphone')->link();
+            $crawler = $client->click($link);
+            $form = $crawler->selectButton('Enregistrer')->form();
+            $form['new_telephone[numero]'] = '00 00 00 00 00';
+            $form['new_telephone[contact][prive]'] = false;
+            $client->submit($form);
+            $crawler = $client->followRedirect();
+            /** Assert 12 - Le client reçoit bien un message de confirmation */
+                $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
+
+        //Scénario - On modifie un numero de téléphone (admin_structure_editcontact)
+            $link = $crawler->filter('#gestion_telephones')->selectLink('Modifier')->link();
+            $crawler = $client->click($link);
+            $form = $crawler->selectButton('Enregistrer')->form();
+            $form['new_telephone[numero]'] = '11 11 11 11 11';
+            $form['new_telephone[contact][prive]'] = true;
+            $client->submit($form);
+            $crawler = $client->followRedirect();
+            /** Assert 13 - Le client reçoit bien un message de confirmation */
+                $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
+
+        //Scénario - On supprime un numéro de téléphone (admin_structure_deletecontact)
+            $link = $crawler->filter('#gestion_telephones')->selectLink('Supprimer')->link();
+            $crawler = $client->click($link);
+            $crawler = $client->followRedirect();
+            /** Assert 14 - Le client reçoit bien un message de confirmation */
+                $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
+        
+        //Scénario - On ajoute un mail (admin_structure_addcontact)
+            $link = $crawler->selectLink('Ajouter une adresse e-mail')->link();
+            $crawler = $client->click($link);
+            $form = $crawler->selectButton('Enregistrer')->form();
+            $form['new_mail[adresse]'] = 'monmail@toto.fr';
+            $form['new_mail[contact][prive]'] = false;
+            $client->submit($form);
+            $crawler = $client->followRedirect();
+            /** Assert 15 - Le client reçoit bien un message de confirmation */
+                $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
+        
+        //Scénario - On modifie un mail (admin_structure_editcontact)
+            $link = $crawler->filter('#gestion_mails')->selectLink('Modifier')->link();
+            $crawler = $client->click($link);
+            $form = $crawler->selectButton('Enregistrer')->form();
+            $form['new_mail[adresse]'] = 'newmail@toto.fr';
+            $form['new_mail[contact][prive]'] = true;
+            $client->submit($form);
+            $crawler = $client->followRedirect();
+            /** Assert 16 - Le client reçoit bien un message de confirmation */
+                $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
+        
+        //Scénario - On supprime un mail (admin_structure_deletecontact)
+            $link = $crawler->filter('#gestion_mails')->selectLink('Supprimer')->link();
+            $crawler = $client->click($link);
+            $crawler = $client->followRedirect();
+            /** Assert 17 - Le client reçoit bien un message de confirmation */
+                $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
+    
+        //Scénario - On ajoute une fonction (admin_structure_addfonction)
+            $link = $crawler->selectLink('Ajouter une fonction')->link();
+            $crawler = $client->click($link);
+            $form = $crawler->selectButton('Enregistrer')->form();
+            $form['fonction_base[typeFonction]'] = rand($this->config['idTypeFonctionStart'], $this->config['idTypeFonctionStart']+$this->config['nbrIdTypeFonction']-1);
+            $form['fonction_base[secteur]'] = 'secteur de test';
+            $client->submit($form);
+            $crawler = $client->followRedirect();
+            /** Assert 18 - Le client reçoit bien un message de confirmation */
+                $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
+        
+        //Scénario - On ajoute un responsable à la fonction (admin_structure_fonction_addhumain)
+            $link = $crawler->selectLink('Ajouter un responsable')->link();
+            $crawler = $client->click($link);
+            $form = $crawler->selectButton('Enregistrer')->form();
+            $form['fonction_humain[humain]'] = rand($this->config['idTypeFonctionStart'], $this->config['idHumainStart']+$this->config['nbrIdHumain']-1);
+            $client->submit($form);
+            $crawler = $client->followRedirect();
+            /** Assert 19 - Le client reçoit bien un message de confirmation */
+                $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
+
+        //Scénario - On supprime le responsable de la fonction (admin_structure_fonction_deletehumain)
+            $link = $crawler->filter('#fonction_humain')->selectLink('Supprimer')->link();
+            $crawler = $client->click($link);
+            $crawler = $client->followRedirect();
+            /** Assert 20 - Le client reçoit bien un message de confirmation */
+                $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
+    
+        //Scénario - On ajoute un mail à la fonction (admin_structure_fonction_addcontact)
+            $link = $crawler->filter('#gestion_fonction_mails')->selectLink('Ajouter')->link();
+            $crawler = $client->click($link);
+            $form = $crawler->selectButton('Enregistrer')->form();
+            $form['new_mail[adresse]'] = 'toto@free.fr';
+            $form['new_mail[contact][prive]'] = false;
+            $client->submit($form);
+            $crawler = $client->followRedirect();
+            /** Assert 21 - Le client reçoit bien un message de confirmation */
+                $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
+        
+        //Scénario - On ajoute un numéro de téléphone à la fonction
+            $link = $crawler->filter('#gestion_fonction_telephones')->selectLink('Ajouter')->link();
+            $crawler = $client->click($link);
+            $form = $crawler->selectButton('Enregistrer')->form();
+            $form['new_telephone[numero]'] = '00 01 02 03 04';
+            $form['new_telephone[contact][prive]'] = false;
+            $client->submit($form);
+            $crawler = $client->followRedirect();
+            /** Assert 22 - Le client reçoit bien un message de confirmation */
+                $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
+    
+        //Scénario - On modifie un mail à la fonction
+            $link = $crawler->filter('#gestion_fonction_mails')->selectLink('Modifier')->link();
+            $crawler = $client->click($link);
+            $form = $crawler->selectButton('Enregistrer')->form();
+            $form['new_mail[adresse]'] = 'titi@free.fr';
+            $form['new_mail[contact][prive]'] = true;
+            $client->submit($form);
+            $crawler = $client->followRedirect();
+            /** Assert 23 - Le client reçoit bien un message de confirmation */
+                $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
+    
+        //Scénario - On modifie un numéro de téléphone à la fonction
+            $link = $crawler->filter('#gestion_fonction_telephones')->selectLink('Modifier')->link();
+            $crawler = $client->click($link);
+            $form = $crawler->selectButton('Enregistrer')->form();
+            $form['new_telephone[numero]'] = '10 11 12 13 14';
+            $form['new_telephone[contact][prive]'] = true;
+            $client->submit($form);
+            $crawler = $client->followRedirect();
+            /** Assert 24 - Le client reçoit bien un message de confirmation */
+                $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
+
+        //Scénario - On supprime un mail à la fonction
+            $link = $crawler->filter('#gestion_fonction_mails')->selectLink('Supprimer')->link();
+            $crawler = $client->click($link);
+            $crawler = $client->followRedirect();
+            /** Assert 25 - Le client reçoit bien un message de confirmation */
+                $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
+    
+        //Scénario - On supprime un numéro de téléphone à la fonction
+            $link = $crawler->filter('#gestion_fonction_telephones')->selectLink('Supprimer')->link();
+            $crawler = $client->click($link);
+            $crawler = $client->followRedirect();
+            /** Assert 26 - Le client reçoit bien un message de confirmation */
+                $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
+
+        //Scénario - On modifie une fonction (admin_structure_editfonction)
+            $link = $crawler->filter('#gestion_structure_fonctions')->selectLink('Modifier')->link();
+            $crawler = $client->click($link);
+            $form = $crawler->selectButton('Enregistrer')->form();
+            $form['fonction_base[typeFonction]'] = rand($this->config['idTypeFonctionStart'], $this->config['idTypeFonctionStart']+$this->config['nbrIdTypeFonction']-1);
+            $form['fonction_base[secteur]'] = 'secteur n°2';
+            $client->submit($form);
+            $crawler = $client->followRedirect();
+            /** Assert 27 - Le client reçoit bien un message de confirmation */
+                $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
+
+        //Scénario - On supprime une fonction (admin_structure_deletefonction)
+            $link = $crawler->filter('#gestion_structure_fonctions')->selectLink('Supprimer')->link();
+            $crawler = $client->click($link);
+            $crawler = $client->followRedirect();
+            /** Assert 28 - Le client reçoit bien un message de confirmation */
+                $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
     }
 
-    /** N°2 - Test d'affichage de la page */
-    public function testChemin_admin_structures_service_edit()
+    /**
+     * Test n°2 - Scenario sur une association
+     *
+     * @return void
+     */
+    public function testScenarioAssociation()
     {
-        $client = static::createClient();
-        $client->request('GET', '/admin/structures/service/edit/'.$this->idstructure.'/'.$this->idpagemere);
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        // Scénario - On débute sur la page Associations (admin_structures_associations)
+            $client = static::createClient();
+            $crawler = $client->request('GET', '/admin/structures/associations');
+            //Si le client n'est pas connecté, il est redirigé vers la page login
+            if($client->getResponse()->getStatusCode() == 302)
+            {
+                $crawler = $client->followRedirect();
+                //Le client rempli le formulaire de connexion et le valide
+                $form = $crawler->selectButton('login_connexion')->form();
+                $form['_username'] = 'j.carion';
+                $form['_password'] = 'password';
+                $client->submit($form);
+                $crawler = $client->followRedirect();
+            }
+            /** Assert 1 - La page s'affiche */
+                $this->assertSame(200, $client->getResponse()->getStatusCode());
+
+        //Scénario - On va gérer la première association disponible
+            $link = $crawler->selectLink('Modifier')->link();
+            $crawler = $client->click($link);
+
+        //Scénario - On arrive sur la page d'une association (admin_structures_association)
+            /** Assert 2 - Affichage d'une association */
+                $this->assertSame(200, $client->getResponse()->getStatusCode());
+
+        //Scénario - On va modifier les informations de base de la structure
+            $link = $crawler->selectLink('Modifier')->link();
+            $crawler = $client->click($link);
+            //Le client rempli le formulaire
+            $form = $crawler->selectButton('Enregistrer')->form();
+            $form['association_base[structure][nom]'] = 'Association de test modifié';
+            $form['association_base[sigle]'] = 'ABC';
+            $form['association_base[structure][presentation]'] = 'Texte de description modifié';
+            $form['association_base[structure][local]'] = false;
+            //Le client valide le formulaire
+            $client->submit($form);
+            $crawler = $client->followRedirect();
+            /** Assert 3 - Le client reçoit bien un message de confirmation */
+                $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
+        
+        //Scénario - On supprime l'association (admin_structures_association_delete)
+            $link = $crawler->filter('#delete_association')->selectLink('Supprimer')->link();
+            $crawler = $client->click($link);
+            $crawler = $client->followRedirect();
+            /** Assert 4 - Le client reçoit bien un message de confirmation */
+                $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
+
+        //Scénario - On crée une nouvelle association (admin_structures_association_new)
+            $link = $crawler->selectLink('Ajouter une association')->link();
+            $crawler = $client->click($link);
+            $form = $crawler->selectButton('Enregistrer')->form();
+            $form['association_base[structure][nom]'] = 'Service test';
+            $form['association_base[sigle]'] = 'XYZ';
+            $form['association_base[structure][presentation]'] = 'Mon texte de description de test';
+            $form['association_base[structure][local]'] = true;
+            $client->submit($form);
+            $crawler = $client->followRedirect();
+            /** Assert 5 - Le client reçoit bien un message de confirmation */
+                $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
+
+    //     //Scénario - On ajoute un site internet (admin_structure_addlien)
+    //         $link = $crawler->filter('#gestion_lien')->selectLink('Ajouter un site Internet')->link();
+    //         $crawler = $client->click($link);
+    //         $form = $crawler->selectButton('Enregistrer')->form();
+    //         $form['lien_base[url]'] = 'http://www.ville-guesnain.fr';
+    //         $client->submit($form);
+    //         $crawler = $client->followRedirect();
+    //         /** Assert 6 - Le client reçoit bien un message de confirmation */
+    //             $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
+        
+    //     //Scénario - On modifie un site internet (admin_structure_editlien)
+    //         $link = $crawler->filter('#gestion_lien')->selectLink('Modifier')->link();
+    //         $crawler = $client->click($link);
+    //         $form = $crawler->selectButton('Enregistrer')->form();
+    //         $form['lien_base[url]'] = 'http://www.ville-guesnain2.fr';
+    //         $client->submit($form);
+    //         $crawler = $client->followRedirect();
+    //         /** Assert 7 - Le client reçoit bien un message de confirmation */
+    //             $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
+        
+    //     //Scénario - On supprime un site internet (admin_structure_deletelien)
+    //         $link = $crawler->filter('#gestion_lien')->selectLink('Supprimer')->link();
+    //         $crawler = $client->click($link);
+    //         $crawler = $client->followRedirect();
+    //         /** Assert 8 - Le client reçoit bien un message de confirmation */
+    //             $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
+        
+    //     //Scénario - On ajoute une adresse (admin_structure_addcontact)
+    //         $link = $crawler->filter('#gestion_adresses')->selectLink('Ajouter une adresse')->link();
+    //         $crawler = $client->click($link);
+    //         $form = $crawler->selectButton('Enregistrer')->form();
+    //         $form['new_adresse[numero]'] = '13';
+    //         $form['new_adresse[rue]'] = 'rue du Bois';
+    //         $form['new_adresse[complement]'] = 'chemin du lac';
+    //         $form['new_adresse[codePostal]'] = '59287';
+    //         $form['new_adresse[ville]'] = 'Guesnain';
+    //         $form['new_adresse[contact][prive]'] = false;
+    //         $client->submit($form);
+    //         $crawler = $client->followRedirect();
+    //         /** Assert 9 - Le client reçoit bien un message de confirmation */
+    //             $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
+        
+    //     //Scénario - On modifie une adresse (admin_structure_editcontact)
+    //         $link = $crawler->filter('#gestion_adresses')->selectLink('Modifier')->link();
+    //         $crawler = $client->click($link);
+    //         $form = $crawler->selectButton('Enregistrer')->form();
+    //         $form['new_adresse[numero]'] = '14';
+    //         $form['new_adresse[rue]'] = 'rue du Peuple';
+    //         $form['new_adresse[complement]'] = null;
+    //         $form['new_adresse[codePostal]'] = '59500';
+    //         $form['new_adresse[ville]'] = 'Douai';
+    //         $form['new_adresse[contact][prive]'] = true;
+    //         $client->submit($form);
+    //         $crawler = $client->followRedirect();
+    //         /** Assert 10 - Le client reçoit bien un message de confirmation */
+    //             $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
+
+    //     //Scénario - On supprime une adresse (admin_structure_deletecontact)
+    //         $link = $crawler->filter('#gestion_adresses')->selectLink('Supprimer')->link();
+    //         $crawler = $client->click($link);
+    //         $crawler = $client->followRedirect();
+    //         /** Assert 11 - Le client reçoit bien un message de confirmation */
+    //             $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
+        
+    //    //Scénario - On ajoute un numero de téléphone (admin_structure_addcontact)
+    //         $link = $crawler->selectLink('Ajouter un numéro de téléphone')->link();
+    //         $crawler = $client->click($link);
+    //         $form = $crawler->selectButton('Enregistrer')->form();
+    //         $form['new_telephone[numero]'] = '00 00 00 00 00';
+    //         $form['new_telephone[contact][prive]'] = false;
+    //         $client->submit($form);
+    //         $crawler = $client->followRedirect();
+    //         /** Assert 12 - Le client reçoit bien un message de confirmation */
+    //             $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
+
+    //     //Scénario - On modifie un numero de téléphone (admin_structure_editcontact)
+    //         $link = $crawler->filter('#gestion_telephones')->selectLink('Modifier')->link();
+    //         $crawler = $client->click($link);
+    //         $form = $crawler->selectButton('Enregistrer')->form();
+    //         $form['new_telephone[numero]'] = '11 11 11 11 11';
+    //         $form['new_telephone[contact][prive]'] = true;
+    //         $client->submit($form);
+    //         $crawler = $client->followRedirect();
+    //         /** Assert 13 - Le client reçoit bien un message de confirmation */
+    //             $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
+
+    //     //Scénario - On supprime un numéro de téléphone (admin_structure_deletecontact)
+    //         $link = $crawler->filter('#gestion_telephones')->selectLink('Supprimer')->link();
+    //         $crawler = $client->click($link);
+    //         $crawler = $client->followRedirect();
+    //         /** Assert 14 - Le client reçoit bien un message de confirmation */
+    //             $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
+        
+    //     //Scénario - On ajoute un mail (admin_structure_addcontact)
+    //         $link = $crawler->selectLink('Ajouter une adresse e-mail')->link();
+    //         $crawler = $client->click($link);
+    //         $form = $crawler->selectButton('Enregistrer')->form();
+    //         $form['new_mail[adresse]'] = 'monmail@toto.fr';
+    //         $form['new_mail[contact][prive]'] = false;
+    //         $client->submit($form);
+    //         $crawler = $client->followRedirect();
+    //         /** Assert 15 - Le client reçoit bien un message de confirmation */
+    //             $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
+        
+    //     //Scénario - On modifie un mail (admin_structure_editcontact)
+    //         $link = $crawler->filter('#gestion_mails')->selectLink('Modifier')->link();
+    //         $crawler = $client->click($link);
+    //         $form = $crawler->selectButton('Enregistrer')->form();
+    //         $form['new_mail[adresse]'] = 'newmail@toto.fr';
+    //         $form['new_mail[contact][prive]'] = true;
+    //         $client->submit($form);
+    //         $crawler = $client->followRedirect();
+    //         /** Assert 16 - Le client reçoit bien un message de confirmation */
+    //             $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
+        
+    //     //Scénario - On supprime un mail (admin_structure_deletecontact)
+    //         $link = $crawler->filter('#gestion_mails')->selectLink('Supprimer')->link();
+    //         $crawler = $client->click($link);
+    //         $crawler = $client->followRedirect();
+    //         /** Assert 17 - Le client reçoit bien un message de confirmation */
+    //             $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
+    
+    //     //Scénario - On ajoute une fonction (admin_structure_addfonction)
+    //         $link = $crawler->selectLink('Ajouter une fonction')->link();
+    //         $crawler = $client->click($link);
+    //         $form = $crawler->selectButton('Enregistrer')->form();
+    //         $form['fonction_base[typeFonction]'] = rand($this->config['idTypeFonctionStart'], $this->config['idTypeFonctionStart']+$this->config['nbrIdTypeFonction']-1);
+    //         $form['fonction_base[secteur]'] = 'secteur de test';
+    //         $client->submit($form);
+    //         $crawler = $client->followRedirect();
+    //         /** Assert 18 - Le client reçoit bien un message de confirmation */
+    //             $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
+        
+    //     //Scénario - On ajoute un responsable à la fonction (admin_structure_fonction_addhumain)
+    //         $link = $crawler->selectLink('Ajouter un responsable')->link();
+    //         $crawler = $client->click($link);
+    //         $form = $crawler->selectButton('Enregistrer')->form();
+    //         $form['fonction_humain[humain]'] = rand($this->config['idTypeFonctionStart'], $this->config['idHumainStart']+$this->config['nbrIdHumain']-1);
+    //         $client->submit($form);
+    //         $crawler = $client->followRedirect();
+    //         /** Assert 19 - Le client reçoit bien un message de confirmation */
+    //             $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
+
+    //     //Scénario - On supprime le responsable de la fonction (admin_structure_fonction_deletehumain)
+    //         $link = $crawler->filter('#fonction_humain')->selectLink('Supprimer')->link();
+    //         $crawler = $client->click($link);
+    //         $crawler = $client->followRedirect();
+    //         /** Assert 20 - Le client reçoit bien un message de confirmation */
+    //             $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
+    
+    //     //Scénario - On ajoute un mail à la fonction (admin_structure_fonction_addcontact)
+    //         $link = $crawler->filter('#gestion_fonction_mails')->selectLink('Ajouter')->link();
+    //         $crawler = $client->click($link);
+    //         $form = $crawler->selectButton('Enregistrer')->form();
+    //         $form['new_mail[adresse]'] = 'toto@free.fr';
+    //         $form['new_mail[contact][prive]'] = false;
+    //         $client->submit($form);
+    //         $crawler = $client->followRedirect();
+    //         /** Assert 21 - Le client reçoit bien un message de confirmation */
+    //             $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
+        
+    //     //Scénario - On ajoute un numéro de téléphone à la fonction
+    //         $link = $crawler->filter('#gestion_fonction_telephones')->selectLink('Ajouter')->link();
+    //         $crawler = $client->click($link);
+    //         $form = $crawler->selectButton('Enregistrer')->form();
+    //         $form['new_telephone[numero]'] = '00 01 02 03 04';
+    //         $form['new_telephone[contact][prive]'] = false;
+    //         $client->submit($form);
+    //         $crawler = $client->followRedirect();
+    //         /** Assert 22 - Le client reçoit bien un message de confirmation */
+    //             $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
+    
+    //     //Scénario - On modifie un mail à la fonction
+    //         $link = $crawler->filter('#gestion_fonction_mails')->selectLink('Modifier')->link();
+    //         $crawler = $client->click($link);
+    //         $form = $crawler->selectButton('Enregistrer')->form();
+    //         $form['new_mail[adresse]'] = 'titi@free.fr';
+    //         $form['new_mail[contact][prive]'] = true;
+    //         $client->submit($form);
+    //         $crawler = $client->followRedirect();
+    //         /** Assert 23 - Le client reçoit bien un message de confirmation */
+    //             $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
+    
+    //     //Scénario - On modifie un numéro de téléphone à la fonction
+    //         $link = $crawler->filter('#gestion_fonction_telephones')->selectLink('Modifier')->link();
+    //         $crawler = $client->click($link);
+    //         $form = $crawler->selectButton('Enregistrer')->form();
+    //         $form['new_telephone[numero]'] = '10 11 12 13 14';
+    //         $form['new_telephone[contact][prive]'] = true;
+    //         $client->submit($form);
+    //         $crawler = $client->followRedirect();
+    //         /** Assert 24 - Le client reçoit bien un message de confirmation */
+    //             $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
+
+    //     //Scénario - On supprime un mail à la fonction
+    //         $link = $crawler->filter('#gestion_fonction_mails')->selectLink('Supprimer')->link();
+    //         $crawler = $client->click($link);
+    //         $crawler = $client->followRedirect();
+    //         /** Assert 25 - Le client reçoit bien un message de confirmation */
+    //             $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
+    
+    //     //Scénario - On supprime un numéro de téléphone à la fonction
+    //         $link = $crawler->filter('#gestion_fonction_telephones')->selectLink('Supprimer')->link();
+    //         $crawler = $client->click($link);
+    //         $crawler = $client->followRedirect();
+    //         /** Assert 26 - Le client reçoit bien un message de confirmation */
+    //             $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
+
+    //     //Scénario - On modifie une fonction (admin_structure_editfonction)
+    //         $link = $crawler->filter('#gestion_structure_fonctions')->selectLink('Modifier')->link();
+    //         $crawler = $client->click($link);
+    //         $form = $crawler->selectButton('Enregistrer')->form();
+    //         $form['fonction_base[typeFonction]'] = rand($this->config['idTypeFonctionStart'], $this->config['idTypeFonctionStart']+$this->config['nbrIdTypeFonction']-1);
+    //         $form['fonction_base[secteur]'] = 'secteur n°2';
+    //         $client->submit($form);
+    //         $crawler = $client->followRedirect();
+    //         /** Assert 27 - Le client reçoit bien un message de confirmation */
+    //             $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
+
+    //     //Scénario - On supprime une fonction (admin_structure_deletefonction)
+    //         $link = $crawler->filter('#gestion_structure_fonctions')->selectLink('Supprimer')->link();
+    //         $crawler = $client->click($link);
+    //         $crawler = $client->followRedirect();
+    //         /** Assert 28 - Le client reçoit bien un message de confirmation */
+    //             $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
     }
 
-    /** N°3 - Test d'affichage de la page */
-    public function testChemin_admin_structure_addlien()
-    {
-        $client = static::createClient();
-        $client->request('GET', '/admin/structure/addlien/'.$this->idstructure.'/'.$this->idpagemere);
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
-    }
-
-    /** N°4 - Test d'affichage de la page */
-    public function testChemin_admin_structure_editlien()
-    {
-        $client = static::createClient();
-        $client->request('GET', '/admin/structures/lien/edit/'.$this->idstructure.'/'.$this->idlien.'/'.$this->idpage);
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
-    }
-
-    /** N°5 - Test d'affichage de la page */
-    public function testChemin_admin_structure_deletelien()
-    {
-        $client = static::createClient();
-        $client->request('GET', '/admin/structures/lien/delete/'.$this->idstructure.'/'.$this->idlien.'/'.$this->idpage);
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
-    }
-
-    /** N°6 - Test d'affichage de la page */
-    public function testChemin_admin_structure_addcontact()
-    {
-        $client = static::createClient();
-        $client->request('GET', '/admin/structure/addcontact/'.$this->idstructure.'/'.$this->idpage.'/adresse');
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
-
-        $client->request('GET', '/admin/structure/addcontact/'.$this->idstructure.'/'.$this->idpage.'/mail');
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
-
-        $client->request('GET', '/admin/structure/addcontact/'.$this->idstructure.'/'.$this->idpage.'/telephone');
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
-    }
-
-    /** N°7 - Test d'affichage de la page */
-    public function testChemin_admin_structure_editcontact()
-    {
-        $client = static::createClient();
-        $client->request('GET', '/admin/structure/editcontact/'.$this->idstructure.'/'.$this->idcontact.'/'.$this->idpage);
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
-    }
-
-    /** N°8 - Test d'affichage de la page */
-    public function testChemin_admin_structure_deletecontact()
-    {
-        $client = static::createClient();
-        $client->request('GET', '/admin/structure/deletecontact/'.$this->idstructure.'/'.$this->idcontact.'/'.$this->idpage);
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
-    }
 
 
-
-    // /** Test d'affichage de la page services */
-    // public function testAdminStructuresServicesIsUp()
-    // {
-    //     $client = static::createClient();
-    //     $client->request('GET', '/admin/structures/services');
-    //     $this->assertSame(200, $client->getResponse()->getStatusCode());
-    // }
+    
 
 
 
@@ -112,249 +619,20 @@ class OutilsControllerStructureTest extends WebTestCase
 
 
 
-    // /** test d'affichage de la page associations */
-    // public function testAdminStructuresAssociationsIsUp()
-    // {
-    //     $client = static::createClient();
-    //     $client->request('GET', '/admin/structures/associations');
-    //     $this->assertSame(200, $client->getResponse()->getStatusCode());
-    // }
-    // /** test d'affichage de la page entreprises */
-    // public function testAdminStructuresEntreprisesIsUp()
-    // {
-    //     $client = static::createClient();
-    //     $client->request('GET', '/admin/structures/entreprises');
-    //     $this->assertSame(200, $client->getResponse()->getStatusCode());
-    // }
 
-    // /** TEST DES FONCTIONS DE : SERVICES */
 
-    // // AJOUTER D'UN NOUVEAU SERVICE
-    // public function testAddNewService()
-    // {
-    //     //Création d'un client afin de réaliser les tests
-    //     $client = static::createClient();
-    //     //Le client arrive sur la page ci-dessous
-    //     $crawler = $client->request('GET', '/admin/structures/services');
-    //     //Le client voit un lien
-    //     $link = $crawler->selectLink('Ajouter un service')->link();
-    //     //Le client clic sur le lien
-    //     $crawler = $client->click($link);
-    //     //Le client rempli le formulaire
-    //     $form = $crawler->selectButton('Enregistrer')->form();
-    //     $form['service_base[structure][nom]'] = 'John Doe';
-    //     $form['service_base[structure][presentation]'] = 'Mon texte de description';
-    //     $form['service_base[structure][local]'] = true;
-    //     //Le client valide le formulaire
-    //     $client->submit($form);
-    //     //Le client est redirigé
-    //     $crawler = $client->followRedirect();
-    //     //Permet de voir la réponse vu par le client
-    //     //echo $client->getResponse()->getContent();
-    //     //Test si le client à bien un message de success
-    //     $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
-    // }
-    // // MODIFIER LA BASE D'UN SERVICE
-    // public function testModifierNomService()
-    // {
-    //     $client = static::createClient();
-    //     $crawler = $client->request('GET', '/admin/structures/services');
-    //     $link = $crawler->selectLink('Modifier')->link();
-    //     $crawler = $client->click($link);
-    //     $link = $crawler->selectLink('Modifier')->link();
-    //     $crawler = $client->click($link);
-    //     //Le client rempli le formulaire
-    //     $form = $crawler->selectButton('Enregistrer')->form();
-    //     $form['service_base[structure][nom]'] = 'John Doe 2';
-    //     $form['service_base[structure][presentation]'] = 'Mon texte de description 2';
-    //     $form['service_base[structure][local]'] = false;
-    //     //Le client valide le formulaire
-    //     $client->submit($form);
-    //     $crawler = $client->followRedirect();
-    //     $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
-    // }
-    // // SUPPRIMER UN SERVICE
-    // public function testSupprimerService()
-    // {
-    //     $client = static::createClient();
-    //     $crawler = $client->request('GET', '/admin/structures/services');
-    //     $link = $crawler->selectLink('Modifier')->link();
-    //     $crawler = $client->click($link);
-    //     $link = $crawler->selectLink('Supprimer : John Doe 2')->link();
-    //     $crawler = $client->click($link);
-    //     $crawler = $client->followRedirect();
-    //     $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
-    // }
-    // // AJOUTER, MODIFIER ET SUPPRIMER UN MAIL DU SERVICE
-    // public function testServiceGestionMails()
-    // {
-    //     //Création du client
-    //     $client = static::createClient();
-    //     //Il démarre sur la page des services
-    //     $crawler = $client->request('GET', '/admin/structures/services');
-    //     //Il clic sur un lien pour modifier un service
-    //     $link = $crawler->selectLink('Modifier')->link();
-    //     $crawler = $client->click($link);
-    //     //Il clic sur ajouter un mail
-    //     $link = $crawler->selectLink('Ajouter une adresse e-mail')->link();
-    //     $crawler = $client->click($link);
-    //     //Il rempli le formulaire avec un nouveau mail
-    //     $form = $crawler->selectButton('Enregistrer')->form();
-    //     $form['new_mail[adresse]'] = 'monmail@toto.fr';
-    //     $form['new_mail[contact][prive]'] = false;
-    //     $client->submit($form);
-    //     $crawler = $client->followRedirect();
-    //     //On vérifi le message de success pour le NOUVEAU mail
-    //     $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
 
-    //     //Le clien clic maintenant pour modifier un mail
-    //     $crawler->filter('#gestion_mails')->selectLink('Modifier')->link();
-    //     $crawler = $client->click($link);
-    //     //Il rempli donc ce nouveau formulaire
-    //     $form = $crawler->selectButton('Enregistrer')->form();
-    //     $form['new_mail[adresse]'] = 'newmail@toto.fr';
-    //     $form['new_mail[contact][prive]'] = true;
-    //     $client->submit($form);
-    //     $crawler = $client->followRedirect();
-    //     //On vérifi le message de success pour la MODIFICATION du mail
-    //     $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
 
-    //     //Le clien clic maintenant pour supprimer un mail
-    //     $link = $crawler->filter('#gestion_mails')->selectLink('Supprimer')->link();
-    //     $crawler = $client->click($link);
-    //     $crawler = $client->followRedirect();
-    //     //On vérifi le message de success pour la SUPPRESSION du mail
-    //     $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
-    // }
-    // // AJOUTER, MODIFIER ET SUPPRIMER UN NUMERO DE TELEPHONE DU SERVICE
-    // public function testServiceGestionTelephones()
-    // {
-    //     //Création du client
-    //     $client = static::createClient();
-    //     //Il démarre sur la page des services
-    //     $crawler = $client->request('GET', '/admin/structures/services');
-    //     //Il clic sur un lien pour modifier un service
-    //     $link = $crawler->selectLink('Modifier')->link();
-    //     $crawler = $client->click($link);
-    //     //Il clic sur ajouter un numéro de téléphone
-    //     $link = $crawler->selectLink('Ajouter un numéro de téléphone')->link();
-    //     $crawler = $client->click($link);
-    //     //Il rempli le formulaire avec un nouveau numéro de téléphone
-    //     $form = $crawler->selectButton('Enregistrer')->form();
-    //     $form['new_telephone[numero]'] = '00 00 00 00 00';
-    //     $form['new_telephone[contact][prive]'] = false;
-    //     $client->submit($form);
-    //     $crawler = $client->followRedirect();
-    //     //On vérifi le message de success pour le NOUVEAU numéro de téléphone
-    //     $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
 
-    //     //Le clien clic maintenant pour modifier un numéro de téléphone
-    //     $crawler->filter('#gestion_telephones')->selectLink('Modifier')->link();
-    //     $crawler = $client->click($link);
-    //     //Il rempli donc ce nouveau formulaire
-    //     $form = $crawler->selectButton('Enregistrer')->form();
-    //     $form['new_telephone[numero]'] = '11 11 11 11 11';
-    //     $form['new_telephone[contact][prive]'] = true;
-    //     $client->submit($form);
-    //     $crawler = $client->followRedirect();
-    //     //On vérifi le message de success pour la MODIFICATION du numéro de téléphone
-    //     $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
 
-    //     //Le clien clic maintenant pour supprimer un numéro de téléphone
-    //     $link = $crawler->filter('#gestion_telephones')->selectLink('Supprimer')->link();
-    //     $crawler = $client->click($link);
-    //     $crawler = $client->followRedirect();
-    //     //On vérifi le message de success pour la SUPPRESSION du numéro de téléphone
-    //     $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
-    // }
-    // // AJOUTER, MODIFIER ET SUPPRIMER UNE ADRESSE DU SERVICE
-    // public function testServiceGestionAdresses()
-    // {
-    //     //Création du client
-    //     $client = static::createClient();
-    //     //Il démarre sur la page des services
-    //     $crawler = $client->request('GET', '/admin/structures/services');
-    //     //Il clic sur un lien pour modifier un service
-    //     $link = $crawler->selectLink('Modifier')->link();
-    //     $crawler = $client->click($link);
-    //     //Il clic sur ajouter une adresse
-    //     $link = $crawler->selectLink('Ajouter une adresse')->link();
-    //     $crawler = $client->click($link);
-    //     //Il rempli le formulaire avec une nouvelle adresse
-    //     $form = $crawler->selectButton('Enregistrer')->form();
-    //     $form['new_adresse[numero]'] = '13';
-    //     $form['new_adresse[rue]'] = 'rue du Bois';
-    //     $form['new_adresse[complement]'] = 'chemin du lac';
-    //     $form['new_adresse[codePostal]'] = '59287';
-    //     $form['new_adresse[ville]'] = 'Guesnain';
-    //     $form['new_adresse[contact][prive]'] = false;
-    //     $client->submit($form);
-    //     $crawler = $client->followRedirect();
-    //     //On vérifi le message de success pour la NOUVELLE adresse
-    //     $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
 
-    //     //Le clien clic maintenant pour modifier une adresse
-    //     $crawler->filter('#gestion_adresses')->selectLink('Modifier')->link();
-    //     $crawler = $client->click($link);
-    //     //Il rempli donc ce nouveau formulaire
-    //     $form = $crawler->selectButton('Enregistrer')->form();
-    //     $form['new_adresse[numero]'] = '14';
-    //     $form['new_adresse[rue]'] = 'rue du Peuple';
-    //     $form['new_adresse[complement]'] = null;
-    //     $form['new_adresse[codePostal]'] = '59500';
-    //     $form['new_adresse[ville]'] = 'Douai';
-    //     $form['new_adresse[contact][prive]'] = true;
-    //     $client->submit($form);
-    //     $crawler = $client->followRedirect();
-    //     //On vérifi le message de success pour la MODIFICATION de l'adresse
-    //     $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
 
-    //     //Le clien clic maintenant pour supprimer une adresse
-    //     $link = $crawler->filter('#gestion_adresses')->selectLink('Supprimer')->link();
-    //     $crawler = $client->click($link);
-    //     $crawler = $client->followRedirect();
-    //     //On vérifi le message de success pour la SUPPRESSION d'une adresse'
-    //     $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
-    // }
-    // // AJOUTER, MODIFIER ET SUPPRIMER UN LIEN DU SERVICE
-    // public function testServiceGestionLien()
-    // {
-    //     //Création du client
-    //     $client = static::createClient();
-    //     //Il démarre sur la page des services
-    //     $crawler = $client->request('GET', '/admin/structures/services');
-    //     //Il clic sur un lien pour modifier un service
-    //     $link = $crawler->selectLink('Modifier')->link();
-    //     $crawler = $client->click($link);
-    //     //Il clic sur ajouter une adresse
-    //     $link = $crawler->selectLink('Ajouter un site Internet')->link();
-    //     $crawler = $client->click($link);
-    //     //Il rempli le formulaire avec une nouvelle adresse
-    //     $form = $crawler->selectButton('Enregistrer')->form();
-    //     $form['lien_base[url]'] = 'www.monsite.fr';
-    //     $client->submit($form);
-    //     $crawler = $client->followRedirect();
-    //     //On vérifi le message de success pour le NOUVEAU LIEN
-    //     $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
 
-    //     //Le clien clic maintenant pour modifier le lien
-    //     $crawler->filter('#gestion_lien')->selectLink('Modifier')->link();
-    //     $crawler = $client->click($link);
-    //     //Il rempli donc ce nouveau formulaire
-    //     $form = $crawler->selectButton('Enregistrer')->form();
-    //     $form['lien_base[url]'] = 'www.monsite2.fr';
-    //     $client->submit($form);
-    //     $crawler = $client->followRedirect();
-    //     //On vérifi le message de success pour la MODIFICATION du lien
-    //     $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
 
-    //     //Le clien clic maintenant pour supprimer le lien
-    //     $link = $crawler->filter('#gestion_lien')->selectLink('Supprimer')->link();
-    //     $crawler = $client->click($link);
-    //     $crawler = $client->followRedirect();
-    //     //On vérifi le message de success pour la SUPPRESSION d'un lien'
-    //     $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
-    // }
+
+
+
+
 
 
 

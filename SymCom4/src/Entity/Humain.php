@@ -71,6 +71,11 @@ class Humain
      */
     private $slug;
 
+    /**
+     * @ORM\Column(type="date", nullable=true)
+     */
+    private $dateNaissance;
+
     public function __construct()
     {
         $this->contacts = new ArrayCollection();
@@ -230,5 +235,17 @@ class Humain
             $slugify = new Slugify();
             $this->slug = $slugify->slugify($this->nom." ".$this->prenom);
         }
+    }
+
+    public function getDateNaissance(): ?\DateTimeInterface
+    {
+        return $this->dateNaissance;
+    }
+
+    public function setDateNaissance(?\DateTimeInterface $dateNaissance): self
+    {
+        $this->dateNaissance = $dateNaissance;
+
+        return $this;
     }
 }
