@@ -1,0 +1,13 @@
+Ne pas utiliser ???? A supprimer...
+<div class="card mb-3">
+    <div class="card-header text-center">
+        <h6 class="card-title">{{ adherent.utilisateur.humain.prenom | title }}</h6>
+    </div>
+    <div class="card-body">
+        {% if adherent.commandes | length > 0 %}
+            {{ adherent.commandes.last.id }}
+        {% endif %}
+    </div>
+    <div class="card-footer">
+    </div>
+</div>

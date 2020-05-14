@@ -1,0 +1,44 @@
+{% extends 'mediatheque_drive/_base_mediatheque_drive.html.twig' %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title text-center">Prêts</h5>
+                </div>
+                <div class="card-body text-center">
+                    <p class="card-text">Je souhaite emprunter des documents à la Médiathèque.<br/>(Livre, CD et DVD)</p>
+                </div>
+                <div class="card-footer text-center">
+                    <div class="card">
+                        <a href="{{ path('mediatheque_drive_typeemprunt', {'idemprunteur': emprunteur.id }) }}" class="btn btn-success">
+                            <i class="fas fa-sign-out-alt"></i>
+                            Emprunter des documents
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title text-center">Retours</h5>
+                </div>
+                <div class="card-body text-center">
+                    <p class="card-text">Je ne souhaite pas emprunter<br/>mais juste effectuer un retour de documents.</p>
+                </div>
+                <div class="card-footer text-center">
+                    <div class="card">
+                        <a href=" {{ path('mediatheque_drive_retour') }}" class="btn btn-success">
+                            <i class="fas fa-sign-in-alt"></i>
+                            Effectuer un retour uniquement
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+{% endblock %}

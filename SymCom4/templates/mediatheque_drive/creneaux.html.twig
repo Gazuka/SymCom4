@@ -1,0 +1,77 @@
+{% extends 'mediatheque_drive/_base_mediatheque_drive.html.twig' %}
+
+{% block content %}
+    {% set membre = app.user.membreMediatheque %}
+    
+    <div class="card">
+        <div class="card-header text-center">
+            <h5 class="card-title">Choix d'un créneau horaire</h5>
+        </div>
+        <div class="card-body text-center">
+            <p class="card-text">
+                Veuillez maintenant choisir un créneau horaire disponible (en vert) afin d'effectuer vos prêts et retours.
+            </p>
+            <div class="row">
+                {% set jourPrecedant = null %}
+                <div class="accordion col-12" id="accordionDrive">
+                    {% for creneau in creneaux %}
+                        {% set jour = creneau.debut | date("dM", "Europe/Paris") %}
+                        {% if jour != jourPrecedant %} 
+                            {% if jourPrecedant != null %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                            {% endif %} 
+                    <div class="card">
+                        <div class="card-header" id="heading{{jour}}">
+                            <h2 class="mb-0">
+                                <button class="btn btn-link {% if jourPrecedant != null %}collapsed{% endif %}" type="button" data-toggle="collapse" data-target="#collapse{{jour}}" aria-expanded={% if jourPrecedant == null %}true{% else %}false{% endif %} aria-controls="collapse{{jour}}">
+                                    <b>{{ creneau.debut | DateComplete }}</b>
+                                </button>
+                            </h2>
+                        </div>
+                        <div id="collapse{{jour}}" class="collapse {% if jourPrecedant == null %}show{% endif %}" aria-labelledby="heading{{jour}}" data-parent="#accordionDrive">
+                            <div class="card-body">
+                                <div class="row">
+                        {% endif %}
+                            {# Affichage d'un creneau #}  
+                                {% if creneau.etat == 'DISPONIBLE' %}
+                                    <div class="col-md-3">
+                                        <a href="{{ path('mediatheque_drive_reserver_creneau', {'idcreneau': creneau.id }) }}" class="btn btn-success m-1 col-12">
+                                            {{ creneau.debut | date("H:i")}}
+                                        </a>
+                                    </div>
+                                {% else %}
+                                    <div class="col-md-3">
+                                        <span class="btn btn-secondary m-1 col-12">
+                                            {{ creneau.debut | date("H:i")}}
+                                        </span>
+                                    </div>
+                                {% endif %}
+                            {# Fin d'affichage d'un creneau  #}
+                                                    
+                        {% set jourPrecedant = jour %}
+                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="card">
+                <a href="{{ path('mediatheque_drive_profil')}}" class="btn btn-link">
+                    <i class="fas fa-arrow-circle-left"></i>
+                    Retour à votre commande
+                </a>
+            </div>
+        </div>
+    </div>
+
+    
+    
+    {# </div> #}
+             
+{% endblock %}

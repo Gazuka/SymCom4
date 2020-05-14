@@ -1,0 +1,53 @@
+{% if derniereCommande != null %}
+    {% if derniereCommande.etat.etat == 'USER_ENCOURS' %}
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title text-center">Ma commande à valider</h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text">Je peux passer une commande pour une autre personne afin de venir la chercher en même temps que la mienne.</p>
+                <p class="card-text">Je choisis un créneau horaire pour venir chercher cette commande.</p>
+                
+                {# Si la derniere commande n'est pas fini on l'affiche #}
+                {% set commande = membre.commandes.last %}
+                {% if commande.etat.etat == 'USER_ENCOURS' %}
+                    {% include 'mediatheque_drive/_detail_commande.html.twig' %}
+                {% endif %}
+
+                {# Idem pour toute la famille #}
+                {% if membre.famille != null %}
+                    {% for adherent in membre.famille.adherents %}
+                        {% if adherent.id != membre.id %}
+                            {% if adherent.commandes | length > 0 %}
+                                {% set commande = adherent.commandes.last %}
+                                {% if commande.etat.etat == 'USER_ENCOURS' %}
+                                    {% include 'mediatheque_drive/_detail_commande.html.twig' %}
+                                {% else %}
+                                    {% if commande.etat.etat == 'FINI' %}
+                                        {% include 'mediatheque_drive/_btn_commander_pour_adherent.html.twig' %}
+                                    {% endif %}
+                                {% endif %}
+                            {% else %}
+                                {% include 'mediatheque_drive/_btn_commander_pour_adherent.html.twig' %}
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+
+                <div class="card mb-3">
+                    <a href="{{ path('mediatheque_drive_inscription_famille') }}" class="btn btn-primary">
+                        Commander pour quelqu'un d'autre
+                    </a>
+                </div>
+                
+            </div>
+            <div class="card-footer">
+                <div class="card">
+                    <a href="{{ path('mediatheque_drive_creneaux') }}" class="btn btn-success">
+                        Choisir un horaire
+                    </a>
+                </div>  
+            </div>
+        </div>
+    {% endif %}
+{% endif %}

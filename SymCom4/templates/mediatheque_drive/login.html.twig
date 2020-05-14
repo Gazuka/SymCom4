@@ -1,0 +1,51 @@
+{% extends 'mediatheque_drive/_base_mediatheque_drive.html.twig' %}
+
+{% block content %}
+
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title text-center">Connectez-vous !</h5>
+            </div>
+            <form method="post">
+                <div class="card-body">
+                    <div class="alert alert-warning text-center">
+                        <p>Votre mot de passe est composé de votre jour et mois de naissance sur 4 chiffres.<br/>(exemple : le 5 février 1980 donne 0502)</p>
+                    </div>
+                    <p class="card-text">Veuillez compléter le formulaire ci-dessous :</p>
+                    {% if hasError %}
+                        <div class="alert alert-warning">
+                            <p>Les informations que vous avez fournies sont incorrectes.</p>
+                        </div>
+                    {% endif %}
+
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="_username">Identifiant de votre carte :</label>
+                                <input type="text" class="form-control" placeholder="La lettre A suivit de 4 chiffres..." name="_username">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="_password">Mot de passe</label>
+                                <input type="password" class="form-control" placeholder="Mot de passe..." name="_password">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer text-center">
+                    <div class="row">
+                        <div class="col-6">
+                            <a href="{{ path('mediatheque_drive')}}" class="btn btn-link">
+                                <i class="fas fa-arrow-circle-left"></i>
+                                Retour à l'accueil
+                            </a>
+                        </div>
+                        <div class="col-6">
+                            <div class="card">
+                                <button id='login_connexion' class="btn btn-success"><i class="fas fa-lock-open"></i> Connexion !</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+{% endblock %}

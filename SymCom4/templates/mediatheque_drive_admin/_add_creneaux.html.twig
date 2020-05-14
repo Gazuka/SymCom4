@@ -1,0 +1,25 @@
+
+
+<div class="card mb-3">
+    <div class="card-header">
+        <h5 class="card-title text-center">Jours d'ouverture du drive</h5>
+        
+    </div>
+    <div class="card-body">
+        {% for jour in jours %}
+            {% set jour = jour %}
+            {% if jour['actif'] == true %}
+                <div class="card bg-success pl-2">
+                    {{ jour['date'] | DateComplete }}
+                </div>
+            {% else %}
+                <div class="card bg-danger pl-2">
+                    <a href="{{ path('admin_mediatheque_drive_add_creneaux', {'jour': jour['date'] | date('d'), 'mois': jour['date'] | date('m'), 'annee': jour['date'] | date('Y'), 'heure': 9, 'minute': 0} )}}" class="text-white">
+                        {{ jour['date'] | DateComplete }}
+                    </a>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+

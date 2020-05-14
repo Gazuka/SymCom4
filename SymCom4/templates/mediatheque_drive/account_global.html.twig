@@ -1,0 +1,54 @@
+{% extends 'mediatheque_drive/_base_mediatheque_drive.html.twig' %}
+
+{% block content %}
+    {% set membre = app.user.membreMediatheque %}
+
+    <div class="row">
+        <div class="col-md-8">
+            {# Commande en cours #}
+            {% include 'mediatheque_drive/_commande_en_cours.html.twig' %}
+
+            {# Commande validé par l'utilisateur #}
+            {% include 'mediatheque_drive/_commande_en_validation.html.twig' %}
+        </div>
+
+        <div class="col-md-4">
+            
+            <div class="card">
+                <div class="card-header text-center">
+                    <h5 class="card-title">Conseils</h5>
+                </div>
+                <div class="card-body">
+                    Pour toutes questions, vous pouvez nous contacter au 03 27 98 39 73.
+                </div>
+                <div class="card-footer">
+                </div>
+            </div>
+
+
+            {# Voir le catalogue
+
+                <div class="card">
+                    <div class="card-header text-center">
+                        <h5 class="card-title">Ma famille</h5>
+                    </div>
+                    <div class="card-body">
+                        {% if membre.famille != null %}
+                            {% for adherent in membre.famille.adherents %}
+                                {% include 'mediatheque_drive/_membre_etat_commande.html.twig' %}
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    <div class="card-footer">
+                        <div class="card">
+                            <a href="{{ path('mediatheque_drive_inscription_famille') }}" class="btn btn-success">
+                                Ajouter un membre de la famille
+                            </a>
+                        </div>
+                    </div>
+                </div> #}
+                
+        </div>
+    </div>
+
+{% endblock %}

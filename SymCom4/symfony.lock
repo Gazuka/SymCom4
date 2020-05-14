@@ -99,6 +99,9 @@
     "fzaninotto/faker": {
         "version": "v1.9.1"
     },
+    "gazuka/outils": {
+        "version": "dev-master"
+    },
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
     },

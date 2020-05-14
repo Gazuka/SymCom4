@@ -1,0 +1,43 @@
+{% extends 'mediatheque_drive/_base_mediatheque_drive.html.twig' %}
+
+{% block content %}
+    
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title text-center">Je veux choisir</h5>
+                </div>
+                <div class="card-body text-center">
+                    <p class="card-text">Je sélectionne dans le catalogue de la Médiathèque.</p>
+                </div>
+                <div class="card-footer text-center">
+                    <div class="card">
+                        <a href=" {{ path('mediatheque_drive_catalogue', {'idemprunteur': emprunteur.id }) }}" class="btn btn-success">
+                            <i class="fas fa-shopping-basket"></i>
+                            Voir le catalogue
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title text-center">Choisissez pour moi</h5>
+                </div>
+                <div class="card-body text-center">
+                    <p class="card-text">Je laisse les employés de la Médiathèque choisir pour moi.</p>
+                </div>
+                <div class="card-footer text-center">
+                    <div class="card">
+                        <a href="{{ path('mediatheque_drive_surprise', {'idemprunteur': emprunteur.id }) }}" class="btn btn-success">
+                            <i class="fas fa-concierge-bell"></i>
+                            Surprenez-moi !
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

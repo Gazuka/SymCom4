@@ -1,6 +1,6 @@
 <?php
-$this->config['idTypeFonctionStart']=490;
+$this->config['idTypeFonctionStart']=1;
 $this->config['nbrIdTypeFonction']=50;
-$this->config['idHumainStart']=360;
+$this->config['idHumainStart']=1;
 $this->config['nbrIdHumain']=51;
 ?>

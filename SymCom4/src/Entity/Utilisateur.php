@@ -2,13 +2,27 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UtilisateurRepository")
+ * @UniqueEntity(
+ *  fields={"pseudo"},
+ *  message="Ce pseudo est déjà utilisé..."
+ * )
+ * @UniqueEntity(
+ *  fields={"email"},
+ *  message="Cet adresse e-mail est déjà utilisée..."
+ * )
+ * @UniqueEntity(
+ *  fields={"humain"},
+ *  message="Vous semblez être déjà inscrit sur notre service..."
+ * )
  */
 class Utilisateur implements UserInterface
 {
@@ -22,6 +36,7 @@ class Utilisateur implements UserInterface
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\Humain", inversedBy="utilisateur", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\Valid
      */
     private $humain;
 
@@ -37,6 +52,9 @@ class Utilisateur implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Email(
+     *     message = "L'adresse '{{ value }}' ne semble pas être un e-mail valide..."
+     * )
      */
     private $email;
 
@@ -46,7 +64,7 @@ class Utilisateur implements UserInterface
     private $roles;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\MembreMediatheque", mappedBy="utilisateur", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="App\Entity\MediathequeMembre", mappedBy="utilisateur", cascade={"persist", "remove"})
      */
     private $membreMediatheque;
 
@@ -147,12 +165,12 @@ class Utilisateur implements UserInterface
         return $this;
     }
 
-    public function getMembreMediatheque(): ?MembreMediatheque
+    public function getMembreMediatheque(): ?MediathequeMembre
     {
         return $this->membreMediatheque;
     }
 
-    public function setMembreMediatheque(MembreMediatheque $membreMediatheque): self
+    public function setMembreMediatheque(MediathequeMembre $membreMediatheque): self
     {
         $this->membreMediatheque = $membreMediatheque;
 

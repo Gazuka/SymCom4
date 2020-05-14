@@ -1,0 +1,38 @@
+{% extends 'mediatheque_drive/_base_mediatheque_drive.html.twig' %}
+
+{% block content %}
+    <div class="card m-3">
+        <div class="card-header text-center">
+            <h5 class="card-title">Inscription</h5>
+        </div>
+        <div class="card-body">
+            <p class="card-text">Veuillez compléter le formulaire ci-dessous :</p>
+            {{ form_start(form) }}
+            <div class="row">
+                <div class="col-md-6">{{ form_row(form.utilisateur.humain.nom) }}</div>
+                <div class="col-md-6">{{ form_row(form.utilisateur.humain.prenom) }}</div>
+                <div class="col-md-6">{{ form_row(form.utilisateur.humain.sexe) }}</div>
+                <div class="col-md-6">{{ form_row(form.utilisateur.humain.dateNaissance) }}</div>
+                <div class="col-md-6">{{ form_row(form.numCarte) }}</div>
+                <div class="col-md-6">{{ form_row(form.utilisateur.email) }}</div>
+            </div>
+        </div>
+        <div class="card-footer text-center">
+            <div class="row">
+                <div class="col-6">
+                    <a href="{{ path('mediatheque_drive')}}" class="btn btn-link">
+                        <i class="fas fa-arrow-circle-left"></i>
+                        Retour à l'accueil
+                    </a>
+                </div>
+                <div class="col-6">
+                    <div class="card">
+                        {{ text_enregistrer | BtnSubmit }}
+                    </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

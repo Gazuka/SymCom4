@@ -1,0 +1,26 @@
+{% extends 'mediatheque_drive_admin/_base_admin_drive_mediatheque.html.twig' %}
+
+{% block content %}
+
+    {% include 'mediatheque_drive_admin/_prochains_creneaux.html.twig' %}
+    
+{% endblock %}
+
+{% block outils %}
+    
+    <div class="card mb-3 p-3">
+        Il y a {{ nbrCommandesATraiter }} commandes à préparer...
+        <br/><br/>        
+        {% include 'mediatheque_drive_admin/_prochaines_commandes.html.twig' %}
+        
+    </div>
+
+    <div class="card mb-3 p-3">
+        Il y a {{ anciensCreneaux | length }} créneaux en retard
+        <br/><br/>        
+        {% include 'mediatheque_drive_admin/_commandes_non_fini.html.twig' %}
+    </div>
+
+    {% include 'mediatheque_drive_admin/_add_creneaux.html.twig' %}
+
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends 'mediatheque_drive/_base_mediatheque_drive.html.twig' %}
+
+{% block content %}
+    
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title text-center">Nous sélectionnerons pour vous !</h5>
+        </div>
+        <div class="card-body text-center">
+            <p class="card-text">
+                Veuillez nous indiquer le nombre d'ouvrages que vous désirez que nous vous préparions.
+            </p>
+            <p class="card-text">
+                Pour rappel : 5 livres, 4 CD et 2 DVD au maximum.
+            </p>
+            <p class="card-text">
+                N'hésitez pas à nous laisser un petit commentaire afin de nous orienter dans notre choix.
+            </p>
+            
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                <div class="alert alert-success">
+                    
+                        
+                            <div class='row'>
+                                <div class="col-md-12 mb-3">Ouvrages choisis par notre équipe :</div>
+                                <div class="col-md-4">{{ form_row(form.nbrLivreSurprise) }}</div>
+                                <div class="col-md-4">{{ form_row(form.nbrCdSurprise) }}</div>
+                                <div class="col-md-4">{{ form_row(form.nbrDvdSurprise) }}</div>
+                                <div class="col-12">
+                                    {{ form_row(form.commentaire) }}
+                                </div>
+                            </div>
+                        
+                    
+                </div>
+                
+            </div>
+        </div>
+        <div class="card-footer text-center">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <a href="{{ path('mediatheque_drive_typeemprunt', {'idemprunteur': emprunteur.id }) }}" class="btn btn-primary">
+                            <i class="fas fa-redo"></i>
+                            Revenir à l'étape précédente
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-check"></i>
+                            J'ai fini mes réservations et je passe à l'étape suivante.
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{ form_end(form) }}
+{% endblock %}

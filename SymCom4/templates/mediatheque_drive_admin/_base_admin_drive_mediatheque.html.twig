@@ -1,0 +1,57 @@
+{% extends '_base.html.twig' %}
+
+{% block title %}
+    Médiathèque de Guesnain
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/mediatheque_drive/mediatheque_drive.css') }}">
+{% endblock %}
+
+
+{% block body %}
+    <header class="header">
+        {% include 'mediatheque_drive_admin/_header.html.twig' %}
+    </header>
+
+    <div class="container-fluid">
+        {% include 'mediatheque_drive_admin/_navbar.html.twig' %}   
+        
+        {% include 'symcom4/admin/partials/_flash.html.twig' %}
+        <div class="row">
+        <div class="col-1">
+            {% include 'mediatheque_drive_admin/_menu.html.twig' %}   
+        </div>
+        <div class="col-7">
+            {% block content %}
+            {% endblock %}
+        </div>
+        <div class="col-4">
+            {% block outils %}
+            {% endblock %}
+        </div>
+    </div>
+
+        
+    </div>
+
+    <div class="container m-5">
+        &nbsp; <!-- Ce div permet de garder un espace avec le footer collé en bas de page -->
+    </div>  
+
+    <footer class="footer bg-dark">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    {% include 'mediatheque_drive_admin/_footer.html.twig' %}
+                </div>
+            </div>
+        </div>
+    </footer>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

@@ -1,0 +1,62 @@
+{% if derniereCommande != null %}
+    {% if derniereCommande.etat.etat != 'USER_ENCOURS' and derniereCommande.etat.etat != 'FINI' %}
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title text-center">Ma commande en cours</h5>
+            </div>
+            <div class="card-body">
+                {% set commande = membre.commandes.last %}
+                {% set creneau = membre.commandes.last.creneau %}
+                
+                <div class="alert alert-danger text-center">
+                    <b>
+                        Rendez-vous à l'entrée de la Médiathèque
+                        <br/>
+                        {{ creneau.debut | DateComplete }} entre {{ creneau.debut | date("H:i") }} et {{ creneau.fin | date("H:i") }}
+                    </b>
+                </div>
+
+                <div class="alert alert-warning text-center">
+                    <b>
+                        N'oubliez pas de rammener l'ensemble des documents que vous avez actuellement en prêt afin de pouvoir retirer votre commande.
+                    </b>
+                </div>
+
+                {% for commande in creneau.commandes %}
+                    <div class="alert alert-primary">
+                        Commande de {{ commande.membre.utilisateur.humain.prenom | title}}
+                    </div>
+
+                    <div class="card mb-3">
+                        <table class="table">
+                            <tbody>
+                                {% for etat in commande.etats | reverse %}
+                                    {% if etat.etat != 'FINI' and etat.etat != 'USER_ENCOURS' %}
+                                        <tr>
+                                            <td>{{ etat.date | date("d/m/Y H:i") }}</td>
+                                            <td>
+                                                {% if etat.etat == 'USER_VALIDE' %}
+                                                    Réservation du créneau horaire
+                                                {% else %}
+                                                    {% if etat.etat == 'PRET' %}
+                                                        Notre équipe a préparé votre commande.
+                                                    {% else %}
+                                                        {% if etat.etat == 'USER_RETOUR' %}
+                                                            Réservation pour un retour de document uniquement.
+                                                        {% else %}
+                                                            {{ etat.etat }}
+                                                        {% endif %}
+                                                    {% endif %}
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+{% endif %}

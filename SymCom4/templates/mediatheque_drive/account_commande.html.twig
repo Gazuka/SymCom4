@@ -1,0 +1,101 @@
+{% extends 'mediatheque_drive/_base_mediatheque_drive.html.twig' %}
+
+{% block content %}
+    {% set membre = app.user.membreMediatheque %}
+    {% include 'mediatheque_drive/_account_top.html.twig' %}
+    <div class="card mb-3">
+        Ma commande en cours contient :<br/>
+        <div class="row">
+            {% if membre.famille == null %}
+            
+                {% set nbrLivre = membre.getOneCommandeByEtat('USER_ENCOURS').nbrLivreChoisi + membre.getOneCommandeByEtat('USER_ENCOURS').nbrLivreSurprise %}
+                {% set nbrCd = membre.getOneCommandeByEtat('USER_ENCOURS').nbrCdChoisi + membre.getOneCommandeByEtat('USER_ENCOURS').nbrCdSurprise %}
+                {% set nbrDvd = membre.getOneCommandeByEtat('USER_ENCOURS').nbrDvdChoisi + membre.getOneCommandeByEtat('USER_ENCOURS').nbrDvdSurprise %}
+                <div class="col-md-3 text-left">
+                    <b class="ml-3">Pour {{ app.user.humain.prenom | title}} :</b>
+                    <ul>
+                        {% if nbrLivre > 0 %}
+                            {% if nbrLivre > 5 %}
+                                <li>5 livres <span class="text-danger">(-{{ nbrLivre - 5}})</span></li> 
+                            {% else %}
+                                <li>{{ nbrLivre }} livre{% if nbrLivre > 1 %}s{% endif %}</li>
+                            {% endif %}
+                        {% endif %}
+                        {% if nbrCd > 0 %}
+                            {% if nbrCd > 4 %}
+                                <li>4 CD <span class="text-danger">(-{{ nbrCd - 4}})</span></li>
+                            {% else %}
+                                <li>{{ nbrCd }} CD</li>
+                            {% endif %}
+                        {% endif %}
+                        {% if nbrDvd > 0 %}
+                            {% if nbrDvd > 2 %}
+                                <li>2 DVD <span class="text-danger">(-{{ nbrDvd - 2}})</span></li>
+                            {% else %}
+                                <li>{{ nbrDvd }} DVD</li>
+                            {% endif %}
+                            
+                        {% endif %}
+                    </ul> 
+                </div>
+            {% else %}
+                {% for adherent in membre.famille.adherents %}
+                    {% if adherent.getOneCommandeByEtat('USER_ENCOURS') != null %}
+                        {% set nbrLivre = adherent.getOneCommandeByEtat('USER_ENCOURS').nbrLivreChoisi + adherent.getOneCommandeByEtat('USER_ENCOURS').nbrLivreSurprise %}
+                        {% set nbrCd = adherent.getOneCommandeByEtat('USER_ENCOURS').nbrCdChoisi + adherent.getOneCommandeByEtat('USER_ENCOURS').nbrCdSurprise %}
+                        {% set nbrDvd = adherent.getOneCommandeByEtat('USER_ENCOURS').nbrDvdChoisi + adherent.getOneCommandeByEtat('USER_ENCOURS').nbrDvdSurprise %}
+                        <div class="col-md-3 text-left">
+                            <b class="ml-3">Pour {{ adherent.utilisateur.humain.prenom | title}} :</b>
+                            <ul>
+                                {% if nbrLivre > 0 %}
+                                    {% if nbrLivre > 5 %}
+                                        <li>5 livres <span class="text-danger">(-{{ nbrLivre - 5}})</span></li> 
+                                    {% else %}
+                                        <li>{{ nbrLivre }} livre{% if nbrLivre > 1 %}s{% endif %}</li>
+                                    {% endif %}
+                                {% endif %}
+                                {% if nbrCd > 0 %}
+                                    {% if nbrCd > 4 %}
+                                        <li>4 CD <span class="text-danger">(-{{ nbrCd - 4}})</span></li>
+                                    {% else %}
+                                        <li>{{ nbrCd }} CD</li>
+                                    {% endif %}
+                                {% endif %}
+                                {% if nbrDvd > 0 %}
+                                    {% if nbrDvd > 2 %}
+                                        <li>2 DVD <span class="text-danger">(-{{ nbrDvd - 2}})</span></li>
+                                    {% else %}
+                                        <li>{{ nbrDvd }} DVD</li>
+                                    {% endif %}
+                                    
+                                {% endif %}
+                            </ul> 
+                        </div>
+                    {% else %}
+                        <div class="col-md-3 text-left">
+                            <b class="ml-3">Pour {{ adherent.utilisateur.humain.prenom | title}} :</b>
+                            <a href=" {{ path('mediatheque_drive_typeemprunt', { 'idemprunteur': adherent.id }) }}" class="btn btn-success">
+                                Commander pour {{ adherent.utilisateur.humain.prenom }}
+                            </a>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+          
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <p>Je commande pour un autre membre de ma famille.</p>
+            <a href="{{ path('mediatheque_drive_inscription_famille') }}" class="btn btn-success">
+                Ajouter un membre de la famille
+            </a>
+        </div>
+        <div class="col-md-6 mb-3">
+            <p>Je choisi un créneau horaire pour venir chercher ma commande.</p>
+            <a href="{{ path('mediatheque_drive_creneaux') }}" class="btn btn-success">
+                Choisir un horaire
+            </a>
+        </div>
+    </div>
+{% endblock %}

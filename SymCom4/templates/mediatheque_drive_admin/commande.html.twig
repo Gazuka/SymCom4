@@ -1,0 +1,125 @@
+{% extends 'mediatheque_drive_admin/_base_admin_drive_mediatheque.html.twig' %}
+
+{% block content %}
+
+    <div class="card">
+        <div class="card-header">
+            {% set anneeActuelle = date('now') | date('Y') %}
+            {% set anneeNaissance = commande.membre.utilisateur.humain.dateNaissance | date('Y') %}
+            <h5 class="card-title">Commande n°{{ commande.id }} : {{ commande.membre.utilisateur.humain.nom | upper }} {{ commande.membre.utilisateur.humain.prenom | title }} ({{ anneeActuelle - anneeNaissance }} ans)</h5>
+        </div>
+        <div class="card-body">
+
+            <div class="row">
+                <div class="col-6 h4">
+                    <p class="text-center">A voir sur OPAC</p>
+                    {% if commande.nbrLivreChoisi > 0 %}
+                        <div class="card mb-3 bg-danger text-center">
+                            <p class='h1'>{{ commande.nbrLivreChoisi }} livre{% if commande.nbrLivreChoisi > 1 %}s{% endif %}</p>
+                        </div>
+                    {% else %}
+                        <div class="card mb-3 bg-white text-center text-white">
+                            <p class='h1'>0</p>
+                        </div>
+                    {% endif %}
+
+                    {% if commande.nbrCdChoisi > 0 %}
+                        <div class="card mb-3 bg-danger text-center">
+                            <p class='h1'>{{ commande.nbrCdChoisi }} CD{% if commande.nbrCdChoisi > 1 %}s{% endif %}</p>
+                        </div>
+                    {% else %}
+                        <div class="card mb-3 bg-white text-center text-white">
+                            <p class='h1'>0</p>
+                        </div>
+                    {% endif %}
+
+                    {% if commande.nbrDvdChoisi > 0 %}
+                        <div class="card mb-3 bg-danger text-center">
+                            <p class='h1'>{{ commande.nbrDvdChoisi }} DVD{% if commande.nbrDvdChoisi > 1 %}s{% endif %}</p>
+                        </div>
+                    {% else %}
+                        <div class="card mb-3 bg-white text-center text-white">
+                            <p class='h1'>0</p>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="col-6 h4">
+                    <p class="text-center">A sélectionner</p>
+                    {% if commande.nbrLivreSurprise > 0 %}
+                        <div class="card mb-3 bg-danger text-center">
+                            <p class='h1'>{{ commande.nbrLivreSurprise }} livre{% if commande.nbrLivreSurprise > 1 %}s{% endif %}</p>
+                        </div>
+                    {% else %}
+                        <div class="card mb-3 bg-white text-center text-white">
+                            <p class='h1'>0</p>
+                        </div>
+                    {% endif %}
+
+                    {% if commande.nbrCdSurprise > 0 %}
+                        <div class="card mb-3 bg-danger text-center">
+                            <p class='h1'>{{ commande.nbrCdSurprise }} CD{% if commande.nbrCdSurprise > 1 %}s{% endif %}</p>
+                        </div>
+                    {% else %}
+                        <div class="card mb-3 bg-white text-center text-white">
+                            <p class='h1'>0</p>
+                        </div>
+                    {% endif %}
+
+                    {% if commande.nbrDvdSurprise > 0 %}
+                        <div class="card mb-3 bg-danger text-center">
+                            <p class='h1'>{{ commande.nbrDvdSurprise }} DVD{% if commande.nbrDvdSurprise > 1 %}s{% endif %}</p>
+                        </div>
+                    {% else %}
+                        <div class="card mb-3 bg-white text-center text-white">
+                            <p class='h1'>0</p>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="col-12">
+                    <div class="card p-3">
+                        {{ commande.commentaire }}
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+        <div class="card-footer">
+            <div class="card">
+                <a href="{{ path('admin_mediatheque_drive_commande_prepare', {'idcommande': commande.id }) }}" class="btn btn-success">La commande est préparée !</a>
+            </div>
+        </div>
+    </div>
+    
+    
+{% endblock %}
+
+{% block outils %}
+    
+    {{ form_start(form) }}
+        
+        <div class='card'>
+            <div class='card-header'>
+                <b>Retour à prévoir avant d'effectuer un prêt</b>
+            </div>
+            <div class='card-body'>
+                <div class="col-md-12">{{ form_row(form.retourLivre) }}</div>
+                <div class="col-md-12">{{ form_row(form.retourCD) }}</div>
+                <div class="col-md-12">{{ form_row(form.retourDVD) }}</div>
+                <div class="col-md-12">{{ form_row(form.noteInterne) }}</div>
+            </div>
+            <div class='card-footer'>
+                <div class='card'>
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-check"></i> Enregistrer
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+                
+    {{ form_end(form) }}
+
+{% endblock %}

@@ -31,7 +31,7 @@ class OutilsService {
      * @param integer $id
      * @return Object
      */
-    public function findById(string $class, int $id):Object
+    public function findById(string $class, int $id):?Object
     {
         $repo = $this->manager->getRepository($class);
         return $repo->findOneById($id);

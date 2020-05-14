@@ -1,0 +1,28 @@
+{% extends 'mediatheque_drive/_base_mediatheque_drive.html.twig' %}
+
+{% block content %}
+    <div class="card text-center">
+        <div class="card-header">
+            <h5 class="card-title">Message aux adhérents de la Médiathèque</h5>
+        </div>
+
+        <div class="card-body">
+            <p class="card-text">
+                Les locaux de la Médiathèque étant fermés durant la crise sanitaire actuelle,<br/>nous vous proposons un service temporaire de prêts et retours sur rendez-vous.
+            </p>
+            <p class="card-text">
+                Laissez-vous guider...
+            </p>
+        </div>
+
+        <div class="card-footer">
+            <div class="card">
+                <a href="{{ path('mediatheque_drive_choix_log') }}" class="btn btn-success">
+                    <i class="fas fa-angle-double-right"></i>
+                    Démarrer
+                </a>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

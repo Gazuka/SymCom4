@@ -1,0 +1,18 @@
+{% if app.user != null %}
+    <div class="row mb-3">
+        <div class="col-md-8">
+            <h2 class='h4'>
+                Mon drive - {{ app.user.humain.prenom | title }} {{ app.user.humain.nom | upper }}
+                {% if emprunteur is defined %}
+                    {% if emprunteur.id != app.user.membreMediatheque.id %}
+                        pour {{ emprunteur.utilisateur.humain.prenom  | title }}
+                    {% endif %}
+                {% endif %}
+            </h2>
+        </div>
+        <div class="col-md-4 text-right">
+            <a href="{{ path('mediatheque_drive_logout') }}">Déconnexion</a>
+        </div>
+    </div>
+    
+{% endif %}

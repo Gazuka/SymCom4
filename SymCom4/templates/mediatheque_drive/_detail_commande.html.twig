@@ -1,0 +1,52 @@
+{% set nbrLivre = commande.nbrLivreChoisi + commande.nbrLivreSurprise %}
+{% set nbrCd = commande.nbrCdChoisi + commande.nbrCdSurprise %}
+{% set nbrDvd = commande.nbrDvdChoisi + commande.nbrDvdSurprise %}
+
+
+    
+        <div class="card mb-3">
+            <div class="card-header text-center">
+                <h6 class="card-title">Pour {{ commande.membre.utilisateur.humain.prenom | title }}</h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <ul>
+                            {% if nbrLivre > 0 %}
+                                {% if nbrLivre > 5 %}
+                                    <li>5 livres <span class="text-danger">(-{{ nbrLivre - 5}})</span></li> 
+                                {% else %}
+                                    <li>{{ nbrLivre }} livre{% if nbrLivre > 1 %}s{% endif %}</li>
+                                {% endif %}
+                            {% endif %}
+                            {% if nbrCd > 0 %}
+                                {% if nbrCd > 4 %}
+                                    <li>4 CD <span class="text-danger">(-{{ nbrCd - 4}})</span></li>
+                                {% else %}
+                                    <li>{{ nbrCd }} CD</li>
+                                {% endif %}
+                            {% endif %}
+                            {% if nbrDvd > 0 %}
+                                {% if nbrDvd > 2 %}
+                                    <li>2 DVD <span class="text-danger">(-{{ nbrDvd - 2}})</span></li>
+                                {% else %}
+                                    <li>{{ nbrDvd }} DVD</li>
+                                {% endif %}
+                            {% endif %}
+                        </ul>
+                    </div>
+                    <div class="col-md-8">
+                        {{ commande.commentaire }}
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class='card'>
+                    <a href="{{ path('mediatheque_drive_supprimer_commande', {'idemprunteur': emprunteur.id }) }}" class="btn btn-alert">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Supprimer cette commande (vos réservations ne seront pas supprimées)
+                    </a>
+                </div>
+            </div>
+        </div>
+    
