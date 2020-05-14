@@ -109,7 +109,7 @@ class MediathequeMembre
     {
         foreach($this->commandes as $commande)
         {
-            if($commande->getEtat() == $etat)
+            if($commande->getEtat()->getEtat() == $etat)
             {
                 return $commande;
             }
@@ -121,7 +121,7 @@ class MediathequeMembre
     {
         foreach($this->commandes as $commande)
         {
-            if($commande->getEtat() == $etat)
+            if($commande->getEtat()->getEtat() == $etat)
             {
                 return $commande;
             }
