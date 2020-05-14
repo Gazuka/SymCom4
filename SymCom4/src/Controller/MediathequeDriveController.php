@@ -472,7 +472,8 @@ class MediathequeDriveController extends SymCom4Controller
                         if($commande != null)
                         {
                             $creneau->addCommande($commande);
-                            $commande->setEtat('USER_VALIDE');
+                            $etat = new MediathequeDriveCommandeEtat('USER_VALIDE');
+                            $commande->addEtat($etat);
                             $creneau->setEtat('RESERVE');
                         }
                     }
