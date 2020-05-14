@@ -488,6 +488,7 @@ class MediathequeDriveController extends SymCom4Controller
             //On redirige vers le profil
             $this->defineRedirect('mediatheque_drive_profil');
             $manager->persist($creneau);
+            $manager->flush();
         }
         else
         {
