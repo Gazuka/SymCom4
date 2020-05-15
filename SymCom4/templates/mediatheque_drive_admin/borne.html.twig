@@ -2,6 +2,12 @@
 
 {% block content %}
 
+    {% if creneaux | length == 0 %}
+        <div class='alert alert-primary'>
+            Il est {{ now | date('H:i') }} et le drive est fermé !
+        </div>
+    {% endif %}
+
     {% for creneau in creneaux %}
         {% if creneau.debut <= now and creneau.fin >= now %}
             
@@ -74,12 +80,7 @@
                 <div class="card-footer">
                 
                 </div>
-            </div>
-            
-        {% else %}
-            <div class='alert alert-primary'>
-                Il est {{ now | date('H:i') }} et le drive est fermé !
-            </div>
+            </div>            
         {% endif %}
     {% endfor %}
     
