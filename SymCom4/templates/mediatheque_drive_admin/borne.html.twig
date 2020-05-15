@@ -76,6 +76,10 @@
                 </div>
             </div>
             
+        {% else %}
+            <div class='alert alert-primary'>
+                Il est {{ now | date('H:i') }} et le drive est fermé !
+            </div>
         {% endif %}
     {% endfor %}
     
