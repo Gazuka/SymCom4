@@ -2,9 +2,11 @@
 
 {% block content %}
 
-    <div class='alert alert-primary'>
-        Il est {{ now | date('H:i') }} et le drive est fermé !
-    </div>
+    {% if creneaux | length == 0 %}
+        <div class='alert alert-primary'>
+            Il est {{ now | date('H:i') }} et le drive est fermé !
+        </div>
+    {% endif %}
 
     {% for creneau in creneaux %}
         {% if creneau.debut <= now and creneau.fin >= now %}
@@ -12,10 +14,6 @@
             {% if creneau.etat == 'FINI' %}
                 <div class='alert alert-success'>
                     La commande est terminée !
-                </div>
-            {% else %}
-                <div class='alert alert-primary'>
-                    {{ creneau.etat }}
                 </div>
             {% endif %}
 
