@@ -249,7 +249,7 @@ class MediathequeDriveAdminController extends SymCom4Controller
         $now1hapres = new DateTime('now');
 
         $timestamp = $now->getTimestamp();
-        $timestamp = strtotime("+ 120 minutes", $timestamp); //////////////////////////////////////////////////////+120 changé pour les tests (triche)
+        $timestamp = strtotime("+ 0 minutes", $timestamp); //////////////////////////////////////////////////////+120 changé pour les tests (triche)
         $timestamp1havant = strtotime("- 15 minutes", $timestamp);
         $timestamp1hapres = strtotime("+ 15 minutes", $timestamp);
         
@@ -274,7 +274,7 @@ class MediathequeDriveAdminController extends SymCom4Controller
         //On récupére l'heure actuelle +2h pour correspondre avec le créneau horaire de la Médiathèque
         $now = new DateTime('now');
         $timestamp = $now->getTimestamp();
-        $timestamp = strtotime("+ 120 minutes", $timestamp); //////////////////////////////////////////////////////+120 changé pour les tests (triche)
+        $timestamp = strtotime("+ 0 minutes", $timestamp); //////////////////////////////////////////////////////+120 changé pour les tests (triche)
         $now->setTimestamp($timestamp);
         
         //On affiche les créneaux de H-15 minutes à h+15 minutes soit 3 creneaux
@@ -295,7 +295,7 @@ class MediathequeDriveAdminController extends SymCom4Controller
         //On récupére l'heure actuelle +2h pour correspondre avec le créneau horaire de la Médiathèque
         $now = new DateTime('now');
         $timestamp = $now->getTimestamp();
-        $timestamp = strtotime("+ 120 minutes", $timestamp);
+        $timestamp = strtotime("+ 0 minutes", $timestamp);
         $now->setTimestamp($timestamp);
 
         $creneaux = $this->outilsService->returnRepo(MediathequeDriveCreneau::class)->findNonFiniInPasse($now);
@@ -313,7 +313,7 @@ class MediathequeDriveAdminController extends SymCom4Controller
     {
         $today = new DateTime('now');
         $timestamp = $today->getTimestamp();
-        $timestamp = strtotime("+ 120 minutes", $timestamp);
+        $timestamp = strtotime("+ 0 minutes", $timestamp);
         $today->setTimestamp($timestamp);
 
         $newDate = new DateTime('now');
