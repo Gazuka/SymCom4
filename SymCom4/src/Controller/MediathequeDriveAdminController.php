@@ -71,7 +71,7 @@ class MediathequeDriveAdminController extends SymCom4Controller
         //Heure actuelle
         $now = new DateTime('now');
         $timestamp = $now->getTimestamp();
-        $timestamp = strtotime("+ 120 minutes", $timestamp); //////////////////////////////////////////////////////+120 changé pour les tests (triche)
+        $timestamp = strtotime("+ 0 minutes", $timestamp); //////////////////////////////////////////////////////+120 changé pour les tests (triche)
         $now->setTimestamp($timestamp);
         
         $this->defineTwig('mediatheque_drive_admin/borne.html.twig');
@@ -210,7 +210,7 @@ class MediathequeDriveAdminController extends SymCom4Controller
         //On récupére l'heure actuelle +2h pour correspondre avec le créneau horaire de la Médiathèque
         $now = new DateTime('now');
         $timestamp = $now->getTimestamp();
-        $timestamp = strtotime("+ 120 minutes", $timestamp);
+        $timestamp = strtotime("+ 0 minutes", $timestamp);
         $now->setTimestamp($timestamp);
 
         //On affiche tous les créneaux à partir du matin

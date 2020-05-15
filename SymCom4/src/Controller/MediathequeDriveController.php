@@ -394,7 +394,7 @@ class MediathequeDriveController extends SymCom4Controller
         //On récupére l'heure actuelle +2h pour correspondre avec le créneau horaire de la Médiathèque
         $now = new DateTime('now');
         $timestamp = $now->getTimestamp();
-        $timestamp = strtotime("+ 120 minutes", $timestamp);
+        $timestamp = strtotime("+ 0 minutes", $timestamp);
         $now->setTimestamp($timestamp);
 
         //On souhaite démarrer avec un creneau sur un horaire "rond"

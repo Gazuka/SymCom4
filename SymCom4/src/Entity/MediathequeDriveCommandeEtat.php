@@ -48,7 +48,7 @@ class MediathequeDriveCommandeEtat
         //On récupére l'heure actuelle +2h pour correspondre avec le créneau horaire de la Médiathèque
         $now = new DateTime('now');
         $timestamp = $now->getTimestamp();
-        $timestamp = strtotime("+ 120 minutes", $timestamp);
+        $timestamp = strtotime("+ 0 minutes", $timestamp);
         $now->setTimestamp($timestamp);
 
         $this->etat = $etat;
