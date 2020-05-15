@@ -3,7 +3,7 @@
         
             <div class="alert alert-primary">
                 <a class='btn btn-warning mr-3' href='{{ path('admin_mediatheque_drive_creneau_finir', {'idcreneau': creneau.id }) }}'>Finir</a>
-                Commande n°{{ creneau.id }} - {{ creneau.debut | DateComplete }} à {{ creneau.debut | date('H:i') }}
+                Creneau n°{{ creneau.id }} - {{ creneau.debut | DateComplete }} à {{ creneau.debut | date('H:i') }}
             </div>
             
             
