@@ -14,7 +14,7 @@ class MediathequeDriveCreneau
 {
     const DUREE_CRENEAU = 15;
     const DUREE_PREPARATION = 60;
-    const FUSEAU_HORAIRE = 120; //On ajoute 2h pour l'heure Française
+    const FUSEAU_HORAIRE = 0; //On ajoute 2h pour l'heure Française
 
     /**
      * @ORM\Id()
