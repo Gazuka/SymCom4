@@ -1,7 +1,7 @@
 {% for creneau in creneaux %}
     {% if creneau.commandes | length > 0 %}
         {% for commande in creneau.commandes %}
-            {% if commande.etat.etat != 'PRET' %}
+            {% if commande.etat.etat != 'PRET' && commande.etat.etat != 'FINI' %}
                 <a href="{{ path('admin_mediatheque_drive_commande', {'idcommande': commande.id}) }}" class="text-white">
                     <div class="card p-2 mb-2 bg-danger col-12">
                         <div class="row">

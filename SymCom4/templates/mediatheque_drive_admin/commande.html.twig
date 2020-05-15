@@ -88,7 +88,11 @@
         </div>
         <div class="card-footer">
             <div class="card">
-                <a href="{{ path('admin_mediatheque_drive_commande_prepare', {'idcommande': commande.id }) }}" class="btn btn-success">La commande est préparée !</a>
+                {% if commande.etat.etat != 'FINI' %}
+                    <a href="{{ path('admin_mediatheque_drive_commande_prepare', {'idcommande': commande.id }) }}" class="btn btn-success">La commande est préparée !</a>
+                {% else %}
+                    <a href="{{ path('admin_mediatheque_drive', {'idcommande': commande.id }) }}" class="btn btn-primary">Cette commande est fini !</a>
+                {% endif %}
             </div>
         </div>
     </div>
