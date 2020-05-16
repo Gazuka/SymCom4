@@ -9,6 +9,7 @@ use App\Entity\MediathequeDriveCreneau;
 use App\Entity\MediathequeDriveCommande;
 use App\Service\MediathequeDriveService;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Entity\MediathequeDriveScanRetour;
 use App\Entity\MediathequeDriveCommandeEtat;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -104,13 +105,16 @@ class MediathequeDriveAdminController extends SymCom4Controller
                 $this->defineRedirect('admin_mediatheque_drive_creneau_finir_borne');
                 $this->defineParamRedirect(['idcreneau' => $creneaux[0]->getId()]);
             break;
+            case null:
+                //rien
+            break;
             default :
                 $scanRetour = new MediathequeDriveScanRetour();
                 $scanRetour->setCodeBarre($code);
                 $now = new DateTime('now');
                 $scanRetour->setDateScan($now);
                 $scanRetour->setTraite(false);
-                $manager->persist();
+                $manager->persist($scanRetour);
                 //$manager->flush();
             break;
         }
