@@ -115,7 +115,7 @@ class MediathequeDriveAdminController extends SymCom4Controller
                 $scanRetour->setDateScan($now);
                 $scanRetour->setTraite(false);
                 $manager->persist($scanRetour);
-                //$manager->flush();
+                //$manager->flush();                
             break;
         }
         return null;

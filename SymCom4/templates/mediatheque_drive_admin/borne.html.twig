@@ -125,13 +125,18 @@
         //Lancement du script
         window.onload = function() 
         {
+            //document.forms['mediatheque_drive_scan'].reset();
+
             //Refresh de la page
-            setTimeout("location.reload(true);", 60000);
+            //setTimeout("location.reload(true);", 60000);
+            setTimeout("window.location.href=window.location.href;", 60000);
+            
 
             //Met le focus sur le lecteur de code barre
             document.getElementById('mediatheque_drive_scan_scan').focus();
             document.getElementById('mediatheque_drive_scan_scan').value = '';         
         } 
+
     
     </script>
 
