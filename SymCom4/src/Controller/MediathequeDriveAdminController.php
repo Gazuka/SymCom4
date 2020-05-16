@@ -8,6 +8,7 @@ use App\Form\MediathequeDriveScanType;
 use App\Entity\MediathequeDriveCreneau;
 use App\Entity\MediathequeDriveCommande;
 use App\Service\MediathequeDriveService;
+use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\MediathequeDriveCommandeEtat;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -56,7 +57,7 @@ class MediathequeDriveAdminController extends SymCom4Controller
      * @Route("/admin/mediatheque/drive/borne", name="admin_mediatheque_drive_borne")
      * @IsGranted("ROLE_ADMIN_MEDIATHEQUE")
      */
-    public function borne(Request $request)
+    public function borne(Request $request, EntityManagerInterface $manager)
     {
         //Recupere les prochains creneaux et les jours valide
         $creneaux = $this->recupCreneauxActuels();
@@ -66,7 +67,7 @@ class MediathequeDriveAdminController extends SymCom4Controller
         $form->handleRequest($request);
 
         //Action a effectuer selon le scan
-        $toto = $this->gestionScan($form);
+        $toto = $this->gestionScan($form, $manager);
 
         //Heure actuelle
         $now = new DateTime('now');
@@ -82,7 +83,18 @@ class MediathequeDriveAdminController extends SymCom4Controller
         return $this->Afficher();
     }
 
-    private function gestionScan($form)
+    /**
+     * @Route("/admin/mediatheque/drive/scanretour", name="admin_mediatheque_drive_scanretour")
+     * @IsGranted("ROLE_ADMIN_MEDIATHEQUE")
+     */
+    public function scanRetour(Request $request, EntityManagerInterface $manager)
+    {
+        $scansRetour = $this->outilsService->returnRepo(MediathequeDriveScanRetour::class);
+        
+        //return $this->Afficher();
+    }
+
+    private function gestionScan($form, $manager)
     {
         $code = $this->Scan($form);
         switch($code)
@@ -91,6 +103,15 @@ class MediathequeDriveAdminController extends SymCom4Controller
                 $creneaux = $this->recupCreneauActuel();
                 $this->defineRedirect('admin_mediatheque_drive_creneau_finir_borne');
                 $this->defineParamRedirect(['idcreneau' => $creneaux[0]->getId()]);
+            break;
+            default :
+                $scanRetour = new MediathequeDriveScanRetour();
+                $scanRetour->setCodeBarre($code);
+                $now = new DateTime('now');
+                $scanRetour->setDateScan($now);
+                $scanRetour->setTraite(false);
+                $manager->persist();
+                //$manager->flush();
             break;
         }
         return null;
