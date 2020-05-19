@@ -85,14 +85,33 @@ class MediathequeDriveAdminController extends SymCom4Controller
     }
 
     /**
-     * @Route("/admin/mediatheque/drive/scanretour", name="admin_mediatheque_drive_scanretour")
+     * @Route("/admin/mediatheque/drive/scansretour", name="admin_mediatheque_drive_scansretour")
      * @IsGranted("ROLE_ADMIN_MEDIATHEQUE")
      */
     public function scanRetour(Request $request, EntityManagerInterface $manager)
     {
-        $scansRetour = $this->outilsService->returnRepo(MediathequeDriveScanRetour::class);
+        $repoScanRetour = $this->outilsService->returnRepo(MediathequeDriveScanRetour::class);
+        $scansRetour = $repoScanRetour->findNonTraite();
         
-        //return $this->Afficher();
+        $this->defineTwig('mediatheque_drive_admin/scanretour.html.twig');
+        $this->defineParamTwig('scansRetour', $scansRetour);
+        
+        return $this->Afficher();
+    }
+
+    /**
+     * @Route("/admin/mediatheque/drive/scanretour/supprimer/{idscan}", name="admin_mediatheque_drive_scanretour_supprimer")
+     * @IsGranted("ROLE_ADMIN_MEDIATHEQUE")
+     */
+    public function scanRetourSupprimer($idscan, EntityManagerInterface $manager)
+    {
+        $scan = $this->outilsService->findById(MediathequeDriveScanRetour::class, $idscan);
+        $scan->setTraite(true);
+        
+        $this->defineRedirect('admin_mediatheque_drive_scansretour');
+        $manager->persist($scan);
+        $manager->flush();
+        return $this->Afficher();
     }
 
     private function gestionScan($form, $manager)
@@ -159,7 +178,7 @@ class MediathequeDriveAdminController extends SymCom4Controller
      * @Route("/admin/mediatheque/drive/creneau/finir/{idcreneau}", name="admin_mediatheque_drive_creneau_finir")
      * @IsGranted("ROLE_ADMIN_MEDIATHEQUE")
      */
-    public function finirCreneau($idcreneau)
+    public function finirCreneau($idcreneau, EntityManagerInterface $manager)
     {
         $creneau = $this->outilsService->findById(MediathequeDriveCreneau::class, $idcreneau);
 
@@ -169,9 +188,12 @@ class MediathequeDriveAdminController extends SymCom4Controller
         {
             $etat = new MediathequeDriveCommandeEtat('FINI');
             $commande->addEtat($etat);
+            $manager->persist($commande);
         }
 
         $creneau->setEtat('FINI');
+        $manager->persist($creneau);
+        $manager->flush();
 
         $this->defineRedirect('admin_mediatheque_drive');
         
@@ -181,7 +203,7 @@ class MediathequeDriveAdminController extends SymCom4Controller
      * @Route("/admin/mediatheque/drive/creneau/finir_borne/{idcreneau}", name="admin_mediatheque_drive_creneau_finir_borne")
      * @IsGranted("ROLE_ADMIN_MEDIATHEQUE")
      */
-    public function finirCreneau2($idcreneau)
+    public function finirCreneau2($idcreneau, EntityManagerInterface $manager)
     {
         $creneau = $this->outilsService->findById(MediathequeDriveCreneau::class, $idcreneau);
 
@@ -191,9 +213,12 @@ class MediathequeDriveAdminController extends SymCom4Controller
         {
             $etat = new MediathequeDriveCommandeEtat('FINI');
             $commande->addEtat($etat);
+            $manager->persist($commande);
         }
 
         $creneau->setEtat('FINI');
+        $manager->persist($creneau);
+        $manager->flush();
 
         $this->defineRedirect('admin_mediatheque_drive_borne');
         

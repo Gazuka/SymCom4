@@ -106,7 +106,7 @@
         {% if creneau.debut <= now and creneau.fin >= now %}
             {% if creneau.etat == 'RESERVE' %}
                 <div class="card mb-3 p-3">
-                    <a href='{{ path('admin_mediatheque_drive_creneau_finir', {'idcreneau': creneau.id }) }}' class="btn btn-success">
+                    <a href='{{ path('admin_mediatheque_drive_creneau_finir_borne', {'idcreneau': creneau.id }) }}' class="btn btn-success">
                         L'adhérent est venu retirer sa commande
                     </a>
                 </div>    

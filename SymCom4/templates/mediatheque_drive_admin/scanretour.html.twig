@@ -1,0 +1,26 @@
+{% extends 'mediatheque_drive_admin/_base_admin_drive_mediatheque.html.twig' %}
+
+{% block content %}
+
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Code Barre</th>
+                <th scope="col">Date</th>
+                <th scope="col">Heure</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for scan in scansRetour %}
+                <tr class='col-12'>
+                    <td>{{ scan.codeBarre }}</td>
+                    <td>{{ scan.dateScan | date('d/m/Y') }}</td>
+                    <td>{{ scan.dateScan | date('H:i') }}</td>
+                    <td><a href="{{ path('admin_mediatheque_drive_scanretour_supprimer', {'idscan': scan.id }) }}">Supprimer</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+{% endblock %}

@@ -47,4 +47,14 @@ class MediathequeDriveScanRetourRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function findNonTraite()
+    {
+        return $this->createQueryBuilder('m')
+            ->andWhere('m.traite = false')
+            ->orderBy('m.dateScan', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }
