@@ -102,6 +102,17 @@
         </div>
     </div>
 
+    <div class="card mb-3 p-3"> 
+        <table class="table">
+            {% for scan in scansRetour %} 
+                <tr class='col-12'>
+                    <td>{{ scan.codeBarre }}</td>
+                    <td>{{ scan.dateScan | date('H:i') }}</td>
+                </tr>
+            {% endfor %}                
+        </table>      
+    </div>
+
     {% for creneau in creneaux %}
         {% if creneau.debut <= now and creneau.fin >= now %}
             {% if creneau.etat == 'RESERVE' %}

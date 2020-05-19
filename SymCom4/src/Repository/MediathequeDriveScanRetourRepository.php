@@ -57,4 +57,15 @@ class MediathequeDriveScanRetourRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+
+    public function findLastNonTraite()
+    {
+        return $this->createQueryBuilder('m')
+            ->andWhere('m.traite = false')
+            ->orderBy('m.dateScan', 'DESC')
+            ->setMaxResults(11)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }

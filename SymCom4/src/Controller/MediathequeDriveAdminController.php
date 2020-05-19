@@ -63,6 +63,10 @@ class MediathequeDriveAdminController extends SymCom4Controller
         //Recupere les prochains creneaux et les jours valide
         $creneaux = $this->recupCreneauxActuels();
 
+        $repoScanRetour = $this->outilsService->returnRepo(MediathequeDriveScanRetour::class);
+        $scansRetour = $repoScanRetour->findLastNonTraite();
+        $this->defineParamTwig('scansRetour', $scansRetour);
+
         //Création d'un formulaire pour l'utilisation du scanner
         $form = $this->createForm(MediathequeDriveScanType::class);        
         $form->handleRequest($request);
@@ -206,7 +210,7 @@ class MediathequeDriveAdminController extends SymCom4Controller
     public function finirCreneau2($idcreneau, EntityManagerInterface $manager)
     {
         $creneau = $this->outilsService->findById(MediathequeDriveCreneau::class, $idcreneau);
-
+        
         //On passe le creneau et ses commandes en fini
         $commandes = $creneau->getCommandes();
         foreach($commandes as $commande)
