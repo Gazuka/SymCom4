@@ -81,10 +81,11 @@ class MediathequeDriveAdminController extends SymCom4Controller
         $this->defineParamTwig('now', $now);
         $this->defineParamTwig('form', $form->createView());
 
+        $manager->flush();
         $repoScanRetour = $this->outilsService->returnRepo(MediathequeDriveScanRetour::class);
         $scansRetour = $repoScanRetour->findLastNonTraite();
         $this->defineParamTwig('scansRetour', $scansRetour);
-        
+
         return $this->Afficher();
     }
 
