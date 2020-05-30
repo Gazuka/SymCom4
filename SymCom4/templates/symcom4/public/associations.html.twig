@@ -1,0 +1,17 @@
+{% extends 'symcom4/public/partials/_base_public.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - Associations
+{% endblock %}
+
+{% block content %}
+    {{ parent() }}
+    <div class='row'>
+        <div class='col-12'>
+            <h1 class='mb-3'>Associations</h1>
+        </div>
+        {% for association in associations %}
+            {% include 'symcom4/public/partials/structures/_card_association.html.twig' with {'association':association} only %}
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Service;
 use App\Entity\Structure;
+use App\Entity\Association;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -35,6 +36,7 @@ class SiteController extends SymCom4Controller
         switch($structure->getType())
         {
             case 'association':
+                $this->defineTwig('symcom4/public/association.html.twig'); 
             break;
             case 'service':
                 $this->defineTwig('symcom4/public/service.html.twig'); 
@@ -69,6 +71,27 @@ class SiteController extends SymCom4Controller
 
         //Fournir les paramètres requis au Twig
         $this->defineParamTwig('services', $services);
+
+        //Afficher la page
+        return $this->Afficher();
+    }
+
+    /**
+     * Afficher tous les associations
+     *
+     * @Route("/associations", name="associations")
+     * 
+     * @return Response
+     */
+    public function associations():Response
+    {
+        //Récupérer le service
+        $services = $this->outilsService->findAll(Association::class);
+        
+        $this->defineTwig('symcom4/public/associations.html.twig');
+
+        //Fournir les paramètres requis au Twig
+        $this->defineParamTwig('associations', $associations);
 
         //Afficher la page
         return $this->Afficher();
