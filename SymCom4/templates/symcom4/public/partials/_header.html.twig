@@ -93,8 +93,11 @@
                                 <li class="nav-item">
                                     <a class="nav-link sc4-size-4 ml-3" href="#">Vie municipale</a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link sc4-size-4 ml-3" href="#">Activités et loisirs</a>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link sc4-size-4 ml-3 dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Activités et loisirs</a>
+                                    <div class="dropdown-menu">
+                                        {% include 'symcom4/public/partials/_menu_activites_loisirs.html.twig' %}
+                                    </div>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link sc4-size-4 ml-3" href="#"><i class="fas fa-search"></i></a>
@@ -104,6 +107,6 @@
                     </nav>
                 </div>
             </div>
-        </div> 
+        </div>
     </div>
 </div>

@@ -13,11 +13,12 @@
 {% endblock %}
 
 {% block content %}
-    {{ parent() }}
     {# Zone avec le diaporama #}
     <div class="row">
         <div class="col-12 sc4-header-diaporama"></div>
     </div>
+    {# Menu du site #}
+    {% include 'symcom4/public/partials/_menu.html.twig' %}
      <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
 {% endblock %}
 
@@ -26,6 +27,6 @@
 {% endblock %}
 
 {% block javascripts %}
-    {{ parent() }}
+    {# {{ parent() }} #}
     <script type="text/javascript" src="{{asset('js/public/header_accueil.js')}}"></script>
 {% endblock %}

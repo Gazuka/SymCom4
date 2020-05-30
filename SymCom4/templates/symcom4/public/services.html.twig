@@ -1,0 +1,17 @@
+{% extends 'symcom4/public/partials/_base_public.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - Services Municipaux
+{% endblock %}
+
+{% block content %}
+    {{ parent() }}
+    <div class='row'>
+        <div class='col-12'>
+            <h1 class='mb-3'>Services municipaux</h1>
+        </div>
+        {% for service in services %}
+            {% include 'symcom4/public/partials/structures/_card_service.html.twig' with {'service':service} only %}
+        {% endfor %}
+    </div>
+{% endblock %}

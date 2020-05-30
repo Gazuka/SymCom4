@@ -318,4 +318,10 @@
     .sc4-header-mini .sc4-header-contact
     {
     }
+
+    /* Largeur du menu dropdawn */
+    .dropdown-menu {
+        width: 600px !important;
+        height: 200px !important;
+    }
 }

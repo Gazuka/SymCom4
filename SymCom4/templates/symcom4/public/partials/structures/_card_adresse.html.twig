@@ -1,0 +1,27 @@
+{# require structure only #}
+<div class='card mb-3'>
+    <div class='card-header'>
+        <h5 class="card-title mb-0">Adresse</h5>
+    </div>
+    <div class='card-body'>
+        {# Affichage de l'adresse #}
+        {% for contact in structure.contacts %}
+            {% if contact.type == 'adresse' %}
+                <div class='row'>
+                    <div class='col-2 text-center'>
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <div class='col-10'>
+                        <adresse>
+                            {{ contact.adresse.numero }} {{ contact.adresse.rue }}</br>
+                            {{ contact.adresse.complement }} {% if contact.adresse.complement != null %}</br>{% endif %}
+                            {{ contact.adresse.codePostal }} {{ contact.adresse.ville }}
+                        </adresse>
+                    </div>
+                </div>                            
+            {% endif %}
+        {% endfor %}
+    </div>
+    <div class='card-footer'>
+    </div>
+</div>

@@ -17,7 +17,11 @@
             {% block header %}{% endblock %}
         </header>
         <section id="content">
-            {% block content %}{% endblock %}
+            <div class="container pt-1">
+                {% block content %}
+                    {% include 'symcom4/public/partials/_menu.html.twig' %}
+                {% endblock %}
+            </div>
         </content>
         <footer>
             {% block footer %}{% endblock %}
@@ -27,4 +31,5 @@
 
 {% block javascripts %}
     {{ parent() }}
+    <script type="text/javascript" src="{{asset('js/public/header.js')}}"></script>
 {% endblock %}

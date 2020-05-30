@@ -1,0 +1,11 @@
+{# require service only #}
+<div class='col-md-3 col-sm-6'>
+    <a href='{{ path('structure', {'slugstructure': service.structure.slug }) }}'>
+        <div class="card mb-3">
+            <img src='http://placehold.it/286x180' alt='{{ service.structure.nom }}' class="card-img-top" />
+            <div class="card-body">
+                <h5 class="card-title">{{ service.structure.nom }}</h5>
+            </div>
+        </div>
+    </a>
+</div>

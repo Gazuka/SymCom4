@@ -1,0 +1,26 @@
+{% extends 'symcom4/public/partials/_base_public.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - {{ structure.nom }}
+{% endblock %}
+
+{% block content %}
+    {{ parent() }}
+    <div class='row'>
+        <div class='col-12'>
+            <h1 class='mb-3'>{{ structure.nom }}</h1>
+        </div>
+        <div class='col-md-8'>
+            {# {{ structure.image }} #}
+            <img src='http://placehold.it/800x300' alt='{{ structure.nom }}' class='img-thumbnail img-fluid mb-3' />
+            <p class='text-justify'>{{ structure.presentation }}</p>
+        </div>
+        <div class='col-md-4'>
+            {% include 'symcom4/public/partials/structures/_card_horaires.html.twig' with {'structure':structure} only %}
+            {% include 'symcom4/public/partials/structures/_card_adresse.html.twig' with {'structure':structure} only %}
+            {% include 'symcom4/public/partials/structures/_card_contacts.html.twig' with {'structure':structure} only %}
+        </div>
+        {# {{ structure.fonctions  | length }}         #}
+        {# {{ structure.lien.label }}{{ structure.lien.url }} #}
+    </div>
+{% endblock %}

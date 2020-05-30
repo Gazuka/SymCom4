@@ -37,6 +37,12 @@ class OutilsService {
         return $repo->findOneById($id);
     }
 
+    public function findBySlug(string $class, string $slug):?Object
+    {
+        $repo = $this->manager->getRepository($class);
+        return $repo->findOneBySlug($slug);
+    }
+
     public function findBy(string $class, array $criteria, array $orderBy = null, $limit = null, $offset = null)
     {
         $repo = $this->manager->getRepository($class);
