@@ -86,7 +86,7 @@ class SiteController extends SymCom4Controller
     public function associations():Response
     {
         //Récupérer le service
-        $services = $this->outilsService->findAll(Association::class);
+        $associations = $this->outilsService->findAll(Association::class);
         
         $this->defineTwig('symcom4/public/associations.html.twig');
 
