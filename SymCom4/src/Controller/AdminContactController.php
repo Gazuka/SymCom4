@@ -43,7 +43,7 @@ class AdminContactController extends AdminController
     public function humains():Response
     {
         //Récupérer tous les humains
-        $humains = $this->outilsBox->findAllEntity(Humain::class);
+        $humains = $this->outilsBox->findEntityBy(Humain::class, [], ['clientMediatheque' => 'ASC', 'nom' => 'ASC', 'prenom' => 'ASC']);
 
         //Obtenir le titre et le menu rapide en fonction du type
         $this->initTwig('humain');
@@ -93,7 +93,7 @@ class AdminContactController extends AdminController
     public function editHumain(int $idhumain):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->pageService->setParams(compact('idhumain'));
+        $this->outilsBox->setPageParams(compact('idhumain'));
 
         //Récupérer l'objet Humain
         $humain = $this->outilsBox->findEntityById(Humain::class, $idhumain);
@@ -124,7 +124,7 @@ class AdminContactController extends AdminController
     public function deleteHumain(int $idhumain):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->pageService->setParams(compact('idhumain'));
+        $this->outilsBox->setPageParams(compact('idhumain'));
 
         //Supprimer le contact de la BDD
         $this->outilsBox->deleteEntityById(Humain::class, $idhumain);
@@ -160,7 +160,7 @@ class AdminContactController extends AdminController
     public function addcontactHumain(int $idhumain, int $idpage, string $type):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->pageService->setParams(compact('idhumain', 'type'));
+        $this->outilsBox->setPageParams(compact('idhumain', 'type'));
 
         //Récupérer l'objet Humain
         $humain = $this->outilsBox->findEntityById(Humain::class, $idhumain);
@@ -171,7 +171,6 @@ class AdminContactController extends AdminController
         $this->outilsBox->setFormTwigFormulaire('symcom4/admin/humains/add_contact.html.twig');
         $this->outilsBox->setFormTexteConfirmation("Le contact a bien été modifié !");
         $this->outilsBox->setFormActions($this, array(['name' => 'action_addcontactHumain', 'params' => ['humain' => $humain]]));
-        $this->addPageMereFormService();        
 
         //Obtenir le titre et le menu rapide en fonction du type
         $this->initTwig('humain');
@@ -201,7 +200,7 @@ class AdminContactController extends AdminController
     public function addutilisateurHumain(int $idhumain, int $idpagemere):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->pageService->setParams(compact('idhumain', 'idpagemere'));
+        $this->outilsBox->setPageParams(compact('idhumain', 'idpagemere'));
 
         //Récupérer l'objet Structure et l'objet Fonction
         $humain = $this->outilsBox->findEntityById(Humain::class, $idhumain);
@@ -213,7 +212,6 @@ class AdminContactController extends AdminController
         $this->outilsBox->setFormTexteConfirmation("### a bien été créé !");
         $this->outilsBox->setFormTexteConfirmationEval(["###" => '$this->element->getPseudo();']);
         $this->outilsBox->setFormActions($this, array(['name' => 'action_addutilisateurHumain', 'params' => ['humain' => $humain]]));
-        $this->addPageMereFormService();
 
         //Obtenir le titre et le menu rapide en fonction du type
         $this->initTwig('humain');

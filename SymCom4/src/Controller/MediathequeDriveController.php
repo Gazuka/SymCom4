@@ -554,6 +554,7 @@ class MediathequeDriveController extends SymCom4Controller
     public function action_preinscriptionMembre(Object $membre, Array $params):Object
     {
         $membre->getUtilisateur()->setPseudo($membre->getNumCarte());
+        $membre->getUtilisateur()->getHumain()->setClientMediatheque(true);
         $password = $params['encoder']->encodePassword($membre->getUtilisateur(), $membre->getUtilisateur()->getHumain()->getDateNaissance()->format('dm'));
         $membre->getUtilisateur()->setPassword($password);
         $roles = $this->outilsBox->findAllEntity(Role::class);
@@ -577,6 +578,7 @@ class MediathequeDriveController extends SymCom4Controller
     public function action_preinscriptionMembreFamille(Object $membreFamille, Array $params):Object
     {
         $chefMembre = $params['membre'];
+        $membreFamille->getUtilisateur()->getHumain()->setClientMediatheque(true);
         $membreFamille->getUtilisateur()->setPseudo($membreFamille->getNumCarte());
         $password = $params['encoder']->encodePassword($membreFamille->getUtilisateur(), $membreFamille->getUtilisateur()->getHumain()->getDateNaissance()->format('dm'));
         $membreFamille->getUtilisateur()->setPassword($password);

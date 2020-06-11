@@ -80,11 +80,18 @@ class Humain
      */
     private $dateNaissance;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $clientMediatheque;
+
     public function __construct()
     {
         $this->contacts = new ArrayCollection();
         $this->responsables = new ArrayCollection();
         $this->fonctions = new ArrayCollection();
+        //Permet de différencier les humains inscrits via le drive mediatheque des autres
+        $this->clientMediatheque = false;
     }
 
     public function __toString()
@@ -249,6 +256,18 @@ class Humain
     public function setDateNaissance(?\DateTimeInterface $dateNaissance): self
     {
         $this->dateNaissance = $dateNaissance;
+
+        return $this;
+    }
+
+    public function getClientMediatheque(): ?bool
+    {
+        return $this->clientMediatheque;
+    }
+
+    public function setClientMediatheque(?bool $clientMediatheque): self
+    {
+        $this->clientMediatheque = $clientMediatheque;
 
         return $this;
     }
