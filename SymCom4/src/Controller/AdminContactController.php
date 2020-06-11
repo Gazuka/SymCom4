@@ -43,19 +43,19 @@ class AdminContactController extends AdminController
     public function humains():Response
     {
         //Récupérer tous les humains
-        $humains = $this->outilsService->findAll(Humain::class);
+        $humains = $this->outilsBox->findAllEntity(Humain::class);
 
         //Obtenir le titre et le menu rapide en fonction du type
         $this->initTwig('humain');
 
         //Définir le twig à afficher
-        $this->defineTwig('symcom4/admin/humains/humains.html.twig'); 
+        $this->outilsBox->defineTwig('symcom4/admin/humains/humains.html.twig'); 
         
         //Fournir les paramètres requis au Twig
-        $this->defineParamTwig('humains', $humains);
+        $this->outilsBox->addParamTwig('humains', $humains);
 
         //Afficher la page
-        return $this->Afficher();
+        return $this->jobController();
     }
 
     /**
@@ -68,19 +68,18 @@ class AdminContactController extends AdminController
     public function newHumain():Response
     {
         //Gérer le formulaire
-        $this->formulaireService->setElement(new Humain());
-        $this->formulaireService->setClassType(NewHumainType::class);
-        $this->formulaireService->setTwigFormulaire('symcom4/admin/humains/new_humain.html.twig');
-        $this->formulaireService->setPageResultat('admin_humains');
-        $this->formulaireService->setTexteConfirmation("### a bien été créé !");
-        $this->formulaireService->setTexteConfirmationEval(["###" => '$this->element->getNom()." ".$this->element->getPrenom();']);
-        $this->createFormService();
+        $this->outilsBox->setFormElement(new Humain());
+        $this->outilsBox->setFormClassType(NewHumainType::class);
+        $this->outilsBox->setFormTwigFormulaire('symcom4/admin/humains/new_humain.html.twig');
+        $this->outilsBox->setFormPageResultat('admin_humains');
+        $this->outilsBox->setFormTexteConfirmation("### a bien été créé !");
+        $this->outilsBox->setFormTexteConfirmationEval(["###" => '$this->element->getNom()." ".$this->element->getPrenom();']);
         
         //Obtenir le titre et le menu rapide en fonction du type
         $this->initTwig('humain');
         
         //Afficher le formulaire ou la redirection
-        return $this->Afficher();
+        return $this->jobController();
     }
 
     /**
@@ -97,22 +96,21 @@ class AdminContactController extends AdminController
         $this->pageService->setParams(compact('idhumain'));
 
         //Récupérer l'objet Humain
-        $humain = $this->outilsService->findById(Humain::class, $idhumain);
+        $humain = $this->outilsBox->findEntityById(Humain::class, $idhumain);
 
         //Gérer le formulaire
-        $this->formulaireService->setElement($humain);
-        $this->formulaireService->setClassType(NewHumainType::class);
-        $this->formulaireService->setTwigFormulaire('symcom4/admin/humains/new_humain.html.twig');
-        $this->formulaireService->setPageResultat('admin_humains');
-        $this->formulaireService->setTexteConfirmation("### a bien été modifié !");
-        $this->formulaireService->setTexteConfirmationEval(["###" => '$this->element->getNom()." ".$this->element->getPrenom();']);
-        $this->createFormService();
-
+        $this->outilsBox->setFormElement($humain);
+        $this->outilsBox->setFormClassType(NewHumainType::class);
+        $this->outilsBox->setFormTwigFormulaire('symcom4/admin/humains/new_humain.html.twig');
+        $this->outilsBox->setFormPageResultat('admin_humains');
+        $this->outilsBox->setFormTexteConfirmation("### a bien été modifié !");
+        $this->outilsBox->setFormTexteConfirmationEval(["###" => '$this->element->getNom()." ".$this->element->getPrenom();']);
+        
         //Obtenir le titre et le menu rapide en fonction du type
         $this->initTwig('humain');
 
         //Afficher le formulaire ou la redirection
-        return $this->Afficher();
+        return $this->jobController();
     }
 
     /**
@@ -129,7 +127,7 @@ class AdminContactController extends AdminController
         $this->pageService->setParams(compact('idhumain'));
 
         //Supprimer le contact de la BDD
-        $this->outilsService->delete(Humain::class, $idhumain);
+        $this->outilsBox->deleteEntityById(Humain::class, $idhumain);
         
         //Afficher un message de validation
         $this->addFlash('success', 'Cette personne a bien été supprimée !');
@@ -138,10 +136,10 @@ class AdminContactController extends AdminController
         $this->initTwig('humain');
 
         //Définir la page de redirection
-        $this->defineRedirect('admin_humains');
+        $this->outilsBox->defineRedirection('admin_humains');
 
         //Afficher la redirection
-        return $this->Afficher();
+        return $this->jobController();
     }
 
     /*========================================================================================*/
@@ -165,26 +163,25 @@ class AdminContactController extends AdminController
         $this->pageService->setParams(compact('idhumain', 'type'));
 
         //Récupérer l'objet Humain
-        $humain = $this->outilsService->findById(Humain::class, $idhumain);
+        $humain = $this->outilsBox->findEntityById(Humain::class, $idhumain);
 
         //Gérer le formulaire
-        $this->formulaireService->setElement($contactService->getElementFormulaire($type));
-        $this->formulaireService->setClassType($contactService->getClassTypeFormulaire($type));
-        $this->formulaireService->setTwigFormulaire('symcom4/admin/humains/add_contact.html.twig');
-        $this->formulaireService->setTexteConfirmation("Le contact a bien été modifié !");
-        $this->formulaireService->setActions($this, array(['name' => 'action_addcontactHumain', 'params' => ['humain' => $humain]]));
-        $this->addPageMereFormService();
-        $this->createFormService();
+        $this->outilsBox->setFormElement($contactService->getElementFormulaire($type));
+        $this->outilsBox->setFormClassType($contactService->getClassTypeFormulaire($type));
+        $this->outilsBox->setFormTwigFormulaire('symcom4/admin/humains/add_contact.html.twig');
+        $this->outilsBox->setFormTexteConfirmation("Le contact a bien été modifié !");
+        $this->outilsBox->setFormActions($this, array(['name' => 'action_addcontactHumain', 'params' => ['humain' => $humain]]));
+        $this->addPageMereFormService();        
 
         //Obtenir le titre et le menu rapide en fonction du type
         $this->initTwig('humain');
 
         //Fournir les paramètres requis au Twig
-        $this->defineParamTwig('type', $type);
-        $this->defineParamTwig('humain', $humain);
+        $this->outilsBox->addParamTwig('type', $type);
+        $this->outilsBox->addParamTwig('humain', $humain);
 
         //Afficher le formulaire ou la redirection
-        return $this->Afficher();
+        return $this->jobController();
     }
 
     /*========================================================================================*/
@@ -207,23 +204,22 @@ class AdminContactController extends AdminController
         $this->pageService->setParams(compact('idhumain', 'idpagemere'));
 
         //Récupérer l'objet Structure et l'objet Fonction
-        $humain = $this->outilsService->findById(Humain::class, $idhumain);
+        $humain = $this->outilsBox->findEntityById(Humain::class, $idhumain);
 
         //Gérer le formulaire
-        $this->formulaireService->setElement(new Utilisateur());
-        $this->formulaireService->setClassType(HumainUtilisateurType::class);
-        $this->formulaireService->setTwigFormulaire('symcom4/admin/general/form_utilisateur.html.twig');
-        $this->formulaireService->setTexteConfirmation("### a bien été créé !");
-        $this->formulaireService->setTexteConfirmationEval(["###" => '$this->element->getPseudo();']);
-        $this->formulaireService->setActions($this, array(['name' => 'action_addutilisateurHumain', 'params' => ['humain' => $humain]]));
+        $this->outilsBox->setFormElement(new Utilisateur());
+        $this->outilsBox->setFormClassType(HumainUtilisateurType::class);
+        $this->outilsBox->setFormTwigFormulaire('symcom4/admin/general/form_utilisateur.html.twig');
+        $this->outilsBox->setFormTexteConfirmation("### a bien été créé !");
+        $this->outilsBox->setFormTexteConfirmationEval(["###" => '$this->element->getPseudo();']);
+        $this->outilsBox->setFormActions($this, array(['name' => 'action_addutilisateurHumain', 'params' => ['humain' => $humain]]));
         $this->addPageMereFormService();
-        $this->createFormService();
 
         //Obtenir le titre et le menu rapide en fonction du type
         $this->initTwig('humain');
 
         //Afficher le formulaire ou la redirection
-        return $this->Afficher();
+        return $this->jobController();
     }
 
     /*========================================================================================*/
@@ -241,19 +237,19 @@ class AdminContactController extends AdminController
     public function utilisateurs():Response
     {
         //Récupérer tous les utilisateurs
-        $utilisateurs = $this->outilsService->findAll(Utilisateur::class);
+        $utilisateurs = $this->outilsBox->findAllEntity(Utilisateur::class);
 
         //Obtenir le titre et le menu rapide en fonction du type
         $this->initTwig('humain');
 
         //Définir le twig à afficher
-        $this->defineTwig('symcom4/admin/humains/utilisateurs.html.twig'); 
+        $this->outilsBox->defineTwig('symcom4/admin/humains/utilisateurs.html.twig'); 
         
         //Fournir les paramètres requis au Twig
-        $this->defineParamTwig('utilisateurs', $utilisateurs);
+        $this->outilsBox->addParamTwig('utilisateurs', $utilisateurs);
 
         //Afficher la page
-        return $this->Afficher();
+        return $this->jobController();
     }
 
     /*========================================================================================*/
@@ -287,72 +283,4 @@ class AdminContactController extends AdminController
         $utilisateur->setHumain($params['humain']);
         return $utilisateur;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    
-    
-    
-    
-
-    
-
-    
-    
-
-    
-
-    
-
-    
-
-
-
-
-
-
-
-
-    // /**
-    //  * @Route("/admin/utilisateur/new", name="admin_utilisateur_new")
-    //  */
-    // public function newUtilisateur(Request $request, EntityManagerInterface $manager):Response
-    // {
-    //     //On génére la page en cours
-    //     $this->pageService->setRoute($request->get('_route'));
-
-    //     //Préparation et traitement du formulaire
-    //     $variables['request'] = $request;
-    //     $variables['manager'] = $manager;
-    //     $variables['element'] = new Utilisateur();
-    //     $variables['classType'] = UtilisateurType::class;
-    //     $variables['pagedebase'] = 'symcom4/admin/general/form_utilisateur.html.twig';
-    //     $variables['pagederesultat'] = 'admin_utilisateurs';
-    //     $variables['texteConfirmation'] = "### a bien été créé !"; 
-    //     $options['texteConfirmationEval'] = ["###" => '$element->getPseudo();'];
-    //     $this->afficherFormulaire($variables, $options);
-    //     //Prépare le Twig
-    //     $this->initTwig('humain');
-    //     //Affiche le formulaire ou la redirection
-    //     return $this->Afficher();
-    // }
-
-    
-
-    
-
-    
 }

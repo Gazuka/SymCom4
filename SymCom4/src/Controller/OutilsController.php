@@ -14,95 +14,95 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  */
 abstract class OutilsController extends AbstractController
 {
-    protected $twig;
-    protected $paramTwig = array();
-    protected $redirect;
-    protected $paramRedirect = array();
+    //protected $twig;
+    //protected $paramTwig = array();
+    //protected $redirect;
+    //protected $paramRedirect = array();
     protected $pageService = null;
     protected $idPageActuelle = null;
 
     
-    /**
-     * Permet de supprimer un objet de la base avec son ID
-     *
-     * @param [ObjectRepository] $repo
-     * @param [EntityManagerInterface] $manager
-     * @param [integer] $id
-     * @return void
-     */
-    protected function delete($repo, $manager, $id):void
-    {
-        //On récupére l'objet
-        $objet = $repo->findOneById($id);
-        //On supprime l'objet
-        $manager->remove($objet);
-        //On enregistre dans la BDD
-        $manager->flush();
-    }
+    // /**
+    //  * Permet de supprimer un objet de la base avec son ID
+    //  *
+    //  * @param [ObjectRepository] $repo
+    //  * @param [EntityManagerInterface] $manager
+    //  * @param [integer] $id
+    //  * @return void
+    //  */
+    // protected function delete($repo, $manager, $id):void        //Intégré dans GazukaOutils
+    // {
+    //     //On récupére l'objet
+    //     $objet = $repo->findOneById($id);
+    //     //On supprime l'objet
+    //     $manager->remove($objet);
+    //     //On enregistre dans la BDD
+    //     $manager->flush();
+    // }
 
-    /******************************************************************************************** */
-    /**
-     * Permet de définir le Twig qui sera utilisé lors de l'affichage
-     *
-     * @param [string] $twig //Chemin du twig
-     * @return void
-     */
-    protected function defineTwig($twig)
-    {
-        $this->twig = $twig;
-    }
+    // /******************************************************************************************** */
+    // /**
+    //  * Permet de définir le Twig qui sera utilisé lors de l'affichage
+    //  *
+    //  * @param [string] $twig //Chemin du twig
+    //  * @return void
+    //  */
+    // protected function defineTwig($twig)
+    // {
+    //     $this->twig = $twig;
+    // }
 
-    /**
-     * Permet de définit les paramètres utiles au Twig lors de l'affichage
-     *
-     * @param [string] $cle //Nom de la variable dans le twig
-     * @param [type] $valeur //Données qui seront utilisées dans le twig
-     * @return void
-     */
-    protected function defineParamTwig($cle, $valeur)
-    {
-        $this->paramTwig[$cle] = $valeur;
-    }
+    // /**
+    //  * Permet de définit les paramètres utiles au Twig lors de l'affichage
+    //  *
+    //  * @param [string] $cle //Nom de la variable dans le twig
+    //  * @param [type] $valeur //Données qui seront utilisées dans le twig
+    //  * @return void
+    //  */
+    // protected function defineParamTwig($cle, $valeur)
+    // {
+    //     $this->paramTwig[$cle] = $valeur;
+    // }
 
-    /******************************************************************************************** */
-    /**
-     * Permet de définir le Redirect qui sera utilisé lors de l'affichage
-     *
-     * @param [string] $redirect //Nom du chemin
-     * @return void
-     */
-    protected function defineRedirect($redirect)
-    {
-        $this->redirect = $redirect;
-    }
+    // /******************************************************************************************** */
+    // /**
+    //  * Permet de définir le Redirect qui sera utilisé lors de l'affichage
+    //  *
+    //  * @param [string] $redirect //Nom du chemin
+    //  * @return void
+    //  */
+    // protected function defineRedirect($redirect)
+    // {
+    //     $this->redirect = $redirect;
+    // }
 
-    /**
-     * Permet de définit les paramètres utiles au Redirect lors de l'affichage
-     *
-     * @param [type] $valeur //Données qui seront utilisées dans le redirect
-     * @return void
-     */
-    protected function defineParamRedirect($valeur)
-    {
-        $this->paramRedirect = $valeur;
-    }
+    // /**
+    //  * Permet de définit les paramètres utiles au Redirect lors de l'affichage
+    //  *
+    //  * @param [type] $valeur //Données qui seront utilisées dans le redirect
+    //  * @return void
+    //  */
+    // protected function defineParamRedirect($valeur)
+    // {
+    //     $this->paramRedirect = $valeur;
+    // }
 
-    /** ==================================================================== */
-    /** GESTION DU FORMULAIRE SERVICE */
+    // /** ==================================================================== */
+    // /** GESTION DU FORMULAIRE SERVICE */
 
-    /** Permet de générer un form dans un controller pour le FormulaireService */
-    protected function createFormService()
-    {
-        $this->formulaireService->setForm($this->createForm($this->formulaireService->getClassType(), $this->formulaireService->getElement()));
-        $this->formulaireService->creerFormulaire();
-    }
+    // /** Permet de générer un form dans un controller pour le FormulaireService */
+    // protected function createFormService()
+    // {
+    //     $this->formulaireService->setForm($this->createForm($this->formulaireService->getClassType(), $this->formulaireService->getElement()));
+    //     $this->formulaireService->creerFormulaire();
+    // }
 
     /** Permet de récupérer les informations de la page mère pour les fournir au Formulaire Service */
     protected function addPageMereFormService()
     {
-        $pageMere = $this->pageService->getPageMere();
-        $this->formulaireService->setPageResultat($pageMere->getNomChemin());
-        $this->formulaireService->setPageResultatConfig($pageMere->getParams());
+        // $pageMere = $this->pageService->getPageMere();
+        // $this->formulaireService->setPageResultat($pageMere->getNomChemin());
+        // $this->formulaireService->setPageResultatConfig($pageMere->getParams());
     }        
 
     /** ==================================================================== */

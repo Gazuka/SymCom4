@@ -131,6 +131,20 @@ class GestionService {
         ]); 
     }
 
+    /** Affiche dans TWIG un tableau pour voir les images, les modifier ou en ajouter
+     *
+     * @return void
+     */
+    public function gestionImage($parent)
+    {
+        $this->twig->display('symcom4/admin/gestion/_gestion_image.html.twig',
+        [
+            'parent' => $parent,
+            'image' => $parent->getImage(),
+            'idPage' => $this->idPageActuelle
+        ]); 
+    }
+
     /** Affiche dans TWIG les bases d'un service (nom, presentation, local) et le bouton de modification
      *
      * @return void

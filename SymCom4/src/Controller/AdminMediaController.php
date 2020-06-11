@@ -24,14 +24,14 @@ class AdminMediaController extends AdminController
     public function index()
     {
         //Prépare le Twig
-        $this->defineTwig('symcom4/admin/medias/medias.html.twig');
+        $this->outilsBox->defineTwig('symcom4/admin/medias/medias.html.twig');
         $this->initTwig('medias');
         //Affiche la page
-        return $this->Afficher();
+        return $this->jobController();
     }
 
     /**
-     * @Route("/admin/medias/initDossier", name="admin_medias_initDossier")
+     * @Route("/admin/medias/initdossier", name="admin_medias_initDossier")
      */
     public function initDossier()
     {
@@ -43,11 +43,18 @@ class AdminMediaController extends AdminController
             $dossier = new Dossier();
         */
 
+        $dossier = new Dossier();
+        $dossier->setTitre('upload');
+        $dossier->setDescriptif('Fichier de réception de tous les médias upload sur le site ou via ftp...');
+        $dossier->creerDossierPhysique();
+        //il faut persit le dossier
+
         //Prépare le Twig
-        $this->defineTwig('symcom4/admin/medias/medias.html.twig');
+        $this->outilsBox->defineTwig('symcom4/admin/medias/medias.html.twig');
         $this->initTwig('medias');
+
         //Affiche la page
-        return $this->Afficher();
+        return $this->jobController();
     }
 
     /******************************************************************************************/
@@ -55,60 +62,61 @@ class AdminMediaController extends AdminController
     /**
      * @Route("/admin/medias/dossiers", name="admin_medias_dossiers")
      */
-    public function dossiers(DossierRepository $repo): Response
+    public function dossiers(): Response
     {
         //Récupére tous les dossiers
-        $dossiers = $repo->findAll();
+        $dossiers = $this->outilsBox->findAllEntity(Dossier::class);
         //Prépare le Twig
         $this->initTwig('medias');
-        $this->defineTwig('symcom4/admin/medias/dossiers/dossiers.html.twig');        
-        $this->defineParamTwig('dossiers', $dossiers);
+        $this->outilsBox->defineTwig('symcom4/admin/medias/dossiers/dossiers.html.twig');        
+        $this->outilsBox->addParamTwig('dossiers', $dossiers);
         //Affiche la page
-        return $this->Afficher();
+        return $this->jobController();
     }
     /**
      * @Route("/admin/medias/dossier/new", name="admin_medias_dossier_new")
      */
-    public function newDossier(Request $request, EntityManagerInterface $manager):Response
+    public function newDossier():Response
     {
-        //Préparation et traitement du formulaire
-        $variables['request'] = $request;
-        $variables['manager'] = $manager;
-        $variables['element'] = new Dossier();
-        $variables['classType'] = NewDossierType::class;
-        $variables['pagedebase'] = 'symcom4/admin/medias/dossiers/new_dossier.html.twig';
-        $variables['pagederesultat'] = 'admin_medias_dossiers';
-        $variables['texteConfirmation'] = "Le dossier ### a bien été créé !"; 
-        $options['texteConfirmationEval'] = ["###" => '$element->getTitre();'];
-        $options['actions'] = array(['name' => 'action_newDossier', 'params' => []]);
-        $this->afficherFormulaire($variables, $options);
+        //Gérer le formulaire
+        $this->outilsBox->setFormElement(new Dossier());
+        $this->outilsBox->setFormClassType(NewDossierType::class);
+        $this->outilsBox->setFormPageResultat('admin_medias_dossiers');
+        $this->outilsBox->setFormTwigFormulaire('symcom4/admin/medias/dossiers/new_dossier.html.twig');
+        $this->outilsBox->setFormTexteConfirmation("Le dossier ### a bien été créé !");
+        $this->outilsBox->setFormTexteConfirmationEval(["###" => '$this->element->getTitre();']);
+        $this->outilsBox->setFormActions($this, array(['name' => 'action_newDossier', 'params' => []]));
+        $this->addPageMereFormService();
+
         //Prépare le Twig
         $this->initTwig('medias');
+
         //Affiche le formulaire ou la redirection
-        return $this->Afficher();
+        return $this->jobController();
     }
 
     /**
      * @Route("/admin/medias/new", name="admin_medias_new")
      */
-    public function newMedia(Request $request, EntityManagerInterface $manager, DossierRepository $repoDossier):Response
+    public function newMedia():Response
     {
-        $dossierImages = $repoDossier->findOneBy(['titre' => 'images']);
-        //Préparation et traitement du formulaire
-        $variables['request'] = $request;
-        $variables['manager'] = $manager;
-        $variables['element'] = new Media();
-        $variables['classType'] = NewMediaType::class;
-        $variables['pagedebase'] = 'symcom4/admin/medias/new_media.html.twig';
-        $variables['pagederesultat'] = 'admin_medias';
-        $variables['texteConfirmation'] = "Le média ### a bien été importé !"; 
-        $options['texteConfirmationEval'] = ["###" => '$element->getNom();'];
-        $options['actions'] = array(['name' => 'action_newMedia', 'params' => ['dossierImages' => $dossierImages]]);
-        $this->afficherFormulaire($variables, $options);
+        $dossierImages = $this->outilsBox->findOneEntityBy(Dossier::class, ['titre' => 'images']);
+
+        //Gérer le formulaire
+        $this->outilsBox->setFormElement(new Media());
+        $this->outilsBox->setFormClassType(NewMediaType::class);
+        $this->outilsBox->setFormPageResultat('admin_medias');
+        $this->outilsBox->setFormTwigFormulaire('symcom4/admin/medias/new_media.html.twig');
+        $this->outilsBox->setFormTexteConfirmation("Le média ### a bien été importé !");
+        $this->outilsBox->setFormTexteConfirmationEval(["###" => '$this->element->getNom();']);
+        $this->outilsBox->setFormActions($this, array(['name' => 'action_newMedia', 'params' => ['dossierImages' => $dossierImages]]));
+        $this->addPageMereFormService();
+
         //Prépare le Twig
         $this->initTwig('medias');
+
         //Affiche le formulaire ou la redirection
-        return $this->Afficher();
+        return $this->jobController();
     }
 
     /******************************************************************************************/

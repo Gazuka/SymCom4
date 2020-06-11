@@ -44,16 +44,16 @@ class MediathequeDriveController extends SymCom4Controller
         if($membre != null)
         {
             //Si un membre est connect => on affiche son profil
-            $this->defineRedirect('mediatheque_drive_profil');
+            $this->outilsBox->defineRedirection('mediatheque_drive_profil');
         }
         else
         {
             //Sinon => on affichage du texte d'intro
-            $this->defineTwig('mediatheque_drive/index.html.twig');
+            $this->outilsBox->defineTwig('mediatheque_drive/index.html.twig');
         }
         
         //On affiche la page ou la redirection      
-        return $this->Afficher();
+        return $this->jobController();
     }
 
     /**
@@ -69,15 +69,15 @@ class MediathequeDriveController extends SymCom4Controller
         if($membre != null)
         {
             //Si un membre est connect => on affiche son profil
-            $this->defineRedirect('mediatheque_drive_profil');
+            $this->outilsBox->defineRedirection('mediatheque_drive_profil');
         }
         else
         {
            //Sinon => on lui propose de s'inscrire ou de se connecter
-           $this->defineTwig('mediatheque_drive/connexionouinscription.html.twig');
+           $this->outilsBox->defineTwig('mediatheque_drive/connexionouinscription.html.twig');
         }
         //On affiche la page ou la redirection
-        return $this->Afficher();
+        return $this->jobController();
     }
 
     /**
@@ -122,22 +122,21 @@ class MediathequeDriveController extends SymCom4Controller
         if($membre != null)
         {
             //Si un membre est connect => on affiche son profil
-            $this->defineRedirect('mediatheque_drive_profil');
+            $this->outilsBox->defineRedirection('mediatheque_drive_profil');
         }
         else
         {
             //Sinon on gère le formulaire d'inscription
-            $this->formulaireService->setElement(new MediathequeMembre());
-            $this->formulaireService->setClassType(MediathequeMembreInscriptionType::class);
-            $this->formulaireService->setTwigFormulaire('mediatheque_drive/form_inscription.html.twig');
-            $this->formulaireService->setPageResultat('mediatheque_drive_profil');
-            $this->formulaireService->setActions($this, array(['name' => 'action_preinscriptionMembre', 'params' => array('encoder' => $encoder)]));
-            $this->formulaireService->setTexteConfirmation("Votre inscription est bien enregistrée.");
-            $this->createFormService();
+            $this->outilsBox->setFormElement(new MediathequeMembre());
+            $this->outilsBox->setFormClassType(MediathequeMembreInscriptionType::class);
+            $this->outilsBox->setFormTwigFormulaire('mediatheque_drive/form_inscription.html.twig');
+            $this->outilsBox->setFormPageResultat('mediatheque_drive_profil');
+            $this->outilsBox->setFormActions(array(['name' => 'action_preinscriptionMembre', 'params' => array('encoder' => $encoder)]));
+            $this->outilsBox->setFormTexteConfirmation("Votre inscription est bien enregistrée.");
         }
 
         //Afficher le formulaire ou la redirection
-        return $this->Afficher();
+        return $this->jobController();
     }
 
     /**
@@ -152,16 +151,15 @@ class MediathequeDriveController extends SymCom4Controller
         $membre = $this->getUser()->getMembreMediatheque();
 
         //Gérer le formulaire
-        $this->formulaireService->setElement(new MediathequeMembre());
-        $this->formulaireService->setClassType(MediathequeMembreInscriptionFamilleType::class);
-        $this->formulaireService->setTwigFormulaire('mediatheque_drive/form_inscription_famille.html.twig');
-        $this->formulaireService->setPageResultat('mediatheque_drive_profil');
-        $this->formulaireService->setActions($this, array(['name' => 'action_preinscriptionMembreFamille', 'params' => array('encoder' => $encoder, 'membre' => $membre)]));
-        $this->formulaireService->setTexteConfirmation("Votre inscription est bien enregistrée.");
-        $this->createFormService();
-
+        $this->outilsBox->setFormElement(new MediathequeMembre());
+        $this->outilsBox->setFormClassType(MediathequeMembreInscriptionFamilleType::class);
+        $this->outilsBox->setFormTwigFormulaire('mediatheque_drive/form_inscription_famille.html.twig');
+        $this->outilsBox->setFormPageResultat('mediatheque_drive_profil');
+        $this->outilsBox->setFormActions(array(['name' => 'action_preinscriptionMembreFamille', 'params' => array('encoder' => $encoder, 'membre' => $membre)]));
+        $this->outilsBox->setFormTexteConfirmation("Votre inscription est bien enregistrée.");
+        
         //Afficher le formulaire ou la redirection
-        return $this->Afficher();
+        return $this->jobController();
     }
 
     /**
@@ -182,7 +180,7 @@ class MediathequeDriveController extends SymCom4Controller
         if(sizeOf($membre->getCommandes()) == 0)
         {
             //Si pas de commande alors on propose emprunt ou retour (1er connexion)
-            $this->defineTwig('mediatheque_drive/account_pret_ou_retour.html.twig');
+            $this->outilsBox->defineTwig('mediatheque_drive/account_pret_ou_retour.html.twig');
         }
         else
         {
@@ -194,20 +192,20 @@ class MediathequeDriveController extends SymCom4Controller
                     if($derniereCommande->getCreneau() == null)
                     {
                         $membre->removeCommande($derniereCommande);
-                        $this->defineRedirect('mediatheque_drive_profil');
+                        $this->outilsBox->defineRedirection('mediatheque_drive_profil');
                     }
                 }
-                $this->defineTwig('mediatheque_drive/account_global.html.twig');
-                $this->defineParamTwig('derniereCommande', $derniereCommande);
+                $this->outilsBox->defineTwig('mediatheque_drive/account_global.html.twig');
+                $this->outilsBox->addParamTwig('derniereCommande', $derniereCommande);
             }
             else
             {
-                $this->defineTwig('mediatheque_drive/account_pret_ou_retour.html.twig');  
+                $this->outilsBox->defineTwig('mediatheque_drive/account_pret_ou_retour.html.twig');  
             }
         }
 
         //On affiche la page
-        return $this->Afficher();
+        return $this->jobController();
     }
 
     /**
@@ -228,10 +226,10 @@ class MediathequeDriveController extends SymCom4Controller
         $emprunteur = $this->emprunteurActif($membre, $idemprunteur);
 
         //On s'occupe du Twig
-        $this->defineTwig('mediatheque_drive/typeemprunt.html.twig');
+        $this->outilsBox->defineTwig('mediatheque_drive/typeemprunt.html.twig');
 
         //On affiche la page
-        return $this->Afficher();
+        return $this->jobController();
     }
 
     /**
@@ -262,9 +260,9 @@ class MediathequeDriveController extends SymCom4Controller
         $manager->persist($retour);
         $manager->flush();
 
-        $this->defineRedirect('mediatheque_drive_creneaux');
+        $this->outilsBox->defineRedirection('mediatheque_drive_creneaux');
 
-        return $this->Afficher();
+        return $this->jobController();
     }
 
     /**
@@ -287,27 +285,25 @@ class MediathequeDriveController extends SymCom4Controller
         if($commande == null)
         {
             //Gérer le formulaire pour une nouvelle commande
-            $this->formulaireService->setElement(new MediathequeDriveCommande());
-            $this->formulaireService->setClassType(MediathequeDriveCommandeNbrOuvragesType::class);
-            $this->formulaireService->setTwigFormulaire('mediatheque_drive/catalogue.html.twig');
-            $this->formulaireService->setPageResultat('mediatheque_drive_profil');
-            $this->formulaireService->setActions($this, array(['name' => 'action_enregistrerCommande', 'params' => array('emprunteur' => $emprunteur)]));
-            $this->formulaireService->setTexteConfirmation("Votre commande est bien enregistrée.");
-            $this->createFormService();
+            $this->outilsBox->setFormElement(new MediathequeDriveCommande());
+            $this->outilsBox->setFormClassType(MediathequeDriveCommandeNbrOuvragesType::class);
+            $this->outilsBox->setFormTwigFormulaire('mediatheque_drive/catalogue.html.twig');
+            $this->outilsBox->setFormPageResultat('mediatheque_drive_profil');
+            $this->outilsBox->setFormActions(array(['name' => 'action_enregistrerCommande', 'params' => array('emprunteur' => $emprunteur)]));
+            $this->outilsBox->setFormTexteConfirmation("Votre commande est bien enregistrée.");
         }
         else
         {
             //Reprise d'une commande en cours...
-            $this->formulaireService->setElement($commande);
-            $this->formulaireService->setClassType(MediathequeDriveCommandeNbrOuvragesType::class);
-            $this->formulaireService->setTwigFormulaire('mediatheque_drive/catalogue.html.twig');
-            $this->formulaireService->setPageResultat('mediatheque_drive_profil');
-            $this->formulaireService->setTexteConfirmation("Votre commande est bien modifiée.");
-            $this->createFormService();
+            $this->outilsBox->setFormElement($commande);
+            $this->outilsBox->setFormClassType(MediathequeDriveCommandeNbrOuvragesType::class);
+            $this->outilsBox->setFormTwigFormulaire('mediatheque_drive/catalogue.html.twig');
+            $this->outilsBox->setFormPageResultat('mediatheque_drive_profil');
+            $this->outilsBox->setFormTexteConfirmation("Votre commande est bien modifiée.");
         }
 
         //Afficher le formulaire ou la redirection
-        return $this->Afficher();
+        return $this->jobController();
     }
 
     /**
@@ -334,27 +330,25 @@ class MediathequeDriveController extends SymCom4Controller
             $commande->setNbrLivreChoisi(0);
             $commande->setNbrCDChoisi(0);
             $commande->setNbrDVDChoisi(0);
-            $this->formulaireService->setElement($commande);
-            $this->formulaireService->setClassType(MediathequeDriveCommandeNbrOuvragesSurpriseType::class);
-            $this->formulaireService->setTwigFormulaire('mediatheque_drive/surprise.html.twig');
-            $this->formulaireService->setPageResultat('mediatheque_drive_profil');
-            $this->formulaireService->setActions($this, array(['name' => 'action_enregistrerCommande', 'params' => array('emprunteur' => $emprunteur)]));
-            $this->formulaireService->setTexteConfirmation("Votre commande est bien enregistrée.");
-            $this->createFormService();
+            $this->outilsBox->setFormElement($commande);
+            $this->outilsBox->setFormClassType(MediathequeDriveCommandeNbrOuvragesSurpriseType::class);
+            $this->outilsBox->setFormTwigFormulaire('mediatheque_drive/surprise.html.twig');
+            $this->outilsBox->setFormPageResultat('mediatheque_drive_profil');
+            $this->outilsBox->setFormActions(array(['name' => 'action_enregistrerCommande', 'params' => array('emprunteur' => $emprunteur)]));
+            $this->outilsBox->setFormTexteConfirmation("Votre commande est bien enregistrée.");
         }
         else
         {
             //Reprise d'une commande en cours...
-            $this->formulaireService->setElement($commande);
-            $this->formulaireService->setClassType(MediathequeDriveCommandeNbrOuvragesSurpriseType::class);
-            $this->formulaireService->setTwigFormulaire('mediatheque_drive/surprise.html.twig');
-            $this->formulaireService->setPageResultat('mediatheque_drive_profil');
-            $this->formulaireService->setTexteConfirmation("Votre commande est bien modifiée.");
-            $this->createFormService();
+            $this->outilsBox->setFormElement($commande);
+            $this->outilsBox->setFormClassType(MediathequeDriveCommandeNbrOuvragesSurpriseType::class);
+            $this->outilsBox->setFormTwigFormulaire('mediatheque_drive/surprise.html.twig');
+            $this->outilsBox->setFormPageResultat('mediatheque_drive_profil');
+            $this->outilsBox->setFormTexteConfirmation("Votre commande est bien modifiée.");
         }
 
         //Afficher le formulaire ou la redirection
-        return $this->Afficher();
+        return $this->jobController();
     }
 
     /**
@@ -379,7 +373,7 @@ class MediathequeDriveController extends SymCom4Controller
         dd($commande);
 
         //Afficher le formulaire ou la redirection
-        return $this->Afficher();
+        return $this->jobController();
     }
 
     /**
@@ -404,7 +398,7 @@ class MediathequeDriveController extends SymCom4Controller
         $limit = "200";
 
         //On récupère les creneaux à afficher
-        $creneaux = $this->outilsService->returnRepo(MediathequeDriveCreneau::class)->findAllinFutur($horaireDebut, $limit);
+        $creneaux = $this->outilsBox->returnRepo(MediathequeDriveCreneau::class)->findAllinFutur($horaireDebut, $limit);
 
         //On regarde si les creneaux sont disponibles
         $iterationCreneau = 0;
@@ -414,11 +408,11 @@ class MediathequeDriveController extends SymCom4Controller
             $iterationCreneau = $iterationCreneau + 1;
         }
 
-        $this->defineTwig('mediatheque_drive/creneaux.html.twig');
-        $this->defineParamTwig('creneaux', $creneaux);
+        $this->outilsBox->defineTwig('mediatheque_drive/creneaux.html.twig');
+        $this->outilsBox->addParamTwig('creneaux', $creneaux);
         // $this->defineParamTwig('now', $now);
         // $this->defineParamTwig('dansUneHeure', $mediathequeDriveService->dansUneHeure($now));
-        return $this->Afficher();
+        return $this->jobController();
     }
 
     /**
@@ -431,7 +425,7 @@ class MediathequeDriveController extends SymCom4Controller
     public function ReserverCreneau($idcreneau, EntityManagerInterface $manager)
     {
         $membre = $this->getUser()->getMembreMediatheque();
-        $creneau = $this->outilsService->FindById(MediathequeDriveCreneau::class, $idcreneau);
+        $creneau = $this->outilsBox->findEntityById(MediathequeDriveCreneau::class, $idcreneau);
         if($creneau != null)
         {
             //Si le creneau est disponible, on l'utilise sinon on affiche un message et on retourne sur la page précédante
@@ -481,24 +475,24 @@ class MediathequeDriveController extends SymCom4Controller
             }
             else
             {
-                    $this->addFlash('danger', "Désolé, mais ce créneau vient juste d'être réservé...");
-                    $this->defineRedirect('mediatheque_drive_creneaux');
+                    //$this->addFlash('danger', "Désolé, mais ce créneau vient juste d'être réservé...");????????????????????????????????
+                    $this->outilsBox->defineRedirection('mediatheque_drive_creneaux');
             }
             //Si on a reservé le creneau on affiche un message flush
-            $this->addFlash('success', "Félicitation, votre créneau est reservé !");
+            //$this->addFlash('success', "Félicitation, votre créneau est reservé !");???????????????????????????????????????
             //On redirige vers le profil
-            $this->defineRedirect('mediatheque_drive_profil');
+            $this->outilsBox->defineRedirection('mediatheque_drive_profil');
             $manager->persist($creneau);
             $manager->flush();
         }
         else
         {
             //Si problème, on redirige vers le profil !
-            $this->defineRedirect('mediatheque_drive_profil');
+            $this->outilsBox->defineRedirection('mediatheque_drive_profil');
         }
        
         //On affiche la redirection
-        return $this->Afficher();
+        return $this->jobController();
     }
 
     // FONCTIONS PRIVEES -------------------------------------------------------------------------------------------------
@@ -535,7 +529,7 @@ class MediathequeDriveController extends SymCom4Controller
         //On verifie si il passe la commande pour un autre
         if($idEmprunteur != null && $idEmprunteur != $membre->getId())
         {
-            $membreAVerifier = $this->outilsService->findById(MediathequeMembre::class, $idEmprunteur);
+            $membreAVerifier = $this->outilsBox->findEntityById(MediathequeMembre::class, $idEmprunteur);
             if($membreAVerifier != null)
             {
                 if($membreAVerifier->getFamille() == $membre->getFamille())
@@ -544,7 +538,7 @@ class MediathequeDriveController extends SymCom4Controller
                 }
             }
         }
-        $this->defineParamTwig('emprunteur', $emprunteur);
+        $this->outilsBox->addParamTwig('emprunteur', $emprunteur);
         return $emprunteur;
     }
 
@@ -562,7 +556,7 @@ class MediathequeDriveController extends SymCom4Controller
         $membre->getUtilisateur()->setPseudo($membre->getNumCarte());
         $password = $params['encoder']->encodePassword($membre->getUtilisateur(), $membre->getUtilisateur()->getHumain()->getDateNaissance()->format('dm'));
         $membre->getUtilisateur()->setPassword($password);
-        $roles = $this->outilsService->findAll(Role::class);
+        $roles = $this->outilsBox->findAllEntity(Role::class);
         foreach($roles as $role)
         {
             if($role->getTitre() == 'ROLE_MEMBRE_MEDIATHEQUE')
@@ -596,7 +590,7 @@ class MediathequeDriveController extends SymCom4Controller
         }
         $membreFamille->setFamille($famille);
         $membreFamille->getUtilisateur()->setEmail($chefMembre->getUtilisateur()->getEmail());
-        $roles = $this->outilsService->findAll(Role::class);
+        $roles = $this->outilsBox->findAllEntity(Role::class);
         foreach($roles as $role)
         {
             if($role->getTitre() == 'ROLE_MEMBRE_MEDIATHEQUE')

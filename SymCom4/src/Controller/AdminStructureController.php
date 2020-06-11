@@ -62,28 +62,27 @@ class AdminStructureController extends AdminController
      public function addlienStructure(int $idstructure, int $idpagemere):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->pageService->setParams(compact('idstructure', 'idpagemere'));
+        $this->outilsBox->setPageParams(compact('idstructure', 'idpagemere'));
 
         //Récupérer l'objet Structure
-        $structure = $this->outilsService->findById(Structure::class, $idstructure);
+        $structure = $this->outilsBox->findEntityById(Structure::class, $idstructure);
 
         //Gérer le formulaire
-        $this->formulaireService->setElement(new Lien());
-        $this->formulaireService->setClassType(LienBaseType::class);
-        $this->formulaireService->setTwigFormulaire('symcom4/admin/general/form_lien.html.twig');
-        $this->formulaireService->setTexteConfirmation("Le lien a bien été modifié !");
-        $this->formulaireService->setActions($this, array(['name' => 'action_addlienStructure', 'params' => ['structure' => $structure]]));
-        $this->addPageMereFormService();
-        $this->createFormService();
-
+        $this->outilsBox->setFormElement(new Lien());
+        $this->outilsBox->setFormClassType(LienBaseType::class);
+        $this->outilsBox->setFormTwigFormulaire('symcom4/admin/general/form_lien.html.twig');
+        $this->outilsBox->setFormTexteConfirmation("Le lien a bien été modifié !");
+        $this->outilsBox->setFormActions(array(['name' => 'action_addlienStructure', 'params' => ['structure' => $structure]]));
+        
+        
         //Obtenir le titre et le menu rapide en fonction du type
         $this->initTwig($structure->getType());
 
         //Fournir les paramètres requis au Twig
-        $this->defineParamTwig('structure', $structure);
+        $this->outilsBox->addParamTwig('structure', $structure);
 
-        //Afficher le formulaire ou la redirection
-        return $this->Afficher();
+        //Laisser le controller faire son Job avec tout ça...
+        return $this->jobController();
     }
 
     /**
@@ -101,30 +100,29 @@ class AdminStructureController extends AdminController
     public function editLienStructure(int $idstructure, int $idlien, int $idpagemere):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->pageService->setParams(compact('idstructure', 'idlien', 'idpagemere'));
+        $this->outilsBox->setPageParams(compact('idstructure', 'idlien', 'idpagemere'));
 
         //Récupérer l'objet Structure et l'objet lien
-        $structure = $this->outilsService->findById(Structure::class, $idstructure);
-        $lien = $this->outilsService->findById(Lien::class, $idlien);
+        $structure = $this->outilsBox->findEntityById(Structure::class, $idstructure);
+        $lien = $this->outilsBox->findEntityById(Lien::class, $idlien);
 
         //Gérer le formulaire
-        $this->formulaireService->setElement($lien);
-        $this->formulaireService->setClassType(LienBaseType::class);
-        $this->formulaireService->setTwigFormulaire('symcom4/admin/general/form_lien.html.twig');
-        $this->formulaireService->setTexteConfirmation("Le lien ### a bien été modifié !");
-        $this->formulaireService->setTexteConfirmationEval(["###" => '$this->element->getLabel();']);
-        $this->formulaireService->setActions($this, array(['name' => 'action_addlienStructure', 'params' => ['structure' => $structure]]));
-        $this->addPageMereFormService();
-        $this->createFormService();
-
+        $this->outilsBox->setFormElement($lien);
+        $this->outilsBox->setFormClassType(LienBaseType::class);
+        $this->outilsBox->setFormTwigFormulaire('symcom4/admin/general/form_lien.html.twig');
+        $this->outilsBox->setFormTexteConfirmation("Le lien ### a bien été modifié !");
+        $this->outilsBox->setFormTexteConfirmationEval(["###" => '$this->element->getLabel();']);
+        $this->outilsBox->setFormActions(array(['name' => 'action_addlienStructure', 'params' => ['structure' => $structure]]));
+        
+        
         //Obtenir le titre et le menu rapide en fonction du type
         $this->initTwig($structure->getType());
 
         //Fournir les paramètres requis au Twig
-        $this->defineParamTwig('structure', $structure);
+        $this->outilsBox->addParamTwig('structure', $structure);
 
-        //Afficher le formulaire ou la redirection
-        return $this->Afficher();
+        //Laisser le controller faire son Job avec tout ça...
+        return $this->jobController();
     }
 
     /**
@@ -142,17 +140,17 @@ class AdminStructureController extends AdminController
     public function deleteLienStructure(int $idstructure, int $idlien, int $idpagemere):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->pageService->setParams(compact('idstructure', 'idlien', 'idpagemere'));
+        $this->outilsBox->setPageParams(compact('idstructure', 'idlien', 'idpagemere'));
 
         //Récupérer l'objet Structure et l'objet page
-        $structure = $this->outilsService->findById(Structure::class, $idstructure);
-        $pageMere = $this->outilsService->findById(Page::class, $idpagemere);
+        $structure = $this->outilsBox->findEntityById(Structure::class, $idstructure);
+        $pageMere = $this->outilsBox->findEntityById(Page::class, $idpagemere);
 
         //Supprimer le lien de la structure
         $structure->setLien(null);
 
         //Supprimer le lien de la BDD
-        $this->outilsService->delete(Lien::class, $idlien);
+        $this->outilsBox->deleteEntityById(Lien::class, $idlien);
         
         //Afficher un message de validation
         $this->addFlash('success', 'Le lien a bien été supprimé.');
@@ -161,14 +159,14 @@ class AdminStructureController extends AdminController
         $this->initTwig($structure->getType());
 
         //Fournir les paramètres requis au Twig
-        $this->defineParamTwig('structure', $structure);
+        $this->outilsBox->addParamTwig('structure', $structure);
 
         //Définir la page de redirection
-        $this->defineRedirect($pageMere->getNomChemin());
-        $this->defineParamRedirect($pageMere->getParams());
+        $this->outilsBox->defineRedirection($pageMere->getNomChemin());
+        $this->outilsBox->addParamsRedirect($pageMere->getParams());
 
         //Afficher la redirection
-        return $this->Afficher();
+        return $this->jobController();
     }
 
     /*========================================================================================*/
@@ -194,29 +192,29 @@ class AdminStructureController extends AdminController
     public function addcontactStructure(int $idstructure, int $idpagemere, string $type, ContactService $contactService):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->pageService->setParams(compact('idstructure', 'idpagemere', 'type'));
+        $this->outilsBox->setPageParams(compact('idstructure', 'idpagemere', 'type'));
         
         //Récupérer l'objet Structure et l'objet page
-        $structure = $this->outilsService->findById(Structure::class, $idstructure);
+        $structure = $this->outilsBox->findEntityById(Structure::class, $idstructure);
         
         //Gérer le formulaire
-        $this->formulaireService->setElement($contactService->getElementFormulaire($type));
-        $this->formulaireService->setClassType($contactService->getClassTypeFormulaire($type));
-        $this->formulaireService->setTwigFormulaire('symcom4/admin/general/form_contact.html.twig');
-        $this->formulaireService->setTexteConfirmation("Le contact a bien été modifié !");
-        $this->formulaireService->setActions($this, array(['name' => 'action_addcontactStructure', 'params' => ['structure' => $structure]]));
-        $this->addPageMereFormService();
-        $this->createFormService();
+        $this->outilsBox->setFormElement($contactService->getElementFormulaire($type));
+        $this->outilsBox->setFormClassType($contactService->getClassTypeFormulaire($type));
+        $this->outilsBox->setFormTwigFormulaire('symcom4/admin/general/form_contact.html.twig');
+        $this->outilsBox->setFormTexteConfirmation("Le contact a bien été modifié !");
+        $this->outilsBox->setFormActions(array(['name' => 'action_addcontactStructure', 'params' => ['structure' => $structure]]));
+        
+        
 
         //Obtenir le titre et le menu rapide en fonction du type
         $this->initTwig($structure->getType());
 
         //Fournir les paramètres requis au Twig
-        $this->defineParamTwig('structure', $structure);
-        $this->defineParamTwig('type', $type);
+        $this->outilsBox->addParamTwig('structure', $structure);
+        $this->outilsBox->addParamTwig('type', $type);
 
-        //Afficher le formulaire ou la redirection
-        return $this->Afficher();
+        //Laisser le controller faire son Job avec tout ça...
+        return $this->jobController();
     }
 
     /**
@@ -237,30 +235,30 @@ class AdminStructureController extends AdminController
     public function editcontactStructure(int $idstructure, int $idcontact, int $idpagemere, ContactService $contactService):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->pageService->setParams(compact('idstructure', 'idcontact', 'idpagemere'));
+        $this->outilsBox->setPageParams(compact('idstructure', 'idcontact', 'idpagemere'));
 
         //Récupérer l'objet Structure, l'objet Contact et le type de contact
-        $structure = $this->outilsService->findById(Structure::class, $idstructure);
-        $contact = $this->outilsService->findById(Contact::class, $idcontact);
+        $structure = $this->outilsBox->findEntityById(Structure::class, $idstructure);
+        $contact = $this->outilsBox->findEntityById(Contact::class, $idcontact);
         $type = $contact->getType();
 
         //Gérer le formulaire
-        $this->formulaireService->setElement($contactService->getElementFormulaire($type, $contact));
-        $this->formulaireService->setClassType($contactService->getClassTypeFormulaire($type));
-        $this->formulaireService->setTwigFormulaire('symcom4/admin/general/form_contact.html.twig');
-        $this->formulaireService->setTexteConfirmation("Le contact a bien été modifié !");
-        $this->addPageMereFormService();
-        $this->createFormService();
+        $this->outilsBox->setFormElement($contactService->getElementFormulaire($type, $contact));
+        $this->outilsBox->setFormClassType($contactService->getClassTypeFormulaire($type));
+        $this->outilsBox->setFormTwigFormulaire('symcom4/admin/general/form_contact.html.twig');
+        $this->outilsBox->setFormTexteConfirmation("Le contact a bien été modifié !");
+        
+        
 
         //Obtenir le titre et le menu rapide en fonction du type
         $this->initTwig($structure->getType());
 
         //Fournir les paramètres requis au Twig
-        $this->defineParamTwig('structure', $structure);
-        $this->defineParamTwig('type', $type);
+        $this->outilsBox->addParamTwig('structure', $structure);
+        $this->outilsBox->addParamTwig('type', $type);
 
-        //Afficher le formulaire ou la redirection
-        return $this->Afficher();
+        //Laisser le controller faire son Job avec tout ça...
+        return $this->jobController();
     }
 
     /**
@@ -280,18 +278,18 @@ class AdminStructureController extends AdminController
     public function deleteContactStructure(int $idstructure, int $idcontact, int $idpagemere):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->pageService->setParams(compact('idstructure', 'idcontact', 'idpagemere'));
+        $this->outilsBox->setPageParams(compact('idstructure', 'idcontact', 'idpagemere'));
 
         //Récupérer l'objet Structure, l'objet contact et l'objet page
-        $structure = $this->outilsService->findById(Structure::class, $idstructure);
-        $contact = $this->outilsService->findById(Contact::class, $idcontact);
-        $pageMere = $this->outilsService->findById(Page::class, $idpagemere);
+        $structure = $this->outilsBox->findEntityById(Structure::class, $idstructure);
+        $contact = $this->outilsBox->findEntityById(Contact::class, $idcontact);
+        $pageMere = $this->outilsBox->findEntityById(Page::class, $idpagemere);
 
         //Supprimer le contact de la structure
         $structure->removeContact($contact);
 
         //Supprimer le contact de la BDD
-        $this->outilsService->delete(Contact::class, $idcontact);
+        $this->outilsBox->deleteEntityById(Contact::class, $idcontact);
         
         //Afficher un message de validation
         $this->addFlash('success', 'Le contact a bien été supprimé !');
@@ -300,14 +298,14 @@ class AdminStructureController extends AdminController
         $this->initTwig($structure->getType());
 
         //Fournir les paramètres requis au Twig
-        $this->defineParamTwig('structure', $structure);
+        $this->outilsBox->addParamTwig('structure', $structure);
 
         //Définir la page de redirection
-        $this->defineRedirect($pageMere->getNomChemin());
-        $this->defineParamRedirect($pageMere->getParams());
+        $this->outilsBox->defineRedirection($pageMere->getNomChemin());
+        $this->outilsBox->addParamsRedirect($pageMere->getParams());
 
         //Afficher la redirection
-        return $this->Afficher();
+        return $this->jobController();
     }
 
     /*========================================================================================*/
@@ -329,28 +327,28 @@ class AdminStructureController extends AdminController
     public function addfonctionStructure(int $idstructure, int $idpagemere):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->pageService->setParams(compact('idstructure', 'idpagemere'));
+        $this->outilsBox->setPageParams(compact('idstructure', 'idpagemere'));
 
         //Récupérer l'objet Structure
-        $structure = $this->outilsService->findById(Structure::class, $idstructure);
+        $structure = $this->outilsBox->findEntityById(Structure::class, $idstructure);
 
         //Gérer le formulaire
-        $this->formulaireService->setElement(new Fonction());
-        $this->formulaireService->setClassType(FonctionBaseType::class);
-        $this->formulaireService->setTwigFormulaire('symcom4/admin/general/form_fonction_base.html.twig');
-        $this->formulaireService->setTexteConfirmation("La fonction a bien été modifié !");
-        $this->formulaireService->setActions($this, array(['name' => 'action_addfonctionStructure', 'params' => ['structure' => $structure]]));
-        $this->addPageMereFormService();
-        $this->createFormService();
+        $this->outilsBox->setFormElement(new Fonction());
+        $this->outilsBox->setFormClassType(FonctionBaseType::class);
+        $this->outilsBox->setFormTwigFormulaire('symcom4/admin/general/form_fonction_base.html.twig');
+        $this->outilsBox->setFormTexteConfirmation("La fonction a bien été modifié !");
+        $this->outilsBox->setFormActions(array(['name' => 'action_addfonctionStructure', 'params' => ['structure' => $structure]]));
+        
+        
 
         //Obtenir le titre et le menu rapide en fonction du type
         $this->initTwig($structure->getType());
 
         //Fournir les paramètres requis au Twig
-        $this->defineParamTwig('structure', $structure);
+        $this->outilsBox->addParamTwig('structure', $structure);
 
-        //Afficher le formulaire ou la redirection
-        return $this->Afficher();
+        //Laisser le controller faire son Job avec tout ça...
+        return $this->jobController();
     }
 
     /**
@@ -368,29 +366,29 @@ class AdminStructureController extends AdminController
     public function editFonctionStructure(int $idstructure, int $idfonction, int $idpagemere):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->pageService->setParams(compact('idstructure', 'idfonction', 'idpagemere'));
+        $this->outilsBox->setPageParams(compact('idstructure', 'idfonction', 'idpagemere'));
 
         //Récupérer l'objet Structure et l'objet Fonction
-        $structure = $this->outilsService->findById(Structure::class, $idstructure);
-        $fonction = $this->outilsService->findById(Fonction::class, $idfonction);
+        $structure = $this->outilsBox->findEntityById(Structure::class, $idstructure);
+        $fonction = $this->outilsBox->findEntityById(Fonction::class, $idfonction);
 
         //Gérer le formulaire
-        $this->formulaireService->setElement($fonction);
-        $this->formulaireService->setClassType(FonctionBaseType::class);
-        $this->formulaireService->setTwigFormulaire('symcom4/admin/general/form_fonction_base.html.twig');
-        $this->formulaireService->setTexteConfirmation("La fonction a bien été modifié !");
-        $this->addPageMereFormService();
-        $this->createFormService();
+        $this->outilsBox->setFormElement($fonction);
+        $this->outilsBox->setFormClassType(FonctionBaseType::class);
+        $this->outilsBox->setFormTwigFormulaire('symcom4/admin/general/form_fonction_base.html.twig');
+        $this->outilsBox->setFormTexteConfirmation("La fonction a bien été modifié !");
+        
+        
 
         //Obtenir le titre et le menu rapide en fonction du type
         $this->initTwig($structure->getType());
 
         //Fournir les paramètres requis au Twig
-        $this->defineParamTwig('structure', $structure);
-        $this->defineParamTwig('fonction', $fonction);
+        $this->outilsBox->addParamTwig('structure', $structure);
+        $this->outilsBox->addParamTwig('fonction', $fonction);
 
-        //Afficher le formulaire ou la redirection
-        return $this->Afficher();
+        //Laisser le controller faire son Job avec tout ça...
+        return $this->jobController();
     }
 
     /**
@@ -408,18 +406,18 @@ class AdminStructureController extends AdminController
     public function deleteFonctionStructure(int $idstructure, int $idfonction, int $idpagemere):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->pageService->setParams(compact('idstructure', 'idfonction', 'idpagemere'));
+        $this->outilsBox->setPageParams(compact('idstructure', 'idfonction', 'idpagemere'));
 
         //Récupérer l'objet Structure, l'objet fonction et l'objet page mère'
-        $structure = $this->outilsService->findById(Structure::class, $idstructure);
-        $fonction = $this->outilsService->findById(Fonction::class, $idfonction);
-        $pageMere = $this->outilsService->findById(Page::class, $idpagemere);
+        $structure = $this->outilsBox->findEntityById(Structure::class, $idstructure);
+        $fonction = $this->outilsBox->findEntityById(Fonction::class, $idfonction);
+        $pageMere = $this->outilsBox->findEntityById(Page::class, $idpagemere);
 
         //Supprimer la fonction de la structure
         $structure->removeFonction($fonction);
 
         //Supprimer la fonction de la BDD
-        $this->outilsService->delete(Fonction::class, $idfonction);
+        $this->outilsBox->deleteEntityById(Fonction::class, $idfonction);
         
         //Afficher un message de validation
         $this->addFlash('success', 'Le fonction a bien été supprimé !');
@@ -428,14 +426,14 @@ class AdminStructureController extends AdminController
         $this->initTwig($structure->getType());
 
         //Fournir les paramètres requis au Twig
-        $this->defineParamTwig('structure', $structure);
+        $this->outilsBox->addParamTwig('structure', $structure);
 
         //Définir la page de redirection
-        $this->defineRedirect($pageMere->getNomChemin());
-        $this->defineParamRedirect($pageMere->getParams());
+        $this->outilsBox->defineRedirection($pageMere->getNomChemin());
+        $this->outilsBox->addParamsRedirect($pageMere->getParams());
 
         //Afficher la redirection
-        return $this->Afficher();
+        return $this->jobController();
     }
 
     /*========================================================================================*/
@@ -458,28 +456,28 @@ class AdminStructureController extends AdminController
     public function addHumainFonctionStructure(int $idstructure, int $idfonction, int $idpagemere):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->pageService->setParams(compact('idstructure', 'idfonction', 'idpagemere'));
+        $this->outilsBox->setPageParams(compact('idstructure', 'idfonction', 'idpagemere'));
 
         //Récupérer l'objet Structure et l'objet Fonction
-        $structure = $this->outilsService->findById(Structure::class, $idstructure);
-        $fonction = $this->outilsService->findById(Fonction::class, $idfonction);
+        $structure = $this->outilsBox->findEntityById(Structure::class, $idstructure);
+        $fonction = $this->outilsBox->findEntityById(Fonction::class, $idfonction);
 
         //Gérer le formulaire
-        $this->formulaireService->setElement($fonction);
-        $this->formulaireService->setClassType(FonctionHumainType::class);
-        $this->formulaireService->setTwigFormulaire('symcom4/admin/general/form_fonction_humain.html.twig');
-        $this->formulaireService->setTexteConfirmation("La fonction a bien été modifié !");
-        $this->addPageMereFormService();
-        $this->createFormService();
+        $this->outilsBox->setFormElement($fonction);
+        $this->outilsBox->setFormClassType(FonctionHumainType::class);
+        $this->outilsBox->setFormTwigFormulaire('symcom4/admin/general/form_fonction_humain.html.twig');
+        $this->outilsBox->setFormTexteConfirmation("La fonction a bien été modifié !");
+        
+        
 
         //Obtenir le titre et le menu rapide en fonction du type
         $this->initTwig($structure->getType());
 
         //Fournir les paramètres requis au Twig
-        $this->defineParamTwig('structure', $structure);
+        $this->outilsBox->addParamTwig('structure', $structure);
 
-        //Afficher le formulaire ou la redirection
-        return $this->Afficher();
+        //Laisser le controller faire son Job avec tout ça...
+        return $this->jobController();
     }
 
     /**
@@ -497,12 +495,12 @@ class AdminStructureController extends AdminController
     public function deleteHumainFonctionStructure(int $idstructure, int $idfonction, int $idpagemere):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->pageService->setParams(compact('idstructure', 'idfonction', 'idpagemere'));
+        $this->outilsBox->setPageParams(compact('idstructure', 'idfonction', 'idpagemere'));
 
         //Récupérer l'objet Structure, l'objet fonction et l'objet page mère'
-        $structure = $this->outilsService->findById(Structure::class, $idstructure);
-        $fonction = $this->outilsService->findById(Fonction::class, $idfonction);
-        $pageMere = $this->outilsService->findById(Page::class, $idpagemere);
+        $structure = $this->outilsBox->findEntityById(Structure::class, $idstructure);
+        $fonction = $this->outilsBox->findEntityById(Fonction::class, $idfonction);
+        $pageMere = $this->outilsBox->findEntityById(Page::class, $idpagemere);
 
         //Supprimer l'humain de la fonction
         $fonction->setHumain(null);
@@ -514,14 +512,14 @@ class AdminStructureController extends AdminController
         $this->initTwig($structure->getType());
 
         //Fournir les paramètres requis au Twig
-        $this->defineParamTwig('structure', $structure);
+        $this->outilsBox->addParamTwig('structure', $structure);
 
         //Définir la page de redirection
-        $this->defineRedirect($pageMere->getNomChemin());
-        $this->defineParamRedirect($pageMere->getParams());
+        $this->outilsBox->defineRedirection($pageMere->getNomChemin());
+        $this->outilsBox->addParamsRedirect($pageMere->getParams());
 
         //Afficher la redirection
-        return $this->Afficher();
+        return $this->jobController();
     }
 
     /*========================================================================================*/
@@ -541,19 +539,19 @@ class AdminStructureController extends AdminController
     public function services(): Response
     {
         //Récupérer tous les services
-        $services = $this->outilsService->findAll(Service::class);
+        $services = $this->outilsBox->findAllEntity(Service::class);
 
         //Obtenir le titre et le menu rapide en fonction du type
         $this->initTwig('service');
 
         //Définir le twig à afficher
-        $this->defineTwig('symcom4/admin/structures/services.html.twig'); 
+        $this->outilsBox->defineTwig('symcom4/admin/structures/services.html.twig'); 
         
         //Fournir les paramètres requis au Twig
-        $this->defineParamTwig('services', $services);
+        $this->outilsBox->addParamTwig('services', $services);
 
         //Afficher la page
-        return $this->Afficher();
+        return $this->jobController();
     }
 
     /**
@@ -568,19 +566,19 @@ class AdminStructureController extends AdminController
     public function newService():Response
     {
         //Gérer le formulaire
-        $this->formulaireService->setElement(new Service());
-        $this->formulaireService->setClassType(ServiceBaseType::class);
-        $this->formulaireService->setTwigFormulaire('symcom4/admin/general/form_service_base.html.twig');
-        $this->formulaireService->setPageResultat('admin_structures_service');
-        $this->formulaireService->setTexteConfirmation("Le service <strong>###</strong> a bien été créé !");
-        $this->formulaireService->setTexteConfirmationEval(["###" => '$this->element->getStructure()->getNom();']);
-        $this->createFormService();
+        $this->outilsBox->setFormElement(new Service());
+        $this->outilsBox->setFormClassType(ServiceBaseType::class);
+        $this->outilsBox->setFormTwigFormulaire('symcom4/admin/general/form_service_base.html.twig');
+        $this->outilsBox->setFormPageResultat('admin_structures_service');
+        $this->outilsBox->setFormTexteConfirmation("Le service <strong>###</strong> a bien été créé !");
+        $this->outilsBox->setFormTexteConfirmationEval(["###" => '$this->element->getStructure()->getNom();']);
+        
         
         //Obtenir le titre et le menu rapide en fonction du type
         $this->initTwig('service');
         
-        //Afficher le formulaire ou la redirection
-        return $this->Afficher();
+        //Laisser le controller faire son Job avec tout ça...
+        return $this->jobController();
     }
 
     /** 
@@ -596,22 +594,22 @@ class AdminStructureController extends AdminController
     public function service(int $idservice): Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->pageService->setParams(compact('idservice'));
+        $this->outilsBox->setPageParams(compact('idservice'));
 
         //Récupérer l'objet Service
-        $service = $this->outilsService->findById(Service::class, $idservice);
+        $service = $this->outilsBox->findEntityById(Service::class, $idservice);
 
         //Préparer le titre et le menu rapide
         $this->initTwig('service');
 
         //Définir le twig à afficher
-        $this->defineTwig('symcom4/admin/structures/service.html.twig'); 
+        $this->outilsBox->defineTwig('symcom4/admin/structures/service.html.twig'); 
 
         //Fournir les paramètres requis au Twig      
-        $this->defineParamTwig('service', $service);
+        $this->outilsBox->addParamTwig('service', $service);
 
         //Afficher la page
-        return $this->Afficher();
+        return $this->jobController();
     }
 
     /**
@@ -628,27 +626,27 @@ class AdminStructureController extends AdminController
     public function editService(int $idstructure, int $idpagemere):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->pageService->setParams(compact('idstructure', 'idpagemere'));
+        $this->outilsBox->setPageParams(compact('idstructure', 'idpagemere'));
         
         //Récupérer l'objet Structure
-        $structure = $this->outilsService->findById(Structure::class, $idstructure);
+        $structure = $this->outilsBox->findEntityById(Structure::class, $idstructure);
         
         //Gérer le formulaire
-        $this->formulaireService->setClassType(ServiceBaseType::class);
-        $this->formulaireService->setElement($structure->getService());
-        $this->formulaireService->setTwigFormulaire('symcom4/admin/general/form_service_base.html.twig');
-        $this->formulaireService->setTexteConfirmation("Le service a bien été modifié !");
-        $this->addPageMereFormService();
-        $this->createFormService();
+        $this->outilsBox->setFormClassType(ServiceBaseType::class);
+        $this->outilsBox->setFormElement($structure->getService());
+        $this->outilsBox->setFormTwigFormulaire('symcom4/admin/general/form_service_base.html.twig');
+        $this->outilsBox->setFormTexteConfirmation("Le service a bien été modifié !");
+        
+        
         
         //Obtenir le titre et le menu rapide en fonction du type
         $this->initTwig($structure->getType());
 
         //Fournir les paramètres requis au Twig
-        $this->defineParamTwig('structure', $structure);
+        $this->outilsBox->addParamTwig('structure', $structure);
 
-        //Afficher le formulaire ou la redirection
-        return $this->Afficher();
+        //Laisser le controller faire son Job avec tout ça...
+        return $this->jobController();
     }
 
     /**
@@ -664,22 +662,22 @@ class AdminStructureController extends AdminController
     public function deleteService(int $idstructure):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->pageService->setParams(compact('idstructure'));
+        $this->outilsBox->setPageParams(compact('idstructure'));
 
         //Supprimer le service de la BDD
-        $this->outilsService->delete(Structure::class, $idstructure);
+        $this->outilsBox->deleteEntityById(Structure::class, $idstructure);
         
         //Afficher un message de validation
         $this->addFlash('success', 'Le service a bien été supprimé !');
        
         //Définir la page de redirection
-        $this->defineRedirect('admin_structures_services');
+        $this->outilsBox->defineRedirection('admin_structures_services');
 
         //Obtenir le titre et le menu rapide en fonction du type
         $this->initTwig('service');
 
         //Afficher la redirection
-        return $this->Afficher();
+        return $this->jobController();
     }
 
     /*========================================================================================*/
@@ -699,19 +697,19 @@ class AdminStructureController extends AdminController
     public function associations(): Response
     {
         //Récupérer toutes les associations
-        $associations = $this->outilsService->findAll(Association::class);
+        $associations = $this->outilsBox->findAllEntity(Association::class);
 
         //Obtenir le titre et le menu rapide en fonction du type
         $this->initTwig('association');
 
         //Définir le twig à afficher
-        $this->defineTwig('symcom4/admin/structures/associations.html.twig'); 
+        $this->outilsBox->defineTwig('symcom4/admin/structures/associations.html.twig'); 
         
         //Fournir les paramètres requis au Twig
-        $this->defineParamTwig('associations', $associations);
+        $this->outilsBox->addParamTwig('associations', $associations);
 
         //Afficher la page
-        return $this->Afficher();
+        return $this->jobController();
     }
 
     /**
@@ -726,19 +724,19 @@ class AdminStructureController extends AdminController
     public function newAssociation():Response
     {
         //Gérer le formulaire
-        $this->formulaireService->setElement(new Association());
-        $this->formulaireService->setClassType(AssociationBaseType::class);
-        $this->formulaireService->setTwigFormulaire('symcom4/admin/general/form_association_base.html.twig');
-        $this->formulaireService->setPageResultat('admin_structures_association');
-        $this->formulaireService->setTexteConfirmation("L'association' <strong>###</strong> a bien été créé !");
-        $this->formulaireService->setTexteConfirmationEval(["###" => '$this->element->getStructure()->getNom();']);
-        $this->createFormService();
+        $this->outilsBox->setFormElement(new Association());
+        $this->outilsBox->setFormClassType(AssociationBaseType::class);
+        $this->outilsBox->setFormTwigFormulaire('symcom4/admin/general/form_association_base.html.twig');
+        $this->outilsBox->setFormPageResultat('admin_structures_association');
+        $this->outilsBox->setFormTexteConfirmation("L'association' <strong>###</strong> a bien été créé !");
+        $this->outilsBox->setFormTexteConfirmationEval(["###" => '$this->element->getStructure()->getNom();']);
+        
         
         //Obtenir le titre et le menu rapide en fonction du type
         $this->initTwig('association');
         
-        //Afficher le formulaire ou la redirection
-        return $this->Afficher();
+        //Laisser le controller faire son Job avec tout ça...
+        return $this->jobController();
     }
 
     /**
@@ -753,22 +751,22 @@ class AdminStructureController extends AdminController
     public function association(int $idassociation): Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->pageService->setParams(compact('idassociation'));
+        $this->outilsBox->setPageParams(compact('idassociation'));
 
         //Récupérer l'objet Association
-        $association = $this->outilsService->findById(Association::class, $idassociation);
+        $association = $this->outilsBox->findEntityById(Association::class, $idassociation);
 
         //Préparer le titre et le menu rapide
         $this->initTwig('association');
 
         //Définir le twig à afficher
-        $this->defineTwig('symcom4/admin/structures/association.html.twig'); 
+        $this->outilsBox->defineTwig('symcom4/admin/structures/association.html.twig'); 
 
         //Fournir les paramètres requis au Twig      
-        $this->defineParamTwig('association', $association);
+        $this->outilsBox->addParamTwig('association', $association);
 
         //Afficher la page
-        return $this->Afficher();
+        return $this->jobController();
     }
 
     /**
@@ -784,27 +782,27 @@ class AdminStructureController extends AdminController
     public function editAssociation(int $idstructure, int $idpagemere):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->pageService->setParams(compact('idstructure', 'idpagemere'));
+        $this->outilsBox->setPageParams(compact('idstructure', 'idpagemere'));
         
         //Récupérer l'objet Structure
-        $structure = $this->outilsService->findById(Structure::class, $idstructure);
+        $structure = $this->outilsBox->findEntityById(Structure::class, $idstructure);
         
         //Gérer le formulaire
-        $this->formulaireService->setClassType(AssociationBaseType::class);
-        $this->formulaireService->setElement($structure->getAssociation());
-        $this->formulaireService->setTwigFormulaire('symcom4/admin/general/form_association_base.html.twig');
-        $this->formulaireService->setTexteConfirmation("L'association a bien été modifiée !");
-        $this->addPageMereFormService();
-        $this->createFormService();
+        $this->outilsBox->setFormClassType(AssociationBaseType::class);
+        $this->outilsBox->setFormElement($structure->getAssociation());
+        $this->outilsBox->setFormTwigFormulaire('symcom4/admin/general/form_association_base.html.twig');
+        $this->outilsBox->setFormTexteConfirmation("L'association a bien été modifiée !");
+        
+        
         
         //Obtenir le titre et le menu rapide en fonction du type
         $this->initTwig($structure->getType());
 
         //Fournir les paramètres requis au Twig
-        $this->defineParamTwig('structure', $structure);
+        $this->outilsBox->addParamTwig('structure', $structure);
 
-        //Afficher le formulaire ou la redirection
-        return $this->Afficher();
+        //Laisser le controller faire son Job avec tout ça...
+        return $this->jobController();
     }
 
     /**
@@ -820,22 +818,22 @@ class AdminStructureController extends AdminController
     public function deleteAssociation(int $idstructure):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->pageService->setParams(compact('idstructure'));
+        $this->outilsBox->setPageParams(compact('idstructure'));
 
         //Supprimer le service de la BDD
-        $this->outilsService->delete(Structure::class, $idstructure);
+        $this->outilsBox->deleteEntityById(Structure::class, $idstructure);
         
         //Afficher un message de validation
         $this->addFlash('success', "L'association' a bien été supprimé !");
        
         //Définir la page de redirection
-        $this->defineRedirect('admin_structures_associations');
+        $this->outilsBox->defineRedirection('admin_structures_associations');
 
         //Obtenir le titre et le menu rapide en fonction du type
         $this->initTwig('association');
 
         //Afficher la redirection
-        return $this->Afficher();
+        return $this->jobController();
     }
 
     /*========================================================================================*/
@@ -853,19 +851,19 @@ class AdminStructureController extends AdminController
     public function typeassociations(): Response
     {
         //Récupérer tous les types d'association
-        $typeAssociations = $this->outilsService->findAll(TypeAssociation::class);
+        $typeAssociations = $this->outilsBox->findAllEntity(TypeAssociation::class);
 
         //Obtenir le titre et le menu rapide
         $this->initTwig('association');
 
         //Définir le twig à afficher
-        $this->defineTwig('symcom4/admin/structures/typeassociations.html.twig'); 
+        $this->outilsBox->defineTwig('symcom4/admin/structures/typeassociations.html.twig'); 
         
         //Fournir les paramètres requis au Twig
-        $this->defineParamTwig('typeAssociations', $typeAssociations);
+        $this->outilsBox->addParamTwig('typeAssociations', $typeAssociations);
 
         //Afficher la page
-        return $this->Afficher();
+        return $this->jobController();
     }
 
     /**
@@ -878,19 +876,19 @@ class AdminStructureController extends AdminController
     public function newTypeAssociation():Response
     {
         //Gérer le formulaire
-        $this->formulaireService->setElement(new TypeAssociation());
-        $this->formulaireService->setClassType(TypeAssociationType::class);
-        $this->formulaireService->setTwigFormulaire('symcom4/admin/general/form_typeassociation.html.twig');
-        $this->formulaireService->setPageResultat('admin_structures_associations_types');
-        $this->formulaireService->setTexteConfirmation("Le type d'association ### a bien été créé !");
-        $this->formulaireService->setTexteConfirmationEval(["###" => '$this->element->getNom();']);
-        $this->createFormService();
+        $this->outilsBox->setFormElement(new TypeAssociation());
+        $this->outilsBox->setFormClassType(TypeAssociationType::class);
+        $this->outilsBox->setFormTwigFormulaire('symcom4/admin/general/form_typeassociation.html.twig');
+        $this->outilsBox->setFormPageResultat('admin_structures_associations_types');
+        $this->outilsBox->setFormTexteConfirmation("Le type d'association ### a bien été créé !");
+        $this->outilsBox->setFormTexteConfirmationEval(["###" => '$this->element->getNom();']);
+        
         
         //Obtenir le titre et le menu rapide en fonction du type
         $this->initTwig('association');
         
-        //Afficher le formulaire ou la redirection
-        return $this->Afficher();
+        //Laisser le controller faire son Job avec tout ça...
+        return $this->jobController();
     }
 
     /**
@@ -904,25 +902,25 @@ class AdminStructureController extends AdminController
     public function editTypeAssociation(int $idtypeassociation):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->pageService->setParams(compact('idtypeassociation'));
+        $this->outilsBox->setPageParams(compact('idtypeassociation'));
         
         //Récupérer l'objet Structure
-        $typeAssociation = $this->outilsService->findById(TypeAssociation::class, $idtypeassociation);
+        $typeAssociation = $this->outilsBox->findEntityById(TypeAssociation::class, $idtypeassociation);
         
         //Gérer le formulaire
-        $this->formulaireService->setElement($typeAssociation);
-        $this->formulaireService->setClassType(TypeAssociationType::class);
-        $this->formulaireService->setTwigFormulaire('symcom4/admin/general/form_typeassociation.html.twig');
-        $this->formulaireService->setTexteConfirmation("Le type d'association ### a bien été modifié !");
-        $this->formulaireService->setTexteConfirmationEval(["###" => '$this->element->getNom();']);
-        $this->formulaireService->setPageResultat('admin_structures_associations_types');
-        $this->createFormService();
+        $this->outilsBox->setFormElement($typeAssociation);
+        $this->outilsBox->setFormClassType(TypeAssociationType::class);
+        $this->outilsBox->setFormTwigFormulaire('symcom4/admin/general/form_typeassociation.html.twig');
+        $this->outilsBox->setFormTexteConfirmation("Le type d'association ### a bien été modifié !");
+        $this->outilsBox->setFormTexteConfirmationEval(["###" => '$this->element->getNom();']);
+        $this->outilsBox->setFormPageResultat('admin_structures_associations_types');
+        
         
         //Obtenir le titre et le menu rapide en fonction du type
         $this->initTwig('association');
 
-        //Afficher le formulaire ou la redirection
-        return $this->Afficher();
+        //Laisser le controller faire son Job avec tout ça...
+        return $this->jobController();
     }
 
     /**
@@ -936,22 +934,22 @@ class AdminStructureController extends AdminController
     public function deleteTypeAssociation(int $idtypeassociation):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->pageService->setParams(compact('idtypeassociation'));
+        $this->outilsBox->setPageParams(compact('idtypeassociation'));
 
         //Supprimer le type d'association de la BDD
-        $this->outilsService->delete(TypeAssociation::class, $idtypeassociation);
+        $this->outilsBox->deleteEntityById(TypeAssociation::class, $idtypeassociation);
         
         //Afficher un message de validation
         $this->addFlash('success', "Le type d'association a bien été supprimé !");
        
         //Définir la page de redirection
-        $this->defineRedirect('admin_structures_typeassociations');
+        $this->outilsBox->defineRedirection('admin_structures_typeassociations');
 
         //Obtenir le titre et le menu rapide en fonction du type
         $this->initTwig('association');
 
         //Afficher la redirection
-        return $this->Afficher();
+        return $this->jobController();
     }
 
     /*========================================================================================*/
@@ -971,27 +969,27 @@ class AdminStructureController extends AdminController
     public function editAssociationType(int $idstructure, int $idpagemere):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->pageService->setParams(compact('idstructure', 'idpagemere'));
+        $this->outilsBox->setPageParams(compact('idstructure', 'idpagemere'));
         
         //Récupérer l'objet Structure
-        $structure = $this->outilsService->findById(Structure::class, $idstructure);
+        $structure = $this->outilsBox->findEntityById(Structure::class, $idstructure);
         
         //Gérer le formulaire
-        $this->formulaireService->setClassType(AssociationTypeType::class);
-        $this->formulaireService->setElement($structure->getAssociation());
-        $this->formulaireService->setTwigFormulaire('symcom4/admin/general/form_association_type.html.twig');
-        $this->formulaireService->setTexteConfirmation("L'association a bien été modifié !");
-        $this->addPageMereFormService();
-        $this->createFormService();
+        $this->outilsBox->setFormClassType(AssociationTypeType::class);
+        $this->outilsBox->setFormElement($structure->getAssociation());
+        $this->outilsBox->setFormTwigFormulaire('symcom4/admin/general/form_association_type.html.twig');
+        $this->outilsBox->setFormTexteConfirmation("L'association a bien été modifié !");
+        
+        
         
         //Obtenir le titre et le menu rapide en fonction du type
         $this->initTwig($structure->getType());
 
         //Fournir les paramètres requis au Twig
-        $this->defineParamTwig('structure', $structure);
+        $this->outilsBox->addParamTwig('structure', $structure);
 
-        //Afficher le formulaire ou la redirection
-        return $this->Afficher();
+        //Laisser le controller faire son Job avec tout ça...
+        return $this->jobController();
     }
 
     /*========================================================================================*/
@@ -1009,19 +1007,19 @@ class AdminStructureController extends AdminController
     public function entreprises(): Response
     {
         //Récupérer tous les services
-        $entreprises = $this->outilsService->findAll(Entreprise::class);
+        $entreprises = $this->outilsBox->findAllEntity(Entreprise::class);
 
         //Obtenir le titre et le menu rapide en fonction du type
         $this->initTwig('entreprise');
 
         //Définir le twig à afficher
-        $this->defineTwig('symcom4/admin/structures/entreprises.html.twig'); 
+        $this->outilsBox->defineTwig('symcom4/admin/structures/entreprises.html.twig'); 
         
         //Fournir les paramètres requis au Twig
-        $this->defineParamTwig('entreprises', $entreprises);
+        $this->outilsBox->addParamTwig('entreprises', $entreprises);
 
         //Afficher la page
-        return $this->Afficher();
+        return $this->jobController();
     }
 
     /**
@@ -1034,19 +1032,19 @@ class AdminStructureController extends AdminController
     public function newEntreprise():Response
     {
         //Gérer le formulaire
-        $this->formulaireService->setElement(new Entreprise());
-        $this->formulaireService->setClassType(EntrepriseBaseType::class);
-        $this->formulaireService->setTwigFormulaire('symcom4/admin/general/form_entreprise_base.html.twig');
-        $this->formulaireService->setPageResultat('admin_structures_entreprise');
-        $this->formulaireService->setTexteConfirmation("L'entreprise <strong>###</strong> a bien été créé !");
-        $this->formulaireService->setTexteConfirmationEval(["###" => '$this->element->getStructure()->getNom();']);
-        $this->createFormService();
+        $this->outilsBox->setFormElement(new Entreprise());
+        $this->outilsBox->setFormClassType(EntrepriseBaseType::class);
+        $this->outilsBox->setFormTwigFormulaire('symcom4/admin/general/form_entreprise_base.html.twig');
+        $this->outilsBox->setFormPageResultat('admin_structures_entreprise');
+        $this->outilsBox->setFormTexteConfirmation("L'entreprise <strong>###</strong> a bien été créé !");
+        $this->outilsBox->setFormTexteConfirmationEval(["###" => '$this->element->getStructure()->getNom();']);
+        
         
         //Obtenir le titre et le menu rapide en fonction du type
         $this->initTwig('entreprise');
         
-        //Afficher le formulaire ou la redirection
-        return $this->Afficher();
+        //Laisser le controller faire son Job avec tout ça...
+        return $this->jobController();
     }
 
     /**
@@ -1060,22 +1058,22 @@ class AdminStructureController extends AdminController
     public function Entreprise(int $identreprise): Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->pageService->setParams(compact('identreprise'));
+        $this->outilsBox->setPageParams(compact('identreprise'));
 
         //Récupérer l'objet Service
-        $entreprise = $this->outilsService->findById(Entreprise::class, $identreprise);
+        $entreprise = $this->outilsBox->findEntityById(Entreprise::class, $identreprise);
 
         //Préparer le titre et le menu rapide
         $this->initTwig('entreprise');
 
         //Définir le twig à afficher
-        $this->defineTwig('symcom4/admin/structures/entreprise.html.twig'); 
+        $this->outilsBox->defineTwig('symcom4/admin/structures/entreprise.html.twig'); 
 
         //Fournir les paramètres requis au Twig      
-        $this->defineParamTwig('entreprise', $entreprise);
+        $this->outilsBox->addParamTwig('entreprise', $entreprise);
 
         //Afficher la page
-        return $this->Afficher();
+        return $this->jobController();
     }
 
     /**
@@ -1090,27 +1088,27 @@ class AdminStructureController extends AdminController
     public function editEntreprise(int $idstructure, int $idpagemere):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->pageService->setParams(compact('idstructure', 'idpagemere'));
+        $this->outilsBox->setPageParams(compact('idstructure', 'idpagemere'));
         
         //Récupérer l'objet Structure
-        $structure = $this->outilsService->findById(Structure::class, $idstructure);
+        $structure = $this->outilsBox->findEntityById(Structure::class, $idstructure);
         
         //Gérer le formulaire
-        $this->formulaireService->setClassType(EntrepriseBaseType::class);
-        $this->formulaireService->setElement($structure->getEntreprise());
-        $this->formulaireService->setTwigFormulaire('symcom4/admin/general/form_entreprise_base.html.twig');
-        $this->formulaireService->setTexteConfirmation("L'entreprise a bien été modifié !");
-        $this->addPageMereFormService();
-        $this->createFormService();
+        $this->outilsBox->setFormClassType(EntrepriseBaseType::class);
+        $this->outilsBox->setFormElement($structure->getEntreprise());
+        $this->outilsBox->setFormTwigFormulaire('symcom4/admin/general/form_entreprise_base.html.twig');
+        $this->outilsBox->setFormTexteConfirmation("L'entreprise a bien été modifié !");
+        
+        
         
         //Obtenir le titre et le menu rapide en fonction du type
         $this->initTwig($structure->getType());
 
         //Fournir les paramètres requis au Twig
-        $this->defineParamTwig('structure', $structure);
+        $this->outilsBox->addParamTwig('structure', $structure);
 
-        //Afficher le formulaire ou la redirection
-        return $this->Afficher();
+        //Laisser le controller faire son Job avec tout ça...
+        return $this->jobController();
     }
 
     /**
@@ -1124,22 +1122,22 @@ class AdminStructureController extends AdminController
     public function deleteEntreprise(int $idstructure):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->pageService->setParams(compact('idstructure'));
+        $this->outilsBox->setPageParams(compact('idstructure'));
 
         //Supprimer le service de la BDD
-        $this->outilsService->delete(Structure::class, $idstructure);
+        $this->outilsBox->deleteEntityById(Structure::class, $idstructure);
         
         //Afficher un message de validation
         $this->addFlash('success', "L'entreprise a bien été supprimé !");
        
         //Définir la page de redirection
-        $this->defineRedirect('admin_structures_entreprises');
+        $this->outilsBox->defineRedirection('admin_structures_entreprises');
 
         //Obtenir le titre et le menu rapide en fonction du type
         $this->initTwig('entreprise');
 
         //Afficher la redirection
-        return $this->Afficher();
+        return $this->jobController();
     }
 
     /*========================================================================================*/
@@ -1157,19 +1155,19 @@ class AdminStructureController extends AdminController
     public function typeentreprises(): Response
     {
         //Récupérer tous les types d'association
-        $typeEntreprises = $this->outilsService->findAll(TypeEntreprise::class);
+        $typeEntreprises = $this->outilsBox->findAllEntity(TypeEntreprise::class);
 
         //Obtenir le titre et le menu rapide
         $this->initTwig('entreprise');
 
         //Définir le twig à afficher
-        $this->defineTwig('symcom4/admin/structures/typeentreprises.html.twig'); 
+        $this->outilsBox->defineTwig('symcom4/admin/structures/typeentreprises.html.twig'); 
         
         //Fournir les paramètres requis au Twig
-        $this->defineParamTwig('typeEntreprises', $typeEntreprises);
+        $this->outilsBox->addParamTwig('typeEntreprises', $typeEntreprises);
 
         //Afficher la page
-        return $this->Afficher();
+        return $this->jobController();
     }
 
     /**
@@ -1182,19 +1180,19 @@ class AdminStructureController extends AdminController
     public function newTypeEntreprise():Response
     {
         //Gérer le formulaire
-        $this->formulaireService->setElement(new TypeEntreprise());
-        $this->formulaireService->setClassType(TypeEntrepriseType::class);
-        $this->formulaireService->setTwigFormulaire('symcom4/admin/general/form_typeentreprise.html.twig');
-        $this->formulaireService->setPageResultat('admin_structures_entreprises_types');
-        $this->formulaireService->setTexteConfirmation("Le type d'entreprise ### a bien été créé !");
-        $this->formulaireService->setTexteConfirmationEval(["###" => '$this->element->getNom();']);
-        $this->createFormService();
+        $this->outilsBox->setFormElement(new TypeEntreprise());
+        $this->outilsBox->setFormClassType(TypeEntrepriseType::class);
+        $this->outilsBox->setFormTwigFormulaire('symcom4/admin/general/form_typeentreprise.html.twig');
+        $this->outilsBox->setFormPageResultat('admin_structures_entreprises_types');
+        $this->outilsBox->setFormTexteConfirmation("Le type d'entreprise ### a bien été créé !");
+        $this->outilsBox->setFormTexteConfirmationEval(["###" => '$this->element->getNom();']);
+        
         
         //Obtenir le titre et le menu rapide en fonction du type
         $this->initTwig('entreprise');
         
-        //Afficher le formulaire ou la redirection
-        return $this->Afficher();
+        //Laisser le controller faire son Job avec tout ça...
+        return $this->jobController();
     }
 
     /**
@@ -1208,25 +1206,25 @@ class AdminStructureController extends AdminController
     public function editTypeEntreprise(int $idtypeentreprise):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->pageService->setParams(compact('idtypeentreprise'));
+        $this->outilsBox->setPageParams(compact('idtypeentreprise'));
         
         //Récupérer l'objet Structure
-        $typeEntreprise = $this->outilsService->findById(TypeEntreprise::class, $idtypeentreprise);
+        $typeEntreprise = $this->outilsBox->findEntityById(TypeEntreprise::class, $idtypeentreprise);
         
         //Gérer le formulaire
-        $this->formulaireService->setElement($typeEntreprise);
-        $this->formulaireService->setClassType(TypeEntrepriseType::class);
-        $this->formulaireService->setTwigFormulaire('symcom4/admin/general/form_typeentreprise.html.twig');
-        $this->formulaireService->setTexteConfirmation("Le type d'entreprise ### a bien été modifié !");
-        $this->formulaireService->setTexteConfirmationEval(["###" => '$this->element->getNom();']);
-        $this->formulaireService->setPageResultat('admin_structures_typeentreprises');
-        $this->createFormService();
+        $this->outilsBox->setFormElement($typeEntreprise);
+        $this->outilsBox->setFormClassType(TypeEntrepriseType::class);
+        $this->outilsBox->setFormTwigFormulaire('symcom4/admin/general/form_typeentreprise.html.twig');
+        $this->outilsBox->setFormTexteConfirmation("Le type d'entreprise ### a bien été modifié !");
+        $this->outilsBox->setFormTexteConfirmationEval(["###" => '$this->element->getNom();']);
+        $this->outilsBox->setFormPageResultat('admin_structures_typeentreprises');
+        
         
         //Obtenir le titre et le menu rapide en fonction du type
         $this->initTwig('entreprise');
 
-        //Afficher le formulaire ou la redirection
-        return $this->Afficher();
+        //Laisser le controller faire son Job avec tout ça...
+        return $this->jobController();
     }
 
     /**
@@ -1240,22 +1238,22 @@ class AdminStructureController extends AdminController
     public function deleteTypeEntreprise(int $idtypeentreprise):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->pageService->setParams(compact('idtypeentreprise'));
+        $this->outilsBox->setPageParams(compact('idtypeentreprise'));
 
         //Supprimer le type d'association de la BDD
-        $this->outilsService->delete(TypeEntreprise::class, $idtypeentreprise);
+        $this->outilsBox->deleteEntityById(TypeEntreprise::class, $idtypeentreprise);
         
         //Afficher un message de validation
         $this->addFlash('success', "Le type d'entreprise a bien été supprimé !");
        
         //Définir la page de redirection
-        $this->defineRedirect('admin_structures_typeentreprises');
+        $this->outilsBox->defineRedirection('admin_structures_typeentreprises');
 
         //Obtenir le titre et le menu rapide en fonction du type
         $this->initTwig('entreprise');
 
         //Afficher la redirection
-        return $this->Afficher();
+        return $this->jobController();
     }
 
     /*========================================================================================*/
@@ -1275,27 +1273,27 @@ class AdminStructureController extends AdminController
     public function editEntrepriseType(int $idstructure, int $idpagemere):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->pageService->setParams(compact('idstructure', 'idpagemere'));
+        $this->outilsBox->setPageParams(compact('idstructure', 'idpagemere'));
         
         //Récupérer l'objet Structure
-        $structure = $this->outilsService->findById(Structure::class, $idstructure);
+        $structure = $this->outilsBox->findEntityById(Structure::class, $idstructure);
         
         //Gérer le formulaire
-        $this->formulaireService->setClassType(EntrepriseTypeType::class);
-        $this->formulaireService->setElement($structure->getEntreprise());
-        $this->formulaireService->setTwigFormulaire('symcom4/admin/general/form_entreprise_type.html.twig');
-        $this->formulaireService->setTexteConfirmation("L'entreprise a bien été modifié !");
-        $this->addPageMereFormService();
-        $this->createFormService();
+        $this->outilsBox->setFormClassType(EntrepriseTypeType::class);
+        $this->outilsBox->setFormElement($structure->getEntreprise());
+        $this->outilsBox->setFormTwigFormulaire('symcom4/admin/general/form_entreprise_type.html.twig');
+        $this->outilsBox->setFormTexteConfirmation("L'entreprise a bien été modifié !");
+        
+        
         
         //Obtenir le titre et le menu rapide en fonction du type
         $this->initTwig($structure->getType());
 
         //Fournir les paramètres requis au Twig
-        $this->defineParamTwig('structure', $structure);
+        $this->outilsBox->addParamTwig('structure', $structure);
 
-        //Afficher le formulaire ou la redirection
-        return $this->Afficher();
+        //Laisser le controller faire son Job avec tout ça...
+        return $this->jobController();
     }
 
     /*========================================================================================*/
@@ -1313,19 +1311,19 @@ class AdminStructureController extends AdminController
     public function fonctions(): Response
     {
         //Récupérer toutes les fonctions
-        $fonctions = $this->outilsService->findAll(Fonction::class);
+        $fonctions = $this->outilsBox->findAllEntity(Fonction::class);
 
         //Obtenir le titre et le menu rapide en fonction du type
         $this->initTwig('fonction');
 
         //Définir le twig à afficher
-        $this->defineTwig('symcom4/admin/fonctions/fonctions.html.twig'); 
+        $this->outilsBox->defineTwig('symcom4/admin/fonctions/fonctions.html.twig'); 
         
         //Fournir les paramètres requis au Twig
-        $this->defineParamTwig('fonctions', $fonctions);
+        $this->outilsBox->addParamTwig('fonctions', $fonctions);
 
         //Afficher la page
-        return $this->Afficher();
+        return $this->jobController();
     }  
     
     /*========================================================================================*/
@@ -1343,19 +1341,19 @@ class AdminStructureController extends AdminController
     public function typefonctions(): Response
     {
         //Récupérer tous les types de fonction
-        $typeFonctions = $this->outilsService->findAll(TypeFonction::class);
+        $typeFonctions = $this->outilsBox->findAllEntity(TypeFonction::class);
 
         //Obtenir le titre et le menu rapide
         $this->initTwig('fonction');
 
         //Définir le twig à afficher
-        $this->defineTwig('symcom4/admin/fonctions/typefonctions.html.twig'); 
+        $this->outilsBox->defineTwig('symcom4/admin/fonctions/typefonctions.html.twig'); 
         
         //Fournir les paramètres requis au Twig
-        $this->defineParamTwig('typeFonctions', $typeFonctions);
+        $this->outilsBox->addParamTwig('typeFonctions', $typeFonctions);
 
         //Afficher la page
-        return $this->Afficher();
+        return $this->jobController();
     }
 
     /**
@@ -1368,19 +1366,19 @@ class AdminStructureController extends AdminController
     public function newTypeFonction():Response
     {
         //Gérer le formulaire
-        $this->formulaireService->setElement(new TypeFonction());
-        $this->formulaireService->setClassType(TypeFonctionType::class);
-        $this->formulaireService->setTwigFormulaire('symcom4/admin/general/form_typefonction.html.twig');
-        $this->formulaireService->setPageResultat('admin_fonctions_types');
-        $this->formulaireService->setTexteConfirmation("Le type de fonction ### a bien été créé !");
-        $this->formulaireService->setTexteConfirmationEval(["###" => '$this->element->getTitre();']);
-        $this->createFormService();
+        $this->outilsBox->setFormElement(new TypeFonction());
+        $this->outilsBox->setFormClassType(TypeFonctionType::class);
+        $this->outilsBox->setFormTwigFormulaire('symcom4/admin/general/form_typefonction.html.twig');
+        $this->outilsBox->setFormPageResultat('admin_fonctions_types');
+        $this->outilsBox->setFormTexteConfirmation("Le type de fonction ### a bien été créé !");
+        $this->outilsBox->setFormTexteConfirmationEval(["###" => '$this->element->getTitre();']);
+        
         
         //Obtenir le titre et le menu rapide en fonction du type
         $this->initTwig('fonction');
         
-        //Afficher le formulaire ou la redirection
-        return $this->Afficher();
+        //Laisser le controller faire son Job avec tout ça...
+        return $this->jobController();
     }
 
     /**
@@ -1394,25 +1392,25 @@ class AdminStructureController extends AdminController
     public function editTypeFonction(int $idtypefonction):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->pageService->setParams(compact('idtypefonction'));
+        $this->outilsBox->setPageParams(compact('idtypefonction'));
         
         //Récupérer l'objet TypeFonction
-        $typeFonction = $this->outilsService->findById(TypeFonction::class, $idtypefonction);
+        $typeFonction = $this->outilsBox->findEntityById(TypeFonction::class, $idtypefonction);
         
         //Gérer le formulaire
-        $this->formulaireService->setElement($typeFonction);
-        $this->formulaireService->setClassType(TypeFonctionType::class);
-        $this->formulaireService->setTwigFormulaire('symcom4/admin/general/form_typefonction.html.twig');
-        $this->formulaireService->setTexteConfirmation("Le type de fonction ### a bien été modifiée !");
-        $this->formulaireService->setTexteConfirmationEval(["###" => '$this->element->getTitre();']);
-        $this->formulaireService->setPageResultat('admin_fonctions_types');
-        $this->createFormService();
+        $this->outilsBox->setFormElement($typeFonction);
+        $this->outilsBox->setFormClassType(TypeFonctionType::class);
+        $this->outilsBox->setFormTwigFormulaire('symcom4/admin/general/form_typefonction.html.twig');
+        $this->outilsBox->setFormTexteConfirmation("Le type de fonction ### a bien été modifiée !");
+        $this->outilsBox->setFormTexteConfirmationEval(["###" => '$this->element->getTitre();']);
+        $this->outilsBox->setFormPageResultat('admin_fonctions_types');
+        
         
         //Obtenir le titre et le menu rapide en fonction du type
         $this->initTwig('fonction');
 
-        //Afficher le formulaire ou la redirection
-        return $this->Afficher();
+        //Laisser le controller faire son Job avec tout ça...
+        return $this->jobController();
     }
 
     /**
@@ -1426,22 +1424,22 @@ class AdminStructureController extends AdminController
     public function deleteTypeFonction(int $idtypefonction):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->pageService->setParams(compact('idtypefonction'));
+        $this->outilsBox->setPageParams(compact('idtypefonction'));
 
         //Supprimer le type d'association de la BDD
-        $this->outilsService->delete(TypeFonction::class, $idtypefonction);
+        $this->outilsBox->deleteEntityById(TypeFonction::class, $idtypefonction);
         
         //Afficher un message de validation
         $this->addFlash('success', "Le type de fonction a bien été supprimé !");
        
         //Définir la page de redirection
-        $this->defineRedirect('admin_fonctions_types');
+        $this->outilsBox->defineRedirection('admin_fonctions_types');
 
         //Obtenir le titre et le menu rapide en fonction du type
         $this->initTwig('fonction');
 
         //Afficher la redirection
-        return $this->Afficher();
+        return $this->jobController();
     }
 
     /*========================================================================================*/
@@ -1466,31 +1464,31 @@ class AdminStructureController extends AdminController
     public function addcontactStructureFonction(int $idfonction, int $idpagemere, string $type, ContactService $contactService):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->pageService->setParams(compact('idfonction', 'idpagemere', 'type'));
+        $this->outilsBox->setPageParams(compact('idfonction', 'idpagemere', 'type'));
 
         //Récupérer l'objet Fonction et l'objet Structure
-        $fonction = $this->outilsService->findById(Fonction::class, $idfonction);
+        $fonction = $this->outilsBox->findEntityById(Fonction::class, $idfonction);
         $structure = $fonction->getStructure();
 
         //Gérer le formulaire
-        $this->formulaireService->setElement($contactService->getElementFormulaire($type));
-        $this->formulaireService->setClassType($contactService->getClassTypeFormulaire($type));
-        $this->formulaireService->setTwigFormulaire('symcom4/admin/general/form_contact.html.twig');
-        $this->formulaireService->setTexteConfirmation("Le contact a bien été modifié !");
-        $this->formulaireService->setActions($this, array(['name' => 'action_addcontactStructureFonction', 'params' => ['fonction' => $fonction]]));
-        $this->addPageMereFormService();
-        $this->createFormService();
+        $this->outilsBox->setFormElement($contactService->getElementFormulaire($type));
+        $this->outilsBox->setFormClassType($contactService->getClassTypeFormulaire($type));
+        $this->outilsBox->setFormTwigFormulaire('symcom4/admin/general/form_contact.html.twig');
+        $this->outilsBox->setFormTexteConfirmation("Le contact a bien été modifié !");
+        $this->outilsBox->setFormActions(array(['name' => 'action_addcontactStructureFonction', 'params' => ['fonction' => $fonction]]));
+        
+        
 
         //Obtenir le titre et le menu rapide en fonction du type
         $this->initTwig($structure->getType());
 
         //Fournir les paramètres requis au Twig
-        $this->defineParamTwig('type', $type);
-        $this->defineParamTwig('structure', $structure);
-        $this->defineParamTwig('fonction', $fonction);
+        $this->outilsBox->addParamTwig('type', $type);
+        $this->outilsBox->addParamTwig('structure', $structure);
+        $this->outilsBox->addParamTwig('fonction', $fonction);
 
-        //Afficher le formulaire ou la redirection
-        return $this->Afficher();
+        //Laisser le controller faire son Job avec tout ça...
+        return $this->jobController();
     }
 
     /**
@@ -1510,32 +1508,31 @@ class AdminStructureController extends AdminController
     public function editcontactStructureFonction(int $idfonction, int $idcontact, int $idpagemere, ContactService $contactService):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->pageService->setParams(compact('idfonction', 'idcontact', 'idpagemere'));
+        $this->outilsBox->setPageParams(compact('idfonction', 'idcontact', 'idpagemere'));
 
         //Récupérer l'objet Fonction, l'objet Structure et l'objet Contact
-        $fonction = $this->outilsService->findById(Fonction::class, $idfonction);
+        $fonction = $this->outilsBox->findEntityById(Fonction::class, $idfonction);
         $structure = $fonction->getStructure();
-        $contact = $this->outilsService->findById(Contact::class, $idcontact);
+        $contact = $this->outilsBox->findEntityById(Contact::class, $idcontact);
         $type = $contact->getType();
 
         //Gérer le formulaire
-        $this->formulaireService->setElement($contactService->getElementFormulaire($type, $contact));
-        $this->formulaireService->setClassType($contactService->getClassTypeFormulaire($type));
-        $this->formulaireService->setTwigFormulaire('symcom4/admin/general/form_contact.html.twig');
-        $this->formulaireService->setTexteConfirmation("Le contact a bien été modifié !");
-        $this->addPageMereFormService();
-        $this->createFormService();
-
+        $this->outilsBox->setFormElement($contactService->getElementFormulaire($type, $contact));
+        $this->outilsBox->setFormClassType($contactService->getClassTypeFormulaire($type));
+        $this->outilsBox->setFormTwigFormulaire('symcom4/admin/general/form_contact.html.twig');
+        $this->outilsBox->setFormTexteConfirmation("Le contact a bien été modifié !");
+        
+        
         //Obtenir le titre et le menu rapide en fonction du type
         $this->initTwig($type);
 
         //Fournir les paramètres requis au Twig
-        $this->defineParamTwig('structure', $structure);
-        $this->defineParamTwig('fonction', $fonction);
-        $this->defineParamTwig('type', $type);
+        $this->outilsBox->addParamTwig('structure', $structure);
+        $this->outilsBox->addParamTwig('fonction', $fonction);
+        $this->outilsBox->addParamTwig('type', $type);
 
-        //Afficher le formulaire ou la redirection
-        return $this->Afficher();
+        //Laisser le controller faire son Job avec tout ça...
+        return $this->jobController();
     }
 
     /**
@@ -1554,19 +1551,19 @@ class AdminStructureController extends AdminController
     public function deleteContactStructureFonction(int $idfonction, int $idcontact, int $idpagemere):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->pageService->setParams(compact('idfonction', 'idcontact', 'idpagemere'));
+        $this->outilsBox->setPageParams(compact('idfonction', 'idcontact', 'idpagemere'));
 
         //Récupérer l'objet Fonction, l'objet Structure et l'objet Page mere
-        $fonction = $this->outilsService->findById(Fonction::class, $idfonction);
-        $contact = $this->outilsService->findById(Contact::class, $idcontact);
+        $fonction = $this->outilsBox->findEntityById(Fonction::class, $idfonction);
+        $contact = $this->outilsBox->findEntityById(Contact::class, $idcontact);
         $structure = $fonction->getStructure();
-        $pageMere = $this->outilsService->findById(Page::class, $idpagemere);
+        $pageMere = $this->outilsBox->findEntityById(Page::class, $idpagemere);
         
         //Supprimer le contact de la fonction
         $fonction->removeContact($contact);
 
         //Supprimer le contact de la BDD
-        $this->outilsService->delete(Contact::class, $idcontact);
+        $this->outilsBox->deleteEntityById(Contact::class, $idcontact);
         
         //Afficher un message de validation
         $this->addFlash('success', 'Le contact a bien été supprimé !');
@@ -1575,15 +1572,15 @@ class AdminStructureController extends AdminController
         $this->initTwig($structure->getType());
 
         //Fournir les paramètres requis au Twig
-        $this->defineParamTwig('structure', $structure);
-        $this->defineParamTwig('fonction', $fonction);
+        $this->outilsBox->addParamTwig('structure', $structure);
+        $this->outilsBox->addParamTwig('fonction', $fonction);
 
         //Définir la page de redirection
-        $this->defineRedirect($pageMere->getNomChemin());
-        $this->defineParamRedirect($pageMere->getParams());
+        $this->outilsBox->defineRedirection($pageMere->getNomChemin());
+        $this->outilsBox->addParamsRedirect($pageMere->getParams());
 
         //Afficher la redirection
-        return $this->Afficher();
+        return $this->jobController();
     }
 
     /*========================================================================================*/

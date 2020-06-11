@@ -2,51 +2,98 @@
 
 namespace App\Controller;
 
-use App\Entity\Lien;
-use App\Entity\Mail;
-use App\Entity\Page;
-use App\Entity\Adresse;
-use App\Entity\Telephone;
-use App\Form\NewMailType;
-use App\Form\NewAdresseType;
-use App\Service\PageService;
-use App\Form\NewTelephoneType;
-use App\Service\OutilsService;
-use App\Service\GestionService;
-use App\Service\FormulaireService;
-use App\Controller\OutilsController;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+use App\Entity\Page;
+use Gazuka\Outils\Outils;
+use App\Service\PageService;
+use App\Service\GestionService;
+use App\Controller\OutilsController;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
+
+// !!! Supprimer le extends OutilsController lorsque Gazuka/Outils sera totalement intégré au site
 class SymCom4Controller extends OutilsController
 {
-    protected $formulaireService;
-    protected $gestionService;
-    protected $outilsService;
+    //Instance de Gazuka/Outils
+    protected $outilsBox;
 
+    protected $idPageActuelle;
+
+
+    // !!! A supprimer lorsque Gazuka/Outils sera totalement intégré au site
+    //protected $formulaireService;
+    //protected $outilsService;
+    // !!! ---
+
+
+    protected $gestionService;
     protected $liensRapides = array();
     protected $request;    
 
-    public function __construct(PageService $pageService, FormulaireService $formulaireService, GestionService $gestionService, OutilsService $outilsService)
+    public function __construct(EntityManagerInterface $manager, RequestStack $requestStack, PageService $pageService, GestionService $gestionService)
     {
+        //Création d'une instance de Gazuka/Outils
+        $this->outilsBox = new Outils($manager, $requestStack, Page::class);
+
         $this->pageService = $pageService;
-        $this->formulaireService = $formulaireService;
+        //$this->formulaireService = $formulaireService; // !!! A supprimer lorsque Gazuka/Outils sera totalement intégré au site
         $this->gestionService = $gestionService;
-        $this->outilsService = $outilsService;
+        //$this->outilsService = $outilsService; // !!! A supprimer lorsque Gazuka/Outils sera totalement intégré au site
     }
 
-    /**
-     * @Route("/", name="accueil")
-     * @IsGranted("ROLE_ADMIN")
-     */
-    public function index()
+    protected function jobControllerCreateByGazuka()
     {
-        return $this->render('symcom4/public/index.html.twig', [
-            'controller_name' => 'SymCom4Controller',
-        ]);
+        //Si besoin on crée un formulaire
+        if($this->outilsBox->getFormClassType() != null && $this->outilsBox->getFormElement() != null)
+        {
+            $this->outilsBox->setFormForm($this->createForm($this->outilsBox->getFormClassType(), $this->outilsBox->getFormElement()));
+            $this->outilsBox->creerFormulaire($this);
+        }
+        
+        //On récupére le jobController
+        $jobController = $this->outilsBox->recupJobController();
+
+        //On récupére les messages flush
+        //???????????????????????????????????????????????????? A faire
+
+        //On enregistre les données du manager
+        //$this->outilsBox->enregistrer(); Directement dans outils
+
+        //On recherche ce qui doit être affiché
+        switch($jobController['affichage']['fonction'])
+        {
+            case 'redirectToRoute':
+                return $this->redirectToRoute($jobController['affichage']['route'], $jobController['affichage']['params']);
+            break;
+            case 'render':
+                return $this->render($jobController['affichage']['twig'], $jobController['affichage']['params']);
+            break;
+            default:
+                //Affichage d'une page d'erreur ou d'une redirection !
+                dd("Penser à mettre une page d'erreur !");
+            break;
+        }
     }
 
-    
+    protected function jobController()
+    {
+        //Passer l'id de la page mere et de la page actuelle à notre GestionService
+        if($this->outilsBox->getPagePageMere() != null)
+        {
+            $this->gestionService->setIdPageMere($this->outilsBox->getPagePageMere()->getId());
+        }
+        $this->gestionService->setIdPageActuelle($this->outilsBox->getPageIdActuel());
+
+        //Donner le gestionService à Twig
+        $this->outilsBox->addParamTwig('gestionService', $this->gestionService);
+        
+        //Enregistrer la page
+        // if($this->pageService != null)
+        // {
+        //     $this->pageService->Enregistrer();
+        // }
+
+        // Demande à Gazuka/outils de faire son Job !
+        return $this->jobControllerCreateByGazuka();
+    }
 }

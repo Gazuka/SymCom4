@@ -24,15 +24,17 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class AdminController extends SymCom4Controller
 {
     /**
+     * Page d'accueil de l'espace administration
+     * 
      * @Route("/admin", name="admin")
      */
     public function index()
     {
         //Prépare le Twig
-        $this->defineTwig('symcom4/admin/index.html.twig');
+        $this->outilsBox->defineTwig('symcom4/admin/index.html.twig');
         $this->initTwig();
-        //Affiche la page
-        return $this->Afficher();
+        //Laisser le controller faire son Job avec tout ça...
+        return $this->jobController();
     }
 
     /**********************************************************************/
@@ -50,48 +52,47 @@ class AdminController extends SymCom4Controller
         switch($categ)
         {
             case 'service':
-                $this->defineParamTwig('nav_titre', 'Les services');
-                //Création d'un lien vers la page Nouveau service
+                $this->outilsBox->addParamTwig('nav_titre', 'Les services');                
                 $this->addLienRapide('admin_structures_service_new', 'Ajouter un service', 'success', 'fas fa-plus');
             break;
             case 'association':
-                $this->defineParamTwig('nav_titre', 'Les associations');
+                $this->outilsBox->addParamTwig('nav_titre', 'Les associations');
                 //Création d'un lien vers la page Nouvelle association
                 $this->addLienRapide('admin_structures_association_new', 'Ajouter une association', 'success', 'fas fa-plus');
                 //Création d'un lien vers la page Nouveau type d'association
                 $this->addLienRapide('admin_structures_associations_type_new', "Ajouter un type d'association", 'success', 'fas fa-plus');
             break;
             case 'entreprise':
-                $this->defineParamTwig('nav_titre', 'Les entreprises');
+                $this->outilsBox->addParamTwig('nav_titre', 'Les entreprises');
                 //Création d'un lien vers la page Nouvelle association
                 $this->addLienRapide('admin_structures_entreprise_new', 'Ajouter une entreprise', 'success', 'fas fa-plus');
                 //Création d'un lien vers la page Nouveau type d'association
                 $this->addLienRapide('admin_structures_entreprises_type_new', "Ajouter un type d'entreprise", 'success', 'fas fa-plus');
             break;
             case 'fonction':
-                $this->defineParamTwig('nav_titre', 'Les fonctions');
+                $this->outilsBox->addParamTwig('nav_titre', 'Les fonctions');
                 //Création d'un lien vers la page Nouvelle fonction
                 //$this->addLienRapide('admin_fonction_new', 'Ajouter une fonction', 'success', 'fas fa-plus');
                 //Création d'un lien vers la page nouveau type de fonction
                 $this->addLienRapide('admin_fonctions_type_new', "Ajouter un type de fonction", 'success', 'fas fa-plus');
             break;
             case 'medias':
-                $this->defineParamTwig('nav_titre', 'Médias');
+                $this->outilsBox->addParamTwig('nav_titre', 'Médias');
                 //Création d'un lien vers la page Nouveau dossier
                 $this->addLienRapide('admin_medias_dossier_new', 'Ajouter un dossier', 'success', 'fas fa-plus');
                 $this->addLienRapide('admin_medias_new', 'Ajouter un média', 'success', 'fas fa-plus');
             break;
             case 'humain':
-                $this->defineParamTwig('nav_titre', 'Personnes');
+                $this->outilsBox->addParamTwig('nav_titre', 'Personnes');
                 //Création d'un lien vers la page Nouveau dossier
                 $this->addLienRapide('admin_humain_new', 'Ajouter une personne', 'success', 'fas fa-plus');
             break;
             default:
-                $this->defineParamTwig('nav_titre', '');
+                $this->outilsBox->addParamTwig('nav_titre', '');
             break;
         }
         //Transfert des liens rapides à Twig
-        $this->defineParamTwig('liensRapides', $this->liensRapides);
+        $this->outilsBox->addParamTwig('liensRapides', $this->liensRapides);
     }
 
     /**

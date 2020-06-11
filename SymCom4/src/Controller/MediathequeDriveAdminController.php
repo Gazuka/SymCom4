@@ -45,13 +45,13 @@ class MediathequeDriveAdminController extends SymCom4Controller
         
         
 
-        $this->defineTwig('mediatheque_drive_admin/index.html.twig');
-        $this->defineParamTwig('creneaux', $creneaux);
-        $this->defineParamTwig('jours', $this->jours);
-        $this->defineParamTwig('nbrCommandesATraiter', $this->nbrCommandesATraiter);
-        $this->defineParamTwig('anciensCreneaux', $anciensCreneaux);
+        $this->outilsBox->defineTwig('mediatheque_drive_admin/index.html.twig');
+        $this->outilsBox->addParamTwig('creneaux', $creneaux);
+        $this->outilsBox->addParamTwig('jours', $this->jours);
+        $this->outilsBox->addParamTwig('nbrCommandesATraiter', $this->nbrCommandesATraiter);
+        $this->outilsBox->addParamTwig('anciensCreneaux', $anciensCreneaux);
 
-        return $this->Afficher();
+        return $this->jobController();
     }
 
     /**
@@ -76,17 +76,17 @@ class MediathequeDriveAdminController extends SymCom4Controller
         $timestamp = strtotime("+ 0 minutes", $timestamp); //////////////////////////////////////////////////////+120 changé pour les tests (triche)
         $now->setTimestamp($timestamp);
         
-        $this->defineTwig('mediatheque_drive_admin/borne.html.twig');
-        $this->defineParamTwig('creneaux', $creneaux);
-        $this->defineParamTwig('now', $now);
-        $this->defineParamTwig('form', $form->createView());
+        $this->outilsBox->defineTwig('mediatheque_drive_admin/borne.html.twig');
+        $this->outilsBox->addParamTwig('creneaux', $creneaux);
+        $this->outilsBox->addParamTwig('now', $now);
+        $this->outilsBox->addParamTwig('form', $form->createView());
 
         $manager->flush();
-        $repoScanRetour = $this->outilsService->returnRepo(MediathequeDriveScanRetour::class);
+        $repoScanRetour = $this->outilsBox->returnRepo(MediathequeDriveScanRetour::class);
         $scansRetour = $repoScanRetour->findLastNonTraite();
-        $this->defineParamTwig('scansRetour', $scansRetour);
+        $this->outilsBox->addParamTwig('scansRetour', $scansRetour);
 
-        return $this->Afficher();
+        return $this->jobController();
     }
 
     /**
@@ -95,13 +95,13 @@ class MediathequeDriveAdminController extends SymCom4Controller
      */
     public function scanRetour(Request $request, EntityManagerInterface $manager)
     {
-        $repoScanRetour = $this->outilsService->returnRepo(MediathequeDriveScanRetour::class);
+        $repoScanRetour = $this->outilsBox->returnRepo(MediathequeDriveScanRetour::class);
         $scansRetour = $repoScanRetour->findNonTraite();
         
-        $this->defineTwig('mediatheque_drive_admin/scanretour.html.twig');
-        $this->defineParamTwig('scansRetour', $scansRetour);
+        $this->outilsBox->defineTwig('mediatheque_drive_admin/scanretour.html.twig');
+        $this->outilsBox->addParamTwig('scansRetour', $scansRetour);
         
-        return $this->Afficher();
+        return $this->jobController();
     }
 
     /**
@@ -110,13 +110,13 @@ class MediathequeDriveAdminController extends SymCom4Controller
      */
     public function scanRetourSupprimer($idscan, EntityManagerInterface $manager)
     {
-        $scan = $this->outilsService->findById(MediathequeDriveScanRetour::class, $idscan);
+        $scan = $this->outilsBox->findEntityById(MediathequeDriveScanRetour::class, $idscan);
         $scan->setTraite(true);
         
-        $this->defineRedirect('admin_mediatheque_drive_scansretour');
+        $this->outilsBox->defineRedirection('admin_mediatheque_drive_scansretour');
         $manager->persist($scan);
         $manager->flush();
-        return $this->Afficher();
+        return $this->jobController();
     }
 
     private function gestionScan($form, $manager)
@@ -126,8 +126,8 @@ class MediathequeDriveAdminController extends SymCom4Controller
         {
             case '019432':
                 $creneaux = $this->recupCreneauActuel();
-                $this->defineRedirect('admin_mediatheque_drive_creneau_finir_borne');
-                $this->defineParamRedirect(['idcreneau' => $creneaux[0]->getId()]);
+                $this->outilsBox->defineRedirection('admin_mediatheque_drive_creneau_finir_borne');
+                $this->outilsBox->addParamRedirect(['idcreneau' => $creneaux[0]->getId()]);
             break;
             case null:
                 //rien
@@ -161,22 +161,21 @@ class MediathequeDriveAdminController extends SymCom4Controller
      */
     public function commande($idcommande)
     {
-        $commande = $this->outilsService->findById(MediathequeDriveCommande::class, $idcommande);
+        $commande = $this->outilsBox->findEntityById(MediathequeDriveCommande::class, $idcommande);
         //$this->defineTwig('mediatheque_drive_admin/commande.html.twig');
-        $this->defineParamTwig('commande', $commande);
+        $this->outilsBox->addParamTwig('commande', $commande);
 
         //Formulaire pour le nombre de retour et les notes
         //Gérer le formulaire
-        $this->formulaireService->setElement($commande);
-        $this->formulaireService->setClassType(MediathequeDriveCommandeRetourType::class);
-        $this->formulaireService->setTwigFormulaire('mediatheque_drive_admin/commande.html.twig');
-        $this->formulaireService->setPageResultat('admin_mediatheque_drive_commande');
-        $this->formulaireService->setPageResultatConfig(['idcommande' => $idcommande]);
+        $this->outilsBox->setFormElement($commande);
+        $this->outilsBox->setFormClassType(MediathequeDriveCommandeRetourType::class);
+        $this->outilsBox->setFormTwigFormulaire('mediatheque_drive_admin/commande.html.twig');
+        $this->outilsBox->setFormPageResultat('admin_mediatheque_drive_commande');
+        $this->outilsBox->setFormPageResultatConfig(['idcommande' => $idcommande]);
         //$this->formulaireService->setActions($this, array(['name' => 'action_preinscriptionMembreFamille', 'params' => array('encoder' => $encoder, 'membre' => $membre)]));
-        $this->formulaireService->setTexteConfirmation("Les modification sont bien enregistrées.");
-        $this->createFormService();
+        $this->outilsBox->setFormTexteConfirmation("Les modification sont bien enregistrées.");
         
-        return $this->Afficher();
+        return $this->jobController();
     }
 
     /**
@@ -185,7 +184,7 @@ class MediathequeDriveAdminController extends SymCom4Controller
      */
     public function finirCreneau($idcreneau, EntityManagerInterface $manager)
     {
-        $creneau = $this->outilsService->findById(MediathequeDriveCreneau::class, $idcreneau);
+        $creneau = $this->outilsBox->findEntityById(MediathequeDriveCreneau::class, $idcreneau);
 
         //On passe le creneau et ses commandes en fini
         $commandes = $creneau->getCommandes();
@@ -200,9 +199,9 @@ class MediathequeDriveAdminController extends SymCom4Controller
         $manager->persist($creneau);
         $manager->flush();
 
-        $this->defineRedirect('admin_mediatheque_drive');
+        $this->outilsBox->defineRedirection('admin_mediatheque_drive');
         
-        return $this->Afficher();
+        return $this->jobController();
     }
     /**
      * @Route("/admin/mediatheque/drive/creneau/finir_borne/{idcreneau}", name="admin_mediatheque_drive_creneau_finir_borne")
@@ -210,7 +209,7 @@ class MediathequeDriveAdminController extends SymCom4Controller
      */
     public function finirCreneau2($idcreneau, EntityManagerInterface $manager)
     {
-        $creneau = $this->outilsService->findById(MediathequeDriveCreneau::class, $idcreneau);
+        $creneau = $this->outilsBox->findEntityById(MediathequeDriveCreneau::class, $idcreneau);
         
         //On passe le creneau et ses commandes en fini
         $commandes = $creneau->getCommandes();
@@ -225,9 +224,9 @@ class MediathequeDriveAdminController extends SymCom4Controller
         $manager->persist($creneau);
         $manager->flush();
 
-        $this->defineRedirect('admin_mediatheque_drive_borne');
+        $this->outilsBox->defineRedirection('admin_mediatheque_drive_borne');
         
-        return $this->Afficher();
+        return $this->jobController();
     }
 
     /**
@@ -236,15 +235,15 @@ class MediathequeDriveAdminController extends SymCom4Controller
      */
     public function commandePrepare($idcommande)
     {
-        $commande = $this->outilsService->findById(MediathequeDriveCommande::class, $idcommande);
+        $commande = $this->outilsBox->findEntityById(MediathequeDriveCommande::class, $idcommande);
         
         
         $etat = new MediathequeDriveCommandeEtat('PRET');
         $commande->addEtat($etat);
 
-        $this->defineRedirect('admin_mediatheque_drive');
+        $this->outilsBox->defineRedirection('admin_mediatheque_drive');
         
-        return $this->Afficher();
+        return $this->jobController();
     }
 
 
@@ -256,8 +255,8 @@ class MediathequeDriveAdminController extends SymCom4Controller
     {
         $mediathequeDriveService->creerCreneauxJournee($jour, $mois, $annee, $heure, $minute);
 
-        $this->defineRedirect('admin_mediatheque_drive');
-        return $this->Afficher();
+        $this->outilsBox->defineRedirection('admin_mediatheque_drive');
+        return $this->jobController();
     }
 
     private function recupCreneauxAujourdhui()
@@ -275,7 +274,7 @@ class MediathequeDriveAdminController extends SymCom4Controller
         $limit = "1000";
 
         //On récupère les creneaux à afficher
-        $creneaux = $this->outilsService->returnRepo(MediathequeDriveCreneau::class)->findAllinFutur($horaireDebut, $limit);
+        $creneaux = $this->outilsBox->returnRepo(MediathequeDriveCreneau::class)->findAllinFutur($horaireDebut, $limit);
 
         //On passe automatiquement les creneaux fermé / vide et passé en fini
         foreach($creneaux as $creneau)
@@ -319,7 +318,7 @@ class MediathequeDriveAdminController extends SymCom4Controller
         $limit = "3";
 
         //On récupère les creneaux à afficher
-        $creneaux = $this->outilsService->returnRepo(MediathequeDriveCreneau::class)->findAllinFutur($horaireDebut, $limit);
+        $creneaux = $this->outilsBox->returnRepo(MediathequeDriveCreneau::class)->findAllinFutur($horaireDebut, $limit);
 
         return $creneaux;
     }
@@ -339,7 +338,7 @@ class MediathequeDriveAdminController extends SymCom4Controller
         $limit = "1";
 
         //On récupère les creneaux à afficher
-        $creneaux = $this->outilsService->returnRepo(MediathequeDriveCreneau::class)->findAllinFutur($horaireDebut, $limit);
+        $creneaux = $this->outilsBox->returnRepo(MediathequeDriveCreneau::class)->findAllinFutur($horaireDebut, $limit);
 
         return $creneaux;
     }
@@ -353,7 +352,7 @@ class MediathequeDriveAdminController extends SymCom4Controller
         $timestamp = strtotime("+ 0 minutes", $timestamp);
         $now->setTimestamp($timestamp);
 
-        $creneaux = $this->outilsService->returnRepo(MediathequeDriveCreneau::class)->findNonFiniInPasse($now);
+        $creneaux = $this->outilsBox->returnRepo(MediathequeDriveCreneau::class)->findNonFiniInPasse($now);
         return $creneaux;
     }
 
