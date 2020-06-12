@@ -20,8 +20,8 @@
                     {% for membre in membres %}
                         <tr>
                             <th scope="row">{{ membre.numCarte }}</th>
-                            <td>{{ membre.utilisateur.humain.nom }}</td>
-                            <td>{{ membre.utilisateur.humain.prenom }}</td>
+                            <td>{{ membre.utilisateur.humain.nom | upper }}</td>
+                            <td>{{ membre.utilisateur.humain.prenom | title}}</td>
                             <td><a href='{{ path('mediatheque_drive_login', {'pseudo': membre.numCarte , 'pass': membre.utilisateur.humain.dateNaissance | date('dm')}) }} ' target="_blank">Réserver</a></td>
                         </tr>
                     {% endfor %}                
