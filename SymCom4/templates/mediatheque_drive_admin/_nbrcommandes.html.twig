@@ -1,0 +1,16 @@
+{% set nbrCommandes = 0 %}
+
+{% for creneau in creneaux %}
+    {% if creneau.commandes | length > 0 %}
+        {% for commande in creneau.commandes %}
+            {% if commande.etat.etat != 'FINI' %}
+                {% set nbrCommandes = nbrCommandes + 1 %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+{% endfor %}
+
+<div class="card bg-success p-4 mb-3">
+    <h2 class='text-center'><span class='text-white'>{{ nbrCommandes }} commandes</span></h2>
+</div>
+
