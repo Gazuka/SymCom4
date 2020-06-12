@@ -85,7 +85,7 @@ class AdminMediaController extends AdminController
         $this->outilsBox->setFormTwigFormulaire('symcom4/admin/medias/dossiers/new_dossier.html.twig');
         $this->outilsBox->setFormTexteConfirmation("Le dossier ### a bien été créé !");
         $this->outilsBox->setFormTexteConfirmationEval(["###" => '$this->element->getTitre();']);
-        $this->outilsBox->setFormActions($this, array(['name' => 'action_newDossier', 'params' => []]));
+        $this->outilsBox->setFormActions(array(['name' => 'action_newDossier', 'params' => []]));
         $this->addPageMereFormService();
 
         //Prépare le Twig
@@ -109,7 +109,7 @@ class AdminMediaController extends AdminController
         $this->outilsBox->setFormTwigFormulaire('symcom4/admin/medias/new_media.html.twig');
         $this->outilsBox->setFormTexteConfirmation("Le média ### a bien été importé !");
         $this->outilsBox->setFormTexteConfirmationEval(["###" => '$this->element->getNom();']);
-        $this->outilsBox->setFormActions($this, array(['name' => 'action_newMedia', 'params' => ['dossierImages' => $dossierImages]]));
+        $this->outilsBox->setFormActions(array(['name' => 'action_newMedia', 'params' => ['dossierImages' => $dossierImages]]));
         $this->addPageMereFormService();
 
         //Prépare le Twig

@@ -16,7 +16,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\HumainRepository")
  * @UniqueEntity(
- *      fields={"nom", "prenom", "dateNaissance"},
+ *      fields={"nom", "prenom", "dateNaissance", "clientMediatheque"},
  *      message="Cet personne est déjà identifiée sur le site."
  * )
  * 

@@ -6,6 +6,7 @@ namespace App\Controller;
 use App\Entity\Page;
 use Gazuka\Outils\Outils;
 use App\Service\PageService;
+use App\Service\ContactService;
 use App\Service\GestionService;
 use App\Controller\OutilsController;
 use Doctrine\ORM\EntityManagerInterface;
@@ -16,29 +17,23 @@ class SymCom4Controller extends OutilsController
 {
     //Instance de Gazuka/Outils
     protected $outilsBox;
+    
+    //protected $idPageActuelle;
 
-    protected $idPageActuelle;
-
-
-    // !!! A supprimer lorsque Gazuka/Outils sera totalement intégré au site
-    //protected $formulaireService;
-    //protected $outilsService;
-    // !!! ---
-
-
+    protected $contactService;
     protected $gestionService;
     protected $liensRapides = array();
     protected $request;    
 
-    public function __construct(EntityManagerInterface $manager, RequestStack $requestStack, PageService $pageService, GestionService $gestionService)
+    public function __construct(EntityManagerInterface $manager, RequestStack $requestStack, PageService $pageService, GestionService $gestionService, ContactService $contactService)
     {
         //Création d'une instance de Gazuka/Outils
         $this->outilsBox = new Outils($manager, $requestStack, Page::class);
 
         $this->pageService = $pageService;
-        //$this->formulaireService = $formulaireService; // !!! A supprimer lorsque Gazuka/Outils sera totalement intégré au site
         $this->gestionService = $gestionService;
-        //$this->outilsService = $outilsService; // !!! A supprimer lorsque Gazuka/Outils sera totalement intégré au site
+        $this->contactService = $contactService;
+        
     }
 
     protected function jobControllerCreateByGazuka()

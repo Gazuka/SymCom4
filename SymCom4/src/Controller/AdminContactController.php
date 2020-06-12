@@ -153,11 +153,10 @@ class AdminContactController extends AdminController
      * @Route("/admin/humain/addcontact/{idhumain}/{type}", name="admin_humain_addcontact")
      *
      * @param integer $idhumain
-     * @param integer $idpage
      * @param string $type
      * @return Response
      */
-    public function addcontactHumain(int $idhumain, int $idpage, string $type):Response
+    public function addcontactHumain(int $idhumain, string $type):Response
     {
         //Donner les arguments de la page en cours au PageService
         $this->outilsBox->setPageParams(compact('idhumain', 'type'));
@@ -166,11 +165,12 @@ class AdminContactController extends AdminController
         $humain = $this->outilsBox->findEntityById(Humain::class, $idhumain);
 
         //Gérer le formulaire
-        $this->outilsBox->setFormElement($contactService->getElementFormulaire($type));
-        $this->outilsBox->setFormClassType($contactService->getClassTypeFormulaire($type));
+        $this->outilsBox->setFormElement($this->contactService->getElementFormulaire($type));
+        $this->outilsBox->setFormClassType($this->contactService->getClassTypeFormulaire($type));
         $this->outilsBox->setFormTwigFormulaire('symcom4/admin/humains/add_contact.html.twig');
         $this->outilsBox->setFormTexteConfirmation("Le contact a bien été modifié !");
-        $this->outilsBox->setFormActions($this, array(['name' => 'action_addcontactHumain', 'params' => ['humain' => $humain]]));
+        $this->outilsBox->setFormPageResultat('admin_humains');
+        $this->outilsBox->setFormActions(array(['name' => 'action_addcontactHumain', 'params' => ['humain' => $humain]]));
 
         //Obtenir le titre et le menu rapide en fonction du type
         $this->initTwig('humain');
@@ -211,7 +211,7 @@ class AdminContactController extends AdminController
         $this->outilsBox->setFormTwigFormulaire('symcom4/admin/general/form_utilisateur.html.twig');
         $this->outilsBox->setFormTexteConfirmation("### a bien été créé !");
         $this->outilsBox->setFormTexteConfirmationEval(["###" => '$this->element->getPseudo();']);
-        $this->outilsBox->setFormActions($this, array(['name' => 'action_addutilisateurHumain', 'params' => ['humain' => $humain]]));
+        $this->outilsBox->setFormActions(array(['name' => 'action_addutilisateurHumain', 'params' => ['humain' => $humain]]));
 
         //Obtenir le titre et le menu rapide en fonction du type
         $this->initTwig('humain');
