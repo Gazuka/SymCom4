@@ -83,17 +83,34 @@ class MediathequeDriveController extends SymCom4Controller
     /**
      * Permet de se connecter
      * 
-     * @Route("/mediatheque/drive/login", name="mediatheque_drive_login")
+     * @Route("/mediatheque/drive/login/{pseudo}/{pass}", name="mediatheque_drive_login", defaults={"pseudo": null, "pass": null})
      */
-    public function login(AuthenticationUtils $utils)
+    public function login(AuthenticationUtils $utils, $pseudo, $pass)
     {
-        $error = $utils->getLastAuthenticationError();
-        $pseudo = $utils->getLastUsername();
+        if($pseudo != null && $pass != null)
+        {
+            //Login par un admin
+            $error = $utils->getLastAuthenticationError();
+            //$pseudo = $utils->getLastUsername();
 
-        return $this->render('mediatheque_drive/login.html.twig', [
-            'hasError' => $error !== null,
-            'pseudo' => $pseudo
-        ]);
+            return $this->render('mediatheque_drive/login.html.twig', [
+                'hasError' => $error !== null,
+                'pseudo' => $pseudo,
+                'pass' => $pass
+            ]);
+        }
+        else
+        {
+            //Login d'un utilisateur
+            $error = $utils->getLastAuthenticationError();
+            $pseudo = $utils->getLastUsername();
+
+            return $this->render('mediatheque_drive/login.html.twig', [
+                'hasError' => $error !== null,
+                'pseudo' => $pseudo
+            ]);
+        }
+        
     }
 
     /**

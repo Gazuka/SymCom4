@@ -1,0 +1,42 @@
+{% extends 'mediatheque_drive_admin/_base_admin_drive_mediatheque.html.twig' %}
+
+{% block content %}
+
+    <div class="card">
+        <div class="card-header text-center">
+                    
+        </div>
+        <div class="card-body">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Nom</th>
+                        <th scope="col">Prenom</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for membre in membres %}
+                        <tr>
+                            <th scope="row">{{ membre.numCarte }}</th>
+                            <td>{{ membre.utilisateur.humain.nom }}</td>
+                            <td>{{ membre.utilisateur.humain.prenom }}</td>
+                            <td><a href='{{ path('mediatheque_drive_login', {'pseudo': membre.numCarte , 'pass': membre.utilisateur.humain.dateNaissance | date('dm')}) }} ' target="_blank">Réserver</a></td>
+                        </tr>
+                    {% endfor %}                
+                </tbody>
+            </table>
+        </div>
+        <div class="card-footer">
+                
+        </div>
+    </div> 
+    
+{% endblock %}
+
+{% block outils %}
+    
+    
+
+{% endblock %}

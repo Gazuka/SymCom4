@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use DateTime;
+use App\Entity\MediathequeMembre;
 use App\Controller\SymCom4Controller;
 use App\Form\MediathequeDriveScanType;
 use App\Entity\MediathequeDriveCreneau;
@@ -50,6 +51,20 @@ class MediathequeDriveAdminController extends SymCom4Controller
         $this->outilsBox->addParamTwig('jours', $this->jours);
         $this->outilsBox->addParamTwig('nbrCommandesATraiter', $this->nbrCommandesATraiter);
         $this->outilsBox->addParamTwig('anciensCreneaux', $anciensCreneaux);
+
+        return $this->jobController();
+    }
+
+    /**
+     * @Route("/admin/mediatheque/drive/utilisateurs", name="admin_mediatheque_drive_utilisateurs")
+     * @IsGranted("ROLE_ADMIN_MEDIATHEQUE")
+     */
+    public function admin_utilisateurs()
+    {
+        $membres = $this->outilsBox->findEntityBy(MediathequeMembre::class, [], ['numCarte' => 'ASC']);
+
+        $this->outilsBox->defineTwig('mediatheque_drive_admin/utilisateurs.html.twig');
+        $this->outilsBox->addParamTwig('membres', $membres);
 
         return $this->jobController();
     }
