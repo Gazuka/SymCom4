@@ -61,7 +61,9 @@ class MediathequeDriveAdminController extends SymCom4Controller
      */
     public function admin_utilisateurs()
     {
-        $membres = $this->outilsBox->findEntityBy(MediathequeMembre::class, [], ['numCarte' => 'ASC']);
+        //$membres = $this->outilsBox->findEntityBy(MediathequeMembre::class, [], ['utilisateur.humain' => 'ASC']);
+
+        $membres = $this->outilsBox->returnRepo(MediathequeMembre::class)->findAllOrderName();
 
         $this->outilsBox->defineTwig('mediatheque_drive_admin/utilisateurs.html.twig');
         $this->outilsBox->addParamTwig('membres', $membres);

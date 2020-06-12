@@ -22,19 +22,18 @@ class MediathequeMembreRepository extends ServiceEntityRepository
     // /**
     //  * @return MediathequeMembre[] Returns an array of MediathequeMembre objects
     //  */
-    /*
-    public function findByExampleField($value)
+    
+    public function findAllOrderName()
     {
         return $this->createQueryBuilder('m')
-            ->andWhere('m.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('m.id', 'ASC')
-            ->setMaxResults(10)
+            ->join('m.utilisateur', 'u')
+            ->join('u.humain', 'h')
+            ->addOrderBy('h.nom', 'ASC')
+            ->addOrderBy('h.prenom', 'ASC')
             ->getQuery()
             ->getResult()
         ;
     }
-    */
 
     /*
     public function findOneBySomeField($value): ?MembreMediatheque
