@@ -1,37 +1,29 @@
-{% extends 'symcom4/admin/partials/_base_admin.html.twig' %}
+{% extends 'symcom4/admin/template_sb2/_base.html.twig' %}
 
-{% block title %}
-    {{ parent() }} - {{ association.structure.nom }}
+{% block titre %}
+    {{ parent() }} : {{ association.structure.nom }}
 {% endblock %}
 
 {% block content %}
 
-    <div class="row mb-3">
-        <div class="col-6">
+    <div class='row col-12'>
+        <div class='{{ taille(8, 12) }}'>
             {{ gestionService.gestionAssociationBase(association.structure) }}
-            {# {% include 'symcom4/admin/partials/_liensrapides.html.twig' %} #}
             {{ gestionService.gestionAssociationType(association.structure) }}
             {{ gestionService.gestionLien(association.structure) }}
+            {{ gestionService.gestionImage(association.structure) }}
         </div>
-        <div class="col-6">
-            {{ gestionService.gestionAdresses(association.structure) }}
-            {{ gestionService.gestionTelephones(association.structure) }}
-            {{ gestionService.gestionMails(association.structure) }}
+        <div class='{{ taille(4, 12) }}'>
+            {{ gestionService.gestionContacts(association.structure) }}
         </div>
     </div>
 
-    <div class="row mb-3">
-        <div class="col-12">
+    <div class='row col-12'>
+        <div class='{{ taille(12, 12) }}'>
             {{ gestionService.gestionStructureFonctions(association.structure) }}
         </div>
-    </div>
-
-    <!-- Affichage du bouton de suppression du service -->
-    <div id="delete_association" class="row">
-        <div class="card col-12">
-            <div class="card-body text-center">
-                {{ path('admin_structures_association_delete', {'idstructure': association.structure.id}) | SupprimerBouton(association.structure.nom) }}
-            </div>
+        <div class='{{ taille(12, 12) }}'>
+            <div class='text-center'>{{ path('admin_structures_association_delete', {'idstructure': association.structure.id}) | LienBtnWithIcon('Supprimer' ~ association.structure.nom, 'fa-trash', 'danger') }}</div>
         </div>
     </div>
 

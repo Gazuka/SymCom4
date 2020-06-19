@@ -1,55 +1,52 @@
-{% extends 'symcom4/admin/_text.html.twig' %}
-{% block all %}
-    <div id='gestion_structure_fonctions' class="card mb-3"> 
-        <div class="card-body">
-            <h4 class="card-title">Gestion des fonctions</h4>
-            {% if fonctions|length > 0 %}
-                {% for fonction in fonctions %}     
-                    <div class="card mb-3"> 
-                        <div class="card-body">
-                            <h5 class="card-title">
-                                <div class='row'>
-                                    <div class="col-8">
-                                        #{{ fonction.id }} - {{ fonction.typeFonction.titre }}
-                                        {% if fonction.secteur != null %}
-                                            - {{ fonction.secteur }}
-                                        {% endif %}
-                                    </div>
-                                    <div class="col-4">
-                                        {{ path('admin_structure_editfonction', {'idstructure': parent.id, 'idfonction': fonction.id, 'idpagemere': idPage }) | ModifierBouton }}
-                                        {{ path('admin_structure_deletefonction', {'idstructure': parent.id, 'idfonction': fonction.id, 'idpagemere': idPage}) | SupprimerBouton }}
-                                    </div>
-                                </div>
-                            </h5>
-                            <div id="fonction_humain" class="row mb-3">
-                                <div class="col-8">
-                                    {% if fonction.humain != null %}
-                                        {{ fonction.humain.nom }} {{ fonction.humain.prenom }} 
-                                    {% else %}
-                                        {{ path('admin_structure_fonction_addhumain', {'idstructure': parent.id, 'idfonction': fonction.id, 'idpagemere': idPage}) | AddHumain("Ajouter un responsable")}}
-                                    {% endif %}
-                                </div>
-                                <div class="col-4">
-                                    {% if fonction.humain != null %}
-                                        {{ path('admin_structure_fonction_deletehumain', {'idstructure': parent.id, 'idfonction': fonction.id, 'idpagemere': idPage}) | SupprimerBouton(fonction.humain.nom ~ ' ' ~ fonction.humain.prenom)}} 
-                                    {% endif %}
-                                </div>
-                            </div> 
-                            <div class="row">
-                                <div class="col-6">
-                                    {{ gestionService.gestionTelephones(fonction) }}
-                                </div>
-                                <div class="col-6">
-                                    {{ gestionService.gestionMails(fonction) }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
-            {% else %}
-                <p class="text-danger">Aucune fonction n'est renseignée</p>
-            {% endif %}
-            {{ path('admin_structure_addfonction', {'idstructure': parent.id, 'idpagemere': idPage}) | AddFonction("Ajouter une fonction")}}
-        </div>
-    </div>
-{% endblock %}
+{% embed 'symcom4/admin/template_sb2/elements/_card_with_menu.html.twig' with {'idPage': idPage, 'parent': parent, 'fonctions': fonctions, 'gestionService': gestionService} only %}
+    {% set titre = 'Fonctions' %}
+    {% if parent.lien != null %}
+        {% set actions =    {                                
+                            }
+        %}
+    {% else %}
+        {% set actions =    {
+                            }
+        %}
+    {% endif %}
+
+    {% block contenu %}
+
+        {% if fonctions | length > 0 %}
+            {% embed 'symcom4/admin/template_sb2/elements/_table_mini.html.twig' with {'idPage': idPage, 'parent': parent, 'fonctions': fonctions, 'gestionService': gestionService} only %}
+                {% set nomColonnes = ['Fonctions', 'Contacts', 'Actions'] %}
+                {% block tbody %}
+                    {% for fonction in fonctions %}
+                        <tr>
+                            <td>
+                                {{ fonction.typeFonction.titre }}
+                                {% if fonction.secteur != null %}
+                                    - {{ fonction.secteur }}
+                                {% endif %}
+                                <hr/>
+                                {% if fonction.humain != null %}
+                                    {{ fonction.humain.nom }} {{ fonction.humain.prenom }}
+                                    {{ path('admin_structure_fonction_deletehumain', {'idstructure': parent.id, 'idfonction': fonction.id, 'idpagemere': idPage}) | LienPetitBtnRond( 'Supprimer', 'fa-trash', 'danger')}}
+                                {% else %}
+                                    {{ path('admin_structure_fonction_addhumain', {'idstructure': parent.id, 'idfonction': fonction.id, 'idpagemere': idPage}) | LienBtnWithIcon("Définir qui occupe cette fonction", ['fa-plus', 'fa-restroom'], 'primary')}}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {{ gestionService.gestionTelephones(fonction) }}
+                                <hr/>
+                                {{ gestionService.gestionMails(fonction) }}
+                            </td>
+                            <td>
+                                {{ path('admin_structure_editfonction', {'idstructure': parent.id, 'idfonction': fonction.id, 'idpagemere': idPage }) | LienBtnRond('Editer', 'fa-edit', 'primary') }}
+                                {{ path('admin_structure_deletefonction', {'idstructure': parent.id, 'idfonction': fonction.id, 'idpagemere': idPage}) | LienBtnRond('Supprimer', 'fa-trash', 'danger') }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% endblock %}
+            {% endembed %}
+        {% endif %}
+        
+        <div class='text-center'>{{ path('admin_structure_addfonction', {'idstructure': parent.id, 'idpagemere': idPage}) | LienBtnWithIcon("Ajouter une nouvelle fonction", ['fa-plus', 'fa-chair'], 'primary')}}
+
+    {% endblock %}
+{% endembed %}

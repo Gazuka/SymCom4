@@ -1,14 +1,20 @@
-{% extends 'symcom4/admin/partials/_base_admin.html.twig' %}
+{% extends 'symcom4/admin/template_sb2/_base.html.twig' %}
 
 {% block content %}
-    <div class="card">
-        <div class="card-body">
-            <h1 class="h4">{{ text_form_add_lien }} {{ structure.nom }}</h1>
-            <p>{{ text_complete_form }}</p>
-            {{ form_start(form) }}
+
+    {% embed 'symcom4/admin/template_sb2/elements/_card_with_menu.html.twig' with {'form': form, 'structure': structure} only %}
+        
+        {% set titre = 'Ajouter un lien à ' ~ structure.nom %}
+        
+        {% set actions = null %}
+
+        {% block contenu %}
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
             {{ form_row(form.url) }}
-            {{ text_enregistrer | BtnSubmit }}
+            {{ 'Enregistrer' | BtnSubmitWithIcon('fa-check', 'success') }}
             {{ form_end(form) }}
-        </div>
-    </div>
+        {% endblock %}
+        
+    {% endembed %}
+
 {% endblock %}

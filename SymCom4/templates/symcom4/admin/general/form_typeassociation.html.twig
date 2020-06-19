@@ -1,14 +1,20 @@
-{% extends 'symcom4/admin/partials/_base_admin.html.twig' %}
+{% extends 'symcom4/admin/template_sb2/_base.html.twig' %}
 
 {% block content %}
-    <div class="card">
-        <div class="card-body">
-            <h1 class="h4">Création d'un nouveau type association</h1>
-            <p>Veuillez compléter le formulaire ci-dessous :</p>
-            {{ form_start(form) }}
-            {{ form_row(form.nom) }}
-            {{ text_enregistrer | BtnSubmit }}
+
+    {% embed 'symcom4/admin/template_sb2/elements/_card_with_menu.html.twig' with {'form': form} only %}
+        
+        {% set titre = "Création d'un nouveau type association" %}
+        
+        {% set actions = null %}
+
+        {% block contenu %}
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+            {{ form_row(form.parent) }}
+            {{ form_row(form.nom) }}            
+            {{ 'Enregistrer' | BtnSubmitWithIcon('fa-check', 'success') }}
             {{ form_end(form) }}
-        </div>
-    </div>
+        {% endblock %}
+        
+    {% endembed %}
 {% endblock %}

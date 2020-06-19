@@ -1,0 +1,29 @@
+{% extends 'symcom4/admin/template_sb2/_base.html.twig' %}
+
+{% block content %}
+
+    {% embed 'symcom4/admin/template_sb2/elements/_card_with_menu.html.twig' with {'structure': structure, 'medias': medias, 'dossier': dossier, 'idpagemere': idpagemere} only %}
+        
+        {% set titre = 'Choisir une image pour ' ~ structure.nom %}
+        
+        {% set actions = null %}
+
+        {% block contenu %}
+            <div class='row'>
+                {% for media in medias %}
+                    {% if media.image != null %}
+                        <div class='text-center col-md-2 col-sm-12'>
+                            <a href='{{ path('admin_structure_addimage', {'idstructure': structure.id ,'idpagemere': idpagemere, 'idimage': media.image.id}) }}'>
+                                {{ media.titre }}
+                                <br/>
+                                <img src='{{ asset(media.image.media.recupAsset()|imagine_filter('reduc')) }}' class='img-thumbnail' />            
+                            </a>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endblock %}
+        
+    {% endembed %}
+
+{% endblock %}

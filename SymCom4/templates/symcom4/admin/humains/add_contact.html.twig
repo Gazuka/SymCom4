@@ -1,29 +1,33 @@
-{% extends 'symcom4/admin/partials/_base_admin.html.twig' %}
+{% extends 'symcom4/admin/template_sb2/_base.html.twig' %}
 
 {% block content %}
-    <div class="card">
-        <div class="card-body">
-            <h1 class="h4">Ajout d'un contact à {{ humain.nom }} {{ humain.prenom }}</h1>
-            <p>Veuillez compléter le formulaire ci-dessous :</p>
-            {{ form_start(form) }}
-                {% if type == 'telephone' %}
-                    {{ form_row(form.numero) }}
-                {% endif %}
-                {% if type == 'mail' %}
-                    {{ form_row(form.adresse) }}
-                {% endif %}
-                {% if type == 'adresse' %}
-                    {{ form_row(form.numero) }}
-                    {{ form_row(form.rue) }}
-                    {{ form_row(form.complement) }}
-                    {{ form_row(form.codePostal) }}
-                    {{ form_row(form.ville) }}  
-                {% endif %}
+
+    {% embed 'symcom4/admin/template_sb2/elements/_card_with_menu.html.twig' with {'form': form, 'type': type} only %}
+        
+        {% set titre = "Ajout d'un contact à " ~ humain.nom ~ ' ' ~ humain.prenom %}
+        
+        {% set actions = null %}
+
+        {% block contenu %}
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+            {% if type == 'telephone' %}
+                {{ form_row(form.numero) }}
+            {% endif %}
+            {% if type == 'mail' %}
+                {{ form_row(form.adresse) }}
+            {% endif %}
+            {% if type == 'adresse' %}
+                {{ form_row(form.numero) }}
+                {{ form_row(form.rue) }}
+                {{ form_row(form.complement) }}
+                {{ form_row(form.codePostal) }}
+                {{ form_row(form.ville) }}  
+            {% endif %}
             {{ form_widget(form.contact) }}
-            <button type="submit" class="btn btn-success">
-                <i class="fas fa-check"></i> Enregistrer
-            </button>
+            {{ 'Enregistrer' | BtnSubmitWithIcon('fa-check', 'success') }}
             {{ form_end(form) }}
-        </div>
-    </div>
+        {% endblock %}
+        
+    {% endembed %}
+
 {% endblock %}

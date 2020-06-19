@@ -13,6 +13,7 @@ class NewDossierType extends AbstractType
     {
         $builder
             ->add('titre')
+            ->add('cote')
             ->add('descriptif')
             ->add('parent')
         ;

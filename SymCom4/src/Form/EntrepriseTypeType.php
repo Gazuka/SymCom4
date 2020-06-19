@@ -3,8 +3,10 @@
 namespace App\Form;
 
 use App\Entity\Entreprise;
+use App\Entity\TypeEntreprise;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class EntrepriseTypeType extends AbstractType
@@ -14,7 +16,7 @@ class EntrepriseTypeType extends AbstractType
         $builder
             ->add('types', EntityType::class,
                 [
-                    'class' => TypeAssociation::class,
+                    'class' => TypeEntreprise::class,
                     'expanded' => true,
                     'multiple' => true
                 ]

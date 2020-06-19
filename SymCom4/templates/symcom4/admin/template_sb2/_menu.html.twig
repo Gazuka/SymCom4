@@ -1,0 +1,163 @@
+<!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+      <!-- Sidebar - Brand -->
+      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+        <div class="sidebar-brand-icon rotate-n-15">
+          <i class="fas fa-laugh-wink"></i>
+        </div>
+        <div class="sidebar-brand-text mx-3">Admin</div>
+      </a>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider my-0">
+
+      <!-- Nav Item - Dashboard -->
+      <li class="nav-item active">
+        <a class="nav-link" href="index.html">
+          <i class="fas fa-fw fa-tachometer-alt"></i>
+          <span>Tableau de bord</span></a>
+      </li>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider">
+
+      <!-- Heading -->
+      <div class="sidebar-heading">
+        Structures
+      </div>
+
+      <!-- Nav Item - Pages Collapse Menu -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseServices" aria-expanded="true" aria-controls="collapseServices">
+          <i class="fas fa-fw fa-cog"></i>
+          <span>Services</span>
+        </a>
+        <div id="collapseServices" class="collapse" aria-labelledby="headingServices" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Les services :</h6>
+            <a class="collapse-item" href="{{ path('admin_structures_services') }}"><i class="fas fa-eye"></i> Voir les services</a>            
+          </div>
+        </div>
+      </li>
+
+      <!-- Nav Item - Pages Collapse Menu -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAssociations" aria-expanded="true" aria-controls="collapseAssociations">
+          <i class="fas fa-fw fa-cog"></i>
+          <span>Associations</span>
+        </a>
+        <div id="collapseAssociations" class="collapse" aria-labelledby="headingAssociations" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Les associations :</h6>
+            <a class="collapse-item" href="{{ path('admin_structures_associations') }}"><i class="fas fa-eye"></i> Voir les associations</a>            
+          </div>
+        </div>
+      </li>
+
+      <!-- Nav Item - Pages Collapse Menu -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseEntreprises" aria-expanded="true" aria-controls="collapseEntreprises">
+          <i class="fas fa-fw fa-cog"></i>
+          <span>Entreprises</span>
+        </a>
+        <div id="collapseEntreprises" class="collapse" aria-labelledby="headingEntreprises" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Les entreprises :</h6>
+            <a class="collapse-item" href="{{ path('admin_structures_entreprises') }}"><i class="fas fa-eye"></i> Voir les entreprises</a>            
+          </div>
+        </div>
+      </li>
+
+      <!-- Nav Item - Utilities Collapse Menu -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFonctions" aria-expanded="true" aria-controls="collapseFonctions">
+          <i class="fas fa-fw fa-wrench"></i>
+          <span>Fonctions</span>
+        </a>
+        <div id="collapseFonctions" class="collapse" aria-labelledby="headingFonctions" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Fonctions :</h6>
+            <a class="collapse-item" href="{{ path('admin_fonctions') }}">Voir les fonctions</a>            
+          </div>
+        </div>
+      </li>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider">
+
+      <!-- Heading -->
+      <div class="sidebar-heading">
+        Médias
+      </div>
+
+      <!-- Nav Item - Tables -->
+      <li class="nav-item">
+        <a class="nav-link" href="{{ path('admin_medias') }}">
+          <i class="fas fa-eye fa-table"></i>
+          <span>Voir les médias</span></a>
+      </li>
+
+      <!-- Nav Item - Tables -->
+      <li class="nav-item">
+        <a class="nav-link" href="{{ path('admin_medias_dossiers') }}">
+          <i class="fas fa-eye fa-table"></i>
+          <span>Voir les dossiers</span></a>
+      </li>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider">
+
+      <!-- Heading -->
+      <div class="sidebar-heading">
+        Personnes
+      </div>
+
+      <!-- Nav Item - Tables -->
+      <li class="nav-item">
+        <a class="nav-link" href="{{ path('admin_humains') }}">
+          <i class="fas fa-eye fa-table"></i>
+          <span>Voir les personnes</span></a>
+      </li>
+
+      <!-- Nav Item - Tables -->
+      <li class="nav-item">
+        <a class="nav-link" href="{{ path('admin_utilisateurs') }}">
+          <i class="fas fa-eye fa-table"></i>
+          <span>Voir les utilisateurs</span></a>
+      </li>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider">
+
+      <!-- Heading -->
+      <div class="sidebar-heading">
+        Configuration
+      </div>
+
+      <!-- Nav Item - Utilities Collapse Menu -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTypes" aria-expanded="true" aria-controls="collapseTypes">
+          <i class="fas fa-fw fa-wrench"></i>
+          <span>Types</span>
+        </a>
+        <div id="collapseTypes" class="collapse" aria-labelledby="headingTypes" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Types :</h6>
+            <a class="collapse-item" href="{{ path('admin_structures_associations_types') }}">Types d'associations</a>
+            <a class="collapse-item" href="{{ path('admin_structures_entreprises_types') }}">Types d'entreprises</a>
+            <a class="collapse-item" href="{{ path('admin_fonctions_types') }}">Types de fonctions</a>
+          </div>
+        </div>
+      </li>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider d-none d-md-block">
+
+      <!-- Sidebar Toggler (Sidebar) -->
+      <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+      </div>
+
+    </ul>
+    <!-- End of Sidebar -->

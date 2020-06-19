@@ -1,18 +1,23 @@
-{% extends 'symcom4/admin/partials/_base_admin.html.twig' %}
+{% extends 'symcom4/admin/template_sb2/_base.html.twig' %}
 
 {% block content %}
-    <div class="card">
-        <div class="card-body">
-            {% if fonction is defined %}
-                <h1 class="h4">Edition du responsable de la fonction : {{ fonction.typeFonction.titre }}</h1>
-            {% else %}
-                <h1 class="h4">Ajout d'un responsable à la fonction</h1>
-            {% endif %}
-            <p>{{ text_complete_form }}</p>
-            {{ form_start(form) }}
+
+    {% embed 'symcom4/admin/template_sb2/elements/_card_with_menu.html.twig' with {'fonction': fonction, 'form': form} only %}
+        {% if fonction is defined %}
+            {% set titre = "Edition du responsable de la fonction : " ~ fonction.typeFonction.titre %}
+        {% else %}
+            {% set titre = "Ajout d'un responsable à la fonction" %}
+        {% endif %}
+
+        {% set actions = null %}
+
+        {% block contenu %}
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
             {{ form_row(form.humain) }}
-            {{ text_enregistrer | BtnSubmit }}
+            {{ 'Enregistrer' | BtnSubmitWithIcon('fa-check', 'success') }}
             {{ form_end(form) }}
-        </div>
-    </div>
+        {% endblock %}
+        
+    {% endembed %}
+
 {% endblock %}

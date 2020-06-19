@@ -59,7 +59,6 @@ class Media
 
     public function __construct()
     {
-        $this->images = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -156,10 +155,10 @@ class Media
         return $this;
     }
 
-    public function upload($dossiers)
+    public function upload($dossier)
     {
         $fichier = $this->getNom();
-
+        $this->setDossier($dossier);
         $this->nom = strtolower($fichier->getClientOriginalName());
         $this->extension = $fichier->getClientOriginalExtension();
         $now = new DateTime(); 
@@ -178,7 +177,7 @@ class Media
                 $image = new Image();
                 $image->setDescriptif("...");
                 $this->setImage($image);
-                $this->setDossier($dossiers['dossierImages']);
+                $this->setDossier($dossier);
                 
             break;
             case 'pdf':
@@ -209,6 +208,9 @@ class Media
         //On défini le nouveau dossier
         $this->setDossier($dossier);
         //On copy le fichier puis on le supprime
+        // dump($fichier);
+        // dump("medias/".$this->dossier->getChemin().$this->nom);
+        // dd('oups');
         $filesystem->copy($fichier, "medias/".$this->dossier->getChemin().$this->nom);
         $filesystem->remove($fichier, $dossierActuel);
     }

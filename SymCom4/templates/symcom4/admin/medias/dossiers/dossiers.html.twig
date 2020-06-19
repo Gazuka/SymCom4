@@ -1,58 +1,44 @@
-{% extends 'symcom4/admin/partials/_base_admin.html.twig' %}
-
-{% block title %}
-    {{ parent() }} - Médias
-{% endblock %}
+{% extends 'symcom4/admin/template_sb2/_base.html.twig' %}
 
 {% block content %}
 
-<div class="row mb-3">
-    <div class="col-4">
-        <div class="card">
-            <div class="card-body">
-                Nombre de dossiers : <strong>{{ dossiers | length }}</strong>
-            </div>
-        </div>
-    </div>
-    <div class="col-8">
-        <div class="card">
-            <div class="card-body">
-                {% include 'symcom4/admin/partials/_liensrapides.html.twig' %}  
-            </div>
-        </div>
-    </div>
-</div>
+    {% embed 'symcom4/admin/template_sb2/elements/_card_info.html.twig' with {'dossiers': dossiers} only %}
+        {% set taille = taille(3, 6) %}
+        {% set couleur = 'primary' %}
+        {% set icone = 'fa-home' %}
+        {% set titre = "Nombre de dossiers" %}
+        {% block valeur %}
+            {{ dossiers|length }}
+        {% endblock %}
+    {% endembed %}
 
-<div class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-                
-                <table class="table">
-                    <thead class="thead-light">
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Titre</th>
-                            <th scope="col">Descriptif</th>
-                            <th scope="col">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for dossier in dossiers %}
-                            <tr>
-                                <td>{{ dossier.id }}</td>
-                                <td>{{ dossier.titre }}</td>
-                                <td>{{ dossier.descriptif }}</td>
-                                <td>
-                                    {#<a class="btn btn-primary" href="{{ path('admin_association_edit', {'id': dossier.id}) }}"><i class="fas fa-edit"></i> Modifier</a>
-                                    <a class="btn btn-danger" href="{{ path('admin_association_delete', {'id': dossier.id}) }}"><i class="fas fa-trash"></i> Supprimer</a>#}
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
+    {% embed 'symcom4/admin/template_sb2/elements/_card_info.html.twig' with {'liensRapides': liensRapides} only %}
+        {% set taille = taille(9, 12) %}
+        {% set couleur = 'success' %}
+        {% set icone = 'fa-home' %}
+        {% set titre = "Actions rapides" %}
+        {% block valeur %}
+            {% include 'symcom4/admin/partials/_liensrapides.html.twig' %}
+        {% endblock %}        
+    {% endembed %}
+
+    {% embed 'symcom4/admin/template_sb2/elements/_table.html.twig' with {'dossiers': dossiers} only %}
+        {% set titre = 'Les dossiers' %}
+        {% set nomColonnes = ['#', 'Titre', 'Cote', 'Chemin', 'Descriptif', 'Actions'] %}
+        {% block tbody %}
+            {% for dossier in dossiers %}
+                <tr>
+                    <td>{{ dossier.id }}</td>
+                    <td>{{ dossier.titre }}</td>
+                    <td>{{ dossier.cote }}</td>
+                    <td>{{ dossier.chemin }}</td>
+                    <td>{{ dossier.descriptif }}</td>
+                    <td>
+                        &nbsp;
+                    </td>
+                </tr>
+            {% endfor %}
+        {% endblock %}
+    {% endembed %}
+
 {% endblock %}

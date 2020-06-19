@@ -1,37 +1,29 @@
-{% extends 'symcom4/admin/partials/_base_admin.html.twig' %}
+{% extends 'symcom4/admin/template_sb2/_base.html.twig' %}
 
-{% block title %}
-    {{ parent() }} - {{ entreprise.structure.nom }}
+{% block titre %}
+    {{ parent() }} : {{ entreprise.structure.nom }}
 {% endblock %}
 
 {% block content %}
 
-    <div class="row mb-3">
-        <div class="col-6">
-            {{ gestionService.gestionEntrepriseBase }}
-            {# {% include 'symcom4/admin/partials/_liensrapides.html.twig' %} #}
-            {{ gestionService.gestionEntrepriseType }}
-            {{ gestionService.gestionLien }}
+    <div class='row col-12'>
+        <div class='{{ taille(8, 12) }}'>
+            {{ gestionService.gestionEntrepriseBase(entreprise.structure) }}
+            {{ gestionService.gestionEntrepriseType(entreprise.structure) }}
+            {{ gestionService.gestionLien(entreprise.structure) }}
+            {{ gestionService.gestionImage(entreprise.structure) }}
         </div>
-        <div class="col-6">
-            {{ gestionService.gestionAdresses }}
-            {{ gestionService.gestionTelephones }}
-            {{ gestionService.gestionMails }}
-        </div>
-    </div>
-    
-    <div class="row mb-3">
-        <div class="col-12">
-            {{ gestionService.gestionStructureFonctions }}
+        <div class='{{ taille(4, 12) }}'>
+            {{ gestionService.gestionContacts(entreprise.structure) }}
         </div>
     </div>
 
-    <!-- Affichage du bouton de suppression du entreprise -->
-    <div  id="delete_entreprise" class="row">
-        <div class="card col-12">
-            <div class="card-body text-center">
-                {{ path('admin_structures_entreprise_delete', {'idstructure': entreprise.structure.id}) | SupprimerBouton(entreprise.structure.nom) }}
-            </div>
+    <div class='row col-12'>
+        <div class='{{ taille(12, 12) }}'>
+            {{ gestionService.gestionStructureFonctions(entreprise.structure) }}
+        </div>
+        <div class='{{ taille(12, 12) }}'>
+            <div class='text-center'>{{ path('admin_structures_entreprise_delete', {'idstructure': entreprise.structure.id}) | LienBtnWithIcon('Supprimer' ~ entreprise.structure.nom, 'fa-trash', 'danger') }}</div>
         </div>
     </div>
 

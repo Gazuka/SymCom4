@@ -5,33 +5,37 @@ namespace App\Controller;
 use App\Entity\Lien;
 use App\Entity\Page;
 
+use App\Entity\Image;
+use App\Entity\Media;
 use App\Entity\Contact;
+use App\Entity\Dossier;
 use App\Entity\Service;
 use App\Entity\Fonction;
 use App\Entity\Structure;
 use App\Entity\Entreprise;
 use App\Form\FonctionType;
 use App\Form\LienBaseType;
+
 use App\Entity\Association;
 use App\Entity\TypeFonction;
 use App\Service\PageService;
-
 use App\Form\ServiceBaseType;
+use App\Service\MediaService;
 use App\Entity\TypeEntreprise;
 use App\Form\FonctionBaseType;
 use App\Form\TypeFonctionType;
 use App\Entity\TypeAssociation;
 use App\Service\ContactService;
 use App\Service\GestionService;
+
 use App\Form\EntrepriseBaseType;
 use App\Form\EntrepriseTypeType;
 use App\Form\FonctionHumainType;
-use App\Form\TypeEntrepriseType;
 
+use App\Form\TypeEntrepriseType;
 use App\Form\AssociationBaseType;
 use App\Form\AssociationTypeType;
 use App\Form\TypeAssociationType;
-
 use App\Controller\AdminController;
 use App\Controller\SymCom4Controller;
 use Doctrine\ORM\EntityManagerInterface;
@@ -167,6 +171,168 @@ class AdminStructureController extends AdminController
 
         //Afficher la redirection
         return $this->jobController();
+    }
+
+    /*========================================================================================*/
+    /*========================================================================================*/
+    /*========================================================================================*/
+    /** STRUCTURES - CHOISIR, AJOUTER, MODIFIER et SUPPRIMER une IMAGE ************************/
+
+    /**
+     * Ajouter un lien à une structure
+     *
+     * @Route("/admin/structure/choisirimage/{idstructure}/{idpagemere}", name="admin_structure_choisirimage")
+     * 
+     */
+    public function choisirImageStructure(int $idstructure, int $idpagemere):Response
+    {
+        //Donner les arguments de la page en cours au PageService
+        $this->outilsBox->setPageParams(compact('idstructure', 'idpagemere'));
+
+        //Récupérer l'objet Structure
+        $structure = $this->outilsBox->findEntityById(Structure::class, $idstructure);
+        
+        //Obtenir le titre et le menu rapide en fonction du type
+        $this->initTwig($structure->getType());
+
+        //Définir le twig a utiliser
+        $this->outilsBox->defineTwig('symcom4/admin/general/form_structure_choix_image.html.twig');
+
+        //Choisir les images disponibles
+        $dossier = $this->outilsBox->findEntityBy(Dossier::class, ['titre' => 'upload_image']);
+        $dossier = $dossier[0];
+        $medias = $this->outilsBox->findEntityBy(Media::class, ['dossier' => $dossier]);
+        
+        //Fournir les paramètres requis au Twig
+        $this->outilsBox->addParamTwig('dossier', 'upload_image');
+        $this->outilsBox->addParamTwig('structure', $structure);
+        $this->outilsBox->addParamTwig('medias', $medias);
+        $this->outilsBox->addParamTwig('idpagemere', $idpagemere);
+        
+        //Laisser le controller faire son Job avec tout ça...
+        return $this->jobController();
+    }
+
+    /**
+     * Ajouter un lien à une structure
+     *
+     * @Route("/admin/structure/addimage/{idstructure}/{idpagemere}/{idimage}", name="admin_structure_addimage")
+     * 
+     */
+    public function addImageStructure(int $idstructure, int $idpagemere, int $idimage):Response
+    {
+        //Récupérer l'objet Structure et l'objet media
+        $structure = $this->outilsBox->findEntityById(Structure::class, $idstructure);
+        $image = $this->outilsBox->findEntityById(Image::class, $idimage);
+
+        //On récupère le dossier du type de structure s'il existe sinon on le crée
+        $dossier = $this->mediaService->ouvrirDossier(null, 'images');
+        $dossier = $this->mediaService->ouvrirDossier($dossier, 'structures');
+        $dossier = $this->mediaService->ouvrirDossier($dossier, $structure->getType().'s');
+        $dossier = $this->mediaService->ouvrirDossier($dossier, $structure->getSlug());
+                
+        // On associe l'image à la structure
+        $structure->setImage($image);
+        $this->outilsBox->persist($structure);
+
+        //On déplace l'image
+        $image->getMedia()->deplacer($dossier);
+        $this->outilsBox->persist($image);
+
+        //On redirige vers la structure
+        switch($structure->getType())
+        {
+            case 'service':
+                $this->outilsBox->defineRedirection('admin_structures_service');        
+                $this->outilsBox->addParamRedirect('idservice', $structure->getService()->getId());
+            break;
+            case 'association':
+                $this->outilsBox->defineRedirection('admin_structures_association');        
+                $this->outilsBox->addParamRedirect('idassociation', $structure->getAssociation()->getId());
+            break;
+            case 'entreprise':
+                $this->outilsBox->defineRedirection('admin_structures_entreprise');        
+                $this->outilsBox->addParamRedirect('identreprise', $structure->getEntreprise()->getId());
+            break;
+
+        }
+        
+        
+
+        //Laisser le controller faire son Job avec tout ça...
+        return $this->jobController();
+    }
+
+    /**
+     * Modifier le lien d'une structure
+     *
+     * @Route("/admin/structures/lien/edit/{idstructure}/{idimage}/{idpagemere}", name="admin_structure_editimage")
+     * 
+     */
+    public function editImageStructure(int $idstructure, int $idlien, int $idpagemere):Response
+    {
+        // //Donner les arguments de la page en cours au PageService
+        // $this->outilsBox->setPageParams(compact('idstructure', 'idlien', 'idpagemere'));
+
+        // //Récupérer l'objet Structure et l'objet lien
+        // $structure = $this->outilsBox->findEntityById(Structure::class, $idstructure);
+        // $lien = $this->outilsBox->findEntityById(Lien::class, $idlien);
+
+        // //Gérer le formulaire
+        // $this->outilsBox->setFormElement($lien);
+        // $this->outilsBox->setFormClassType(LienBaseType::class);
+        // $this->outilsBox->setFormTwigFormulaire('symcom4/admin/general/form_lien.html.twig');
+        // $this->outilsBox->setFormTexteConfirmation("Le lien ### a bien été modifié !");
+        // $this->outilsBox->setFormTexteConfirmationEval(["###" => '$this->element->getLabel();']);
+        // $this->outilsBox->setFormActions(array(['name' => 'action_addlienStructure', 'params' => ['structure' => $structure]]));
+        
+        
+        // //Obtenir le titre et le menu rapide en fonction du type
+        // $this->initTwig($structure->getType());
+
+        // //Fournir les paramètres requis au Twig
+        // $this->outilsBox->addParamTwig('structure', $structure);
+
+        // //Laisser le controller faire son Job avec tout ça...
+        // return $this->jobController();
+    }
+
+    /**
+     * Supprimer le lien d'une structure
+     *
+     * @Route("/admin/structures/lien/delete/{idstructure}/{idimage}/{idpagemere}", name="admin_structure_deleteimage")
+     * 
+     */
+    public function deleteImageStructure(int $idstructure, int $idlien, int $idpagemere):Response
+    {
+        // //Donner les arguments de la page en cours au PageService
+        // $this->outilsBox->setPageParams(compact('idstructure', 'idlien', 'idpagemere'));
+
+        // //Récupérer l'objet Structure et l'objet page
+        // $structure = $this->outilsBox->findEntityById(Structure::class, $idstructure);
+        // $pageMere = $this->outilsBox->findEntityById(Page::class, $idpagemere);
+
+        // //Supprimer le lien de la structure
+        // $structure->setLien(null);
+
+        // //Supprimer le lien de la BDD
+        // $this->outilsBox->deleteEntityById(Lien::class, $idlien);
+        
+        // //Afficher un message de validation
+        // $this->addFlash('success', 'Le lien a bien été supprimé.');
+
+        // //Obtenir le titre et le menu rapide en fonction du type
+        // $this->initTwig($structure->getType());
+
+        // //Fournir les paramètres requis au Twig
+        // $this->outilsBox->addParamTwig('structure', $structure);
+
+        // //Définir la page de redirection
+        // $this->outilsBox->defineRedirection($pageMere->getNomChemin());
+        // $this->outilsBox->addParamsRedirect($pageMere->getParams());
+
+        // //Afficher la redirection
+        // return $this->jobController();
     }
 
     /*========================================================================================*/

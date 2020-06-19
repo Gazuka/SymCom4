@@ -69,19 +69,9 @@ class ContactsExtension extends AbstractExtension
         return $html;
     }
 
-    public function afficheAddLien($url, $texte = "")
-    {
-        $html = "<a id='btn_add_lien' class='btn btn-success' href='".$url."'><i class='fas fa-plus'></i> <i class='fas fa-globe-americas'></i> ".$texte."</a>";
-        return $html;
-    }
-    public function afficheAddFonction($url, $texte = "")
-    {
-        $html = "<a class='btn btn-success' href='".$url."'><i class='fas fa-plus'></i> <i class='fas fa-chair'></i> ".$texte."</a>";
-        return $html;
-    }
-    public function afficheAddHumain($url, $texte = "")
-    {
-        $html = "<a class='btn btn-success' href='".$url."'><i class='fas fa-plus'></i> <i class='fas fa-restroom'></i> ".$texte."</a>";
-        return $html;
-    }
+    // public function afficheAddLien($url, $texte = "")
+    // {
+    //     $html = "<a id='btn_add_lien' class='btn btn-success' href='".$url."'><i class='fas fa-plus'></i> <i class='fas fa-globe-americas'></i> ".$texte."</a>";
+    //     return $html;
+    // }
 }

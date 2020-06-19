@@ -1,10 +1,32 @@
-{% extends 'symcom4/admin/partials/_base_admin.html.twig' %}
+{% extends 'symcom4/admin/template_sb2/_base.html.twig' %}
 
 {% block content %}
-    <div class="card">
-        <div class="card-body">
-            {% if fonction is defined %}
-                <h1 class="h4">Ajout d'un contact à {{ fonction.typefonction.titre }} de {{fonction.structure.nom}}</h1>
+
+    {% embed 'symcom4/admin/template_sb2/elements/_card_with_menu.html.twig' with {'structure': structure, 'form': form} only %}
+        {% if structure is defined %}
+            {% set titre = "Ajout d'un contact à " ~ fonction.typefonction.titre ~ " de " ~ fonction.structure.nom %}
+        {% else %}
+            {% set titre = "Ajout d'un contact à " ~ structure.nom %}
+        {% endif %}
+
+        {% set actions = null %}
+
+        {% block contenu %}
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+            {{ form_row(form.structure.nom) }}
+            {{ form_row(form.sigle) }}
+            {{ form_row(form.structure.presentation) }}
+            {{ form_row(form.structure.local) }}
+            {{ 'Enregistrer' | BtnSubmitWithIcon('fa-check', 'success') }}
+            {{ form_end(form) }}
+        {% endblock %}
+        
+    {% endembed %}
+
+{% endblock %}
+
+
+            Ajout d'un contact à {{ fonction.typefonction.titre }} de {{fonction.structure.nom}}</h1>
             {% else %}
                 <h1 class="h4">Ajout d'un contact à {{ structure.nom }}</h1>
             {% endif %}

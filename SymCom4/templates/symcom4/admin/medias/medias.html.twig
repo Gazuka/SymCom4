@@ -1,19 +1,49 @@
-{% extends 'symcom4/admin/partials/_base_admin.html.twig' %}
-
-{% block title %}
-    {{ parent() }} - Médias
-{% endblock %}
+{% extends 'symcom4/admin/template_sb2/_base.html.twig' %}
 
 {% block content %}
 
-<div class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-                Gestion des dossiers
-                {% include 'symcom4/admin/partials/_liensrapides.html.twig' %} 
-            </div>
-        </div>
-    </div>
-</div>
+    {% embed 'symcom4/admin/template_sb2/elements/_card_info.html.twig' with {'medias': medias} only %}
+        {% set taille = taille(3, 6) %}
+        {% set couleur = 'primary' %}
+        {% set icone = 'fa-home' %}
+        {% set titre = "Nombre de médias" %}
+        {% block valeur %}
+            {{medias|length}}
+        {% endblock %}
+    {% endembed %}
+
+    {% embed 'symcom4/admin/template_sb2/elements/_card_info.html.twig' with {'liensRapides': liensRapides} only %}
+        {% set taille = taille(9, 12) %}
+        {% set couleur = 'success' %}
+        {% set icone = 'fa-home' %}
+        {% set titre = "Actions rapides" %}
+        {% block valeur %}
+            {% include 'symcom4/admin/partials/_liensrapides.html.twig' %}
+        {% endblock %}        
+    {% endembed %}
+
+    {% embed 'symcom4/admin/template_sb2/elements/_table.html.twig' with {'medias': medias} only %}
+        {% set titre = 'Listing des médias' %}
+        {% set nomColonnes = ['#', 'Dossier', 'Nom', 'Titre', 'Actions'] %}
+        {% block tbody %}
+            {% for media in medias %}
+                <tr>
+                    <td>{{ media.id }}</td>
+                    <td>
+                        {{ media.dossier.titre }}                        
+                    </td>
+                    <td>
+                        {{ media.nom }}
+                        <br/>
+                        {% if media.image != null %}
+                            <img src='{{ asset(media.recupAsset()|imagine_filter('reduc')) }}' class='img-thumbnail' />
+                        {% endif %}
+                    </td>
+                    <td>{{ media.titre }}</td>
+                    <td>&nbsp;</td>
+                </tr>
+            {% endfor %}
+        {% endblock %}
+    {% endembed %}
+
 {% endblock %}

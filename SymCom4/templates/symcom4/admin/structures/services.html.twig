@@ -1,61 +1,44 @@
-{% extends 'symcom4/admin/partials/_base_admin.html.twig' %}
-
-{% block title %}
-    {{ parent() }} - Services
-{% endblock %}
+{% extends 'symcom4/admin/template_sb2/_base.html.twig' %}
 
 {% block content %}
 
-<div class="row mb-3">
-    <div class="col-4">
-        <div class="card">
-            <div class="card-body">
-                Nombre de services : <strong>{{ services | length }}</strong>
-            </div>
-        </div>
-    </div>
-    <div class="col-8">
-        <div class="card">
-            <div class="card-body">
-                {% include 'symcom4/admin/partials/_liensrapides.html.twig' %}    
-            </div>
-        </div>
-    </div>
-</div>
+    {% embed 'symcom4/admin/template_sb2/elements/_card_info.html.twig' with {'services': services} only %}
+        {% set taille = taille(3, 6) %}
+        {% set couleur = 'primary' %}
+        {% set icone = 'fa-home' %}
+        {% set titre = "Nombre de services" %}
+        {% block valeur %}
+            {{ services|length }}
+        {% endblock %}
+    {% endembed %}
 
-<div class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-                
-                <table class="table">
-                    <thead class="thead-light">
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Nom</th>
-                            <th scope="col">Descriptif</th>
-                            <th scope="col">Guesninois</th>
-                            <th scope="col">Contacts</th>
-                            <th scope="col">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for service in services %}
-                            <tr>
-                                <td>{{ service.id }}</td>
-                                <td><a href="{{ path('admin_structures_service', {'idservice': service.id}) }}">{{ service.structure.nom }}</a></td>
-                                <td>{{ service.structure.presentation }}</td>
-                                <td>{% if service.structure.local == true %}OUI{% else %}NON{% endif %}</td>
-                                <td>{{ service.structure.contacts | NbrContacts }}</td>
-                                <td>
-                                    {{ path('admin_structures_service', {'idservice': service.id}) | ModifierBouton }}
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
+    {% embed 'symcom4/admin/template_sb2/elements/_card_info.html.twig' with {'liensRapides': liensRapides} only %}
+        {% set taille = taille(9, 12) %}
+        {% set couleur = 'success' %}
+        {% set icone = 'fa-home' %}
+        {% set titre = "Actions rapides" %}
+        {% block valeur %}
+            {% include 'symcom4/admin/partials/_liensrapides.html.twig' %}
+        {% endblock %}        
+    {% endembed %}
+
+    {% embed 'symcom4/admin/template_sb2/elements/_table.html.twig' with {'services': services} only %}
+        {% set titre = 'Les services' %}
+        {% set nomColonnes = ['#', 'Nom', 'Descriptif', 'Guesninoise', 'Contacts', 'Actions'] %}
+        {% block tbody %}
+            {% for service in services %}
+                <tr>
+                    <td>{{ service.id }}</td>
+                    <td><a href="{{ path('admin_structures_service', {'idservice': service.id}) }}">{{ service.structure.nom }}</a></td>
+                    <td>{{ service.structure.presentation }}</td>
+                    <td>{% if service.structure.local == true %}OUI{% else %}NON{% endif %}</td>
+                    <td>{{ service.structure.contacts | NbrContacts }}</td>
+                    <td>
+                        {{ path('admin_structures_service', {'idservice': service.id}) | LienBtnRond('Editer', 'fa-edit', 'primary') }}
+                    </td>
+                </tr>
+            {% endfor %}
+        {% endblock %}
+    {% endembed %}
+
 {% endblock %}

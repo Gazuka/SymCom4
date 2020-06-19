@@ -1,0 +1,19 @@
+{% extends 'symcom4/admin/template_sb2/_base.html.twig' %}
+
+{% block content %}
+
+    {% embed 'symcom4/admin/template_sb2/elements/_card_with_menu.html.twig' with {'structure': structure, 'form': form} only %}
+        {% set titre = "Edition des types de l'entreprise : " ~ structure.nom %}
+        
+        {% set actions = null %}
+
+        {% block contenu %}
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+            {{ form_widget(form.types) }}
+            {{ 'Enregistrer' | BtnSubmitWithIcon('fa-check', 'success') }}
+            {{ form_end(form) }}
+        {% endblock %}
+        
+    {% endembed %}
+
+{% endblock %}

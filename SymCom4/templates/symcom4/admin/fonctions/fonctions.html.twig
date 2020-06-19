@@ -1,58 +1,43 @@
-{% extends 'symcom4/admin/partials/_base_admin.html.twig' %}
-
-{% block title %}
-    {{ parent() }} - Fonctions
-{% endblock %}
+{% extends 'symcom4/admin/template_sb2/_base.html.twig' %}
 
 {% block content %}
 
-<div class="row mb-3">
-    <div class="col-4">
-        <div class="card">
-            <div class="card-body">
-                Nombre d'fonctions : <strong>{{ fonctions | length }}</strong>
-            </div>
-        </div>
-    </div>
-    <div class="col-8">
-        <div class="card">
-            <div class="card-body">
-                {% include 'symcom4/admin/partials/_liensrapides.html.twig' %}  
-            </div>
-        </div>
-    </div>
-</div>
+    {% embed 'symcom4/admin/template_sb2/elements/_card_info.html.twig' with {'fonctions': fonctions} only %}
+        {% set taille = taille(3, 6) %}
+        {% set couleur = 'primary' %}
+        {% set icone = 'fa-home' %}
+        {% set titre = "Nombre de fonctions" %}
+        {% block valeur %}
+            {{ fonctions|length }}
+        {% endblock %}
+    {% endembed %}
 
-<div class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-                <table class="table">
-                    <thead class="thead-light">
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Titre</th>
-                            <th scope="col">Structure</th>
-                            <th scope="col">Contacts</th>
-                            <th scope="col">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for fonction in fonctions %}
-                            <tr>
-                                <td>{{ fonction.id }}</td>
-                                <td>{{ fonction.typeFonction.titre }}</td>
-                                <td>{{ fonction.structure.nom }}</td>
-                                <td>{{ fonction.contacts | NbrContacts }}</td>
-                                <td>
-                                {# {{ path('admin_fonction', {'idfonction': fonction.id}) | ModifierBouton }} #}
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
+    {% embed 'symcom4/admin/template_sb2/elements/_card_info.html.twig' with {'liensRapides': liensRapides} only %}
+        {% set taille = taille(9, 12) %}
+        {% set couleur = 'success' %}
+        {% set icone = 'fa-home' %}
+        {% set titre = "Actions rapides" %}
+        {% block valeur %}
+            {% include 'symcom4/admin/partials/_liensrapides.html.twig' %}
+        {% endblock %}        
+    {% endembed %}
+
+    {% embed 'symcom4/admin/template_sb2/elements/_table.html.twig' with {'fonctions': fonctions} only %}
+        {% set titre = 'Les services' %}
+        {% set nomColonnes = ['#', 'Titre', 'Structure', 'Contacts', 'Actions'] %}
+        {% block tbody %}
+            {% for fonction in fonctions %}
+                <tr>
+                    <td>{{ fonction.id }}</td>
+                    <td>{{ fonction.typeFonction.titre }}</td>
+                    <td>{{ fonction.structure.nom }}</td>
+                    <td>{{ fonction.contacts | NbrContacts }}</td>
+                    <td>
+                        &nbsp;
+                    </td>
+                </tr>
+            {% endfor %}
+        {% endblock %}
+    {% endembed %}
+
 {% endblock %}

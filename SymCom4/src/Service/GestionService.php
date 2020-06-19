@@ -54,6 +54,15 @@ class GestionService {
     /*========================================================================================*/
     /** FONCTIONS PUBLIQUES *******************************************************************/
 
+    public function gestionContacts($parent)
+    {
+        $this->twig->display('symcom4/admin/gestion/_gestion_contacts.html.twig',
+        [
+            'parent' => $parent,
+            'gestionService' => $this
+        ]); 
+    }
+
     /************************************************************************************/
     /** Affiche dans TWIG un tableau pour voir les adresses, les modifier ou en ajouter
      *

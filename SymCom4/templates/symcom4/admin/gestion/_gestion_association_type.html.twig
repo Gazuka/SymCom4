@@ -1,28 +1,24 @@
-{% extends 'symcom4/admin/_text.html.twig' %}
-{% block all %}
-    <div class="card mb-3">
-        <div class="card-body">
-            <h5 class="card-title">Type d'association</h5>
-            <div class="row">
-                <div class="col-12">
-                    {% if structure.association.types | length == 0 %}
-                        <p class="text-danger text-center">
-                            Attention, si l'association n'a pas de type, elle ne sera pas visible sur le site !
-                        </p>
-                    {% else %}
-                        <ul>
-                            {% for type in structure.association.types %}
-                                <li>{{ type.parentName }}{{ type.nom }}</li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12 text-right">
-                    {{ path('admin_structures_association_edittype', {'idstructure': structure.id, 'idpagemere': idPage }) | ModifierBouton }}
-                </div>
-            </div>
-        </div>
-    </div>
-{% endblock %}
+{% embed 'symcom4/admin/template_sb2/elements/_card_with_menu.html.twig' with {'structure': structure, 'idPage': idPage} only %}
+    
+    {% set titre = "Type d'association" %}
+    
+    {% set actions =    {
+                            'Editer': path('admin_structures_association_edittype', {'idstructure': structure.id, 'idpagemere': idPage })
+                        }
+    %}
+
+    {% block contenu %}
+        {% if structure.association.types | length == 0 %}
+            <p class="text-danger text-center">
+                Attention, si l'association n'a pas de type, elle ne sera pas visible sur le site !
+            </p>
+            <div class='text-center'>{{ path('admin_structures_association_edittype', {'idstructure': structure.id, 'idpagemere': idPage }) | LienBtnWithIcon("Définir le type d'association", 'fa-edit', 'success') }}</div>
+        {% else %}
+            <ul>
+                {% for type in structure.association.types %}
+                    <li>{{ type.parentName }}{{ type.nom }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endblock %}
+{% endembed %}

@@ -1,29 +1,26 @@
-{% extends 'symcom4/admin/_text.html.twig' %}
-{% block all %}
-    <div class="card mb-3">
-        <div class="card-body">
-            <div class="row">
-                <div class="col-2">
-                    {% if structure.local == true %}
-                        LOGO Guesnain
-                    {% else %}
-                        Exterieur
-                    {% endif %}
-                </div>
-                <div class="col-10">
-                    <h1 class="h3">{{ structure.nom }}
-                        {% if structure.association.sigle != null %}
-                            ({{ structure.association.sigle }})
-                        {% endif %}
-                    </h1>
-                    <p>{{ structure.presentation }}</p>
-                </div>
+{% embed 'symcom4/admin/template_sb2/elements/_card_with_menu.html.twig' with {'structure': structure, 'idPage': idPage} only %}
+    {% if structure.association.sigle != null %}
+        {% set titre = structure.nom ~ '(' ~ structure.association.sigle ~ ')' %}
+    {% else %}
+        {% set titre = structure.nom %}
+    {% endif %}
+
+    {% set actions =    {
+                            'Editer': path('admin_structures_association_edit', {'idstructure': structure.id, 'idpagemere': idPage })
+                        }
+    %}
+    {% block contenu %}
+        <div class="row">
+            <div class="{{ taille(1, 1) }}">
+                {% if structure.local == true %}
+                    LOGO Guesnain
+                {% else %}
+                    Exterieur
+                {% endif %}
             </div>
-            <div class="row">
-                <div class="col-12 text-right">
-                    {{ path('admin_structures_association_edit', {'idstructure': structure.id, 'idpagemere': idPage }) | ModifierBouton }}
-                </div>
+            <div class="{{ taille(11, 11) }}">
+                <p>{{ structure.presentation }}</p>
             </div>
         </div>
-    </div>
-{% endblock %}
+    {% endblock %}
+{% endembed %}

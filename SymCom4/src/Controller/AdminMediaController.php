@@ -23,38 +23,32 @@ class AdminMediaController extends AdminController
      */
     public function index()
     {
+        $medias = $this->outilsBox->findAllEntity(Media::class);
         //Prépare le Twig
         $this->outilsBox->defineTwig('symcom4/admin/medias/medias.html.twig');
         $this->initTwig('medias');
+        $this->outilsBox->addParamTwig('medias', $medias);
         //Affiche la page
         return $this->jobController();
     }
 
-    /**
-     * @Route("/admin/medias/initdossier", name="admin_medias_initDossier")
-     */
-    public function initDossier()
+    private function initDossiers()
     {
-        //A n'utiliser que lors d'une nouvelle installation
-        /*
-            CREER UNE FONCTION QUI GERE LENSEMBLE DES DOSSIERS REQUIS POUR LE FONCTIONNEMENT DU SITE
-            > images
-            > associations
-            $dossier = new Dossier();
-        */
+        //On crée les dossiers de fonctionnement du site
+        $dossier_upload = $this->mediaService->ouvrirDossier(null, 'upload');
+        $dossier_upload->setCote('upload');
+        $dossier_upload->setDescriptif('Contient touts les fichiers uploadés sur le site et pas encore utilisés.');
+        $this->outilsBox->persist($dossier_upload);
 
-        $dossier = new Dossier();
-        $dossier->setTitre('upload');
-        $dossier->setDescriptif('Fichier de réception de tous les médias upload sur le site ou via ftp...');
-        $dossier->creerDossierPhysique();
-        //il faut persit le dossier
-
-        //Prépare le Twig
-        $this->outilsBox->defineTwig('symcom4/admin/medias/medias.html.twig');
-        $this->initTwig('medias');
-
-        //Affiche la page
-        return $this->jobController();
+            $dossier_upload_images = $this->mediaService->ouvrirDossier($dossier_upload, 'images');
+            $dossier_upload_images->setCote('upload_images');
+            $dossier_upload_images->setDescriptif('Contient toutes les images uploadées sur le site et pas encore utilisés.');
+            $this->outilsBox->persist($dossier_upload_images);
+        
+        $dossier_images = $this->mediaService->ouvrirDossier(null, 'images');
+        $dossier_images->setCote('images');
+        $dossier_images->setDescriptif('Contient toutes les images utilisées sur le site.');
+        $this->outilsBox->persist($dossier_images);
     }
 
     /******************************************************************************************/
@@ -64,7 +58,8 @@ class AdminMediaController extends AdminController
      */
     public function dossiers(): Response
     {
-        //Récupére tous les dossiers
+        $this->initDossiers();
+        //Récupére tous les dossiers        
         $dossiers = $this->outilsBox->findAllEntity(Dossier::class);
         //Prépare le Twig
         $this->initTwig('medias');
@@ -96,12 +91,13 @@ class AdminMediaController extends AdminController
     }
 
     /**
-     * @Route("/admin/medias/new", name="admin_medias_new")
+     * @Route("/admin/medias/new/{cote}", name="admin_medias_new", defaults={"cote": "upload"})
      */
-    public function newMedia():Response
+    public function newMedia($cote):Response
     {
-        $dossierImages = $this->outilsBox->findOneEntityBy(Dossier::class, ['titre' => 'images']);
-
+        $dossier = $this->outilsBox->findEntityBy(Dossier::class, ['cote' => $cote]);
+        $dossier = $dossier[0];
+        
         //Gérer le formulaire
         $this->outilsBox->setFormElement(new Media());
         $this->outilsBox->setFormClassType(NewMediaType::class);
@@ -109,7 +105,7 @@ class AdminMediaController extends AdminController
         $this->outilsBox->setFormTwigFormulaire('symcom4/admin/medias/new_media.html.twig');
         $this->outilsBox->setFormTexteConfirmation("Le média ### a bien été importé !");
         $this->outilsBox->setFormTexteConfirmationEval(["###" => '$this->element->getNom();']);
-        $this->outilsBox->setFormActions(array(['name' => 'action_newMedia', 'params' => ['dossierImages' => $dossierImages]]));
+        $this->outilsBox->setFormActions(array(['name' => 'action_newMedia', 'params' => ['dossier' => $dossier]]));
         $this->addPageMereFormService();
 
         //Prépare le Twig
@@ -121,16 +117,16 @@ class AdminMediaController extends AdminController
 
     /******************************************************************************************/
     /****************************************GESTIONS DES ACTIONS *****************************/
-    protected function action_newDossier(Object $dossier, $params, $request)
+    public function action_newDossier(Object $dossier, $params)
     {
         //On crée le dossier correspondant
         $dossier->creerDossierPhysique();
         return $dossier;
     }
 
-    protected function action_newMedia(Object $media, $params, $request)
+    public function action_newMedia(Object $media, $params)
     {
-        $media->upload($params);
+        $media->upload($params['dossier']);
         return $media;
     }
 }

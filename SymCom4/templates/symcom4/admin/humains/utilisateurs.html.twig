@@ -1,65 +1,42 @@
-{% extends 'symcom4/admin/partials/_base_admin.html.twig' %}
-
-{% block title %}
-    {{ parent() }} - Utilisateurs
-{% endblock %}
+{% extends 'symcom4/admin/template_sb2/_base.html.twig' %}
 
 {% block content %}
 
-<div class="row mb-3">
-    <div class="col-4">
-        <div class="card">
-            <div class="card-body">
-                Nombre d'utilisateurs : <strong>{{ utilisateurs | length }}</strong>
-            </div>
-        </div>
-    </div>
-    <div class="col-8">
-        <div class="card">
-            <div class="card-body">
-                {% include 'symcom4/admin/partials/_liensrapides.html.twig' %}    
-            </div>
-        </div>
-    </div>
-</div>
+    {% embed 'symcom4/admin/template_sb2/elements/_card_info.html.twig' with {'utilisateurs': utilisateurs} only %}
+        {% set taille = taille(3, 6) %}
+        {% set couleur = 'primary' %}
+        {% set icone = 'fa-home' %}
+        {% set titre = "Nombre d'utilisateurs" %}
+        {% block valeur %}
+            {{ utilisateurs|length }}
+        {% endblock %}
+    {% endembed %}
 
-<div class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-                
-                <table class="table">
-                    <thead class="thead-light">
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Nom</th>
-                            <th scope="col">Prénom</th>
-                            <th scope="col">Pseudo</th>
-                            <th scope="col">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for utilisateur in utilisateurs %}
-                            <tr>
-                                <td>{{ utilisateur.humain.id }}</td>
-                                <td>{{ utilisateur.humain.nom }}</td>
-                                <td>{{ utilisateur.humain.prenom }}</td>
-                                <td>
-                                    {{ utilisateur.pseudo }}
-                                </td>
-                                <td>
-                                    {# {{ path('admin_humain_addcontact', {'id': humain.id, 'type': 'telephone'}) | addContacts('telephone')}}
-                                    {{ path('admin_humain_addcontact', {'id': humain.id, 'type': 'mail'}) | addContacts('mail')}}
-                                    {{ path('admin_humain_addcontact', {'id': humain.id, 'type': 'adresse'}) | addContacts('adresse')}}
-                                    {{ path('admin_humain_edit', {'id': humain.id}) | ModifierBouton }}
-                                    {{ path('admin_humain_delete', {'id': humain.id}) | SupprimerBouton }} #}
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
+    {% embed 'symcom4/admin/template_sb2/elements/_card_info.html.twig' with {'liensRapides': liensRapides} only %}
+        {% set taille = taille(9, 12) %}
+        {% set couleur = 'success' %}
+        {% set icone = 'fa-home' %}
+        {% set titre = "Actions rapides" %}
+        {% block valeur %}
+            {% include 'symcom4/admin/partials/_liensrapides.html.twig' %}
+        {% endblock %}        
+    {% endembed %}
+
+    {% embed 'symcom4/admin/template_sb2/elements/_table.html.twig' with {'utilisateurs': utilisateurs} only %}
+        {% set titre = 'Les utilisateurs' %}
+        {% set nomColonnes = ['#', 'Nom', 'Prénom', 'Pseudo'] %}
+        {% block tbody %}
+            {% for utilisateur in utilisateurs %}
+                <tr>
+                    <td>{{ utilisateur.humain.id }}</td>
+                    <td>{{ utilisateur.humain.nom }}</td>
+                    <td>{{ utilisateur.humain.prenom }}</td>
+                    <td>
+                        {{ utilisateur.pseudo }}
+                    </td>
+                </tr>
+            {% endfor %}
+        {% endblock %}
+    {% endembed %}
+
 {% endblock %}

@@ -1,34 +1,18 @@
-{% extends 'symcom4/admin/_text.html.twig' %}
-{% block all %}
-    <div id="gestion_fonction_telephones" class="card mb-3"> 
-        <div class="card-body">
-            <h5 class="card-title">{{ text_service_contact_telephone }}</h5>
-            {% if telephones|length > 0 %}
-                <table class="table">
-                    <thead class="thead-light">
-                        <tr>
-                            <th style="width:5%;" scope="col">{{ text_id }}</th>
-                            <th style="width:50%;" scope="col">{{ text_service_contact_telephone_numero }}</th>
-                            <th style="width:45%;" scope="col">{{ text_actions }}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for telephone in telephones %}
-                            <tr>
-                                <td>{{ telephone.id }}</td>
-                                <td>{{ telephone.numero }}</td>
-                                <td>
-                                    {{ path('admin_structure_fonction_editcontact', {'idfonction': parent.id, 'idcontact': telephone.contact.id, 'idpagemere': idPage }) | ModifierBouton }}
-                                    {{ path('admin_structure_fonction_deletecontact', {'idfonction': parent.id, 'idcontact': telephone.contact.id, 'idpagemere': idPage}) | SupprimerBouton }}
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table> 
-            {% else %}
-                <p class="text-danger">{{ text_no_telephone }}</p>
-            {% endif %}
-            {{ path('admin_structure_fonction_addcontact', {'idfonction': parent.id, 'type': 'telephone', 'idpagemere': idPage}) | AddContacts('telephone', text_add_tel)}}
-        </div>
-    </div>
-{% endblock %}
+{% if telephones | length > 0 %}
+    {% embed 'symcom4/admin/template_sb2/elements/_table_mini.html.twig' with {'idPage': idPage, 'parent': parent, 'telephones': telephones} only %}
+        {% set nomColonnes = ['Téléphones', 'Actions'] %}
+        {% block tbody %}
+            {% for telephone in telephones %}
+                <tr>
+                    <td>{{ telephone.numero }}</td>
+                    <td>
+                        {{ path('admin_structure_fonction_editcontact', {'idfonction': parent.id, 'idcontact': telephone.contact.id, 'idpagemere': idPage }) | LienBtnRond('Editer', 'fa-edit', 'primary') }}
+                        {{ path('admin_structure_fonction_deletecontact', {'idfonction': parent.id, 'idcontact': telephone.contact.id, 'idpagemere': idPage}) | LienBtnRond('Supprimer', 'fa-trash', 'danger') }}
+                    </td>
+                </tr>
+            {% endfor %}
+        {% endblock %}
+    {% endembed %}
+{% endif %}
+            
+<div class='text-center'>{{ path('admin_structure_fonction_addcontact', {'idfonction': parent.id, 'type': 'telephone', 'idpagemere': idPage}) | LienBtnWithIcon('Ajouter un numéro de téléphone', ['fa-plus', 'fa-phone'], 'success')}}</div>

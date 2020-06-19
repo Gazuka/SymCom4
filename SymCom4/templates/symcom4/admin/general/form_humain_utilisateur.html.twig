@@ -1,15 +1,21 @@
-{% extends 'symcom4/admin/partials/_base_admin.html.twig' %}
+{% extends 'symcom4/admin/template_sb2/_base.html.twig' %}
 
 {% block content %}
-    <div class="card">
-        <div class="card-body">
-            <h1 class="h4">Création d'un nouvel utilisateur</h1>
-            <p>Veuillez compléter le formulaire ci-dessous :</p>
-            {{ form_start(form) }}
+
+    {% embed 'symcom4/admin/template_sb2/elements/_card_with_menu.html.twig' with {'form': form} only %}
+        
+        {% set titre = "Création d'un nouvel utilisateur" %}
+        
+        {% set actions = null %}
+
+        {% block contenu %}
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
             {{ form_row(form.pseudo) }}
             {{ form_row(form.password) }}
-            {{ text_enregistrer | BtnSubmit }}
+            {{ 'Enregistrer' | BtnSubmitWithIcon('fa-check', 'success') }}
             {{ form_end(form) }}
-        </div>
-    </div>
+        {% endblock %}
+        
+    {% endembed %}
+
 {% endblock %}

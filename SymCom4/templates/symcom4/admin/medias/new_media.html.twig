@@ -1,17 +1,21 @@
-{% extends 'symcom4/admin/partials/_base_admin.html.twig' %}
+{% extends 'symcom4/admin/template_sb2/_base.html.twig' %}
 
 {% block content %}
-    <div class="card">
-        <div class="card-body">
-            <h1 class="h4">Ajout d'un nouveau média</h1>
-            <p>Veuillez compléter le formulaire ci-dessous :</p>
-            {{ form_start(form) }}    
+
+    {% embed 'symcom4/admin/template_sb2/elements/_card_with_menu.html.twig' with {'form': form} only %}
+        
+        {% set titre = "Ajout d'un nouveau média" %}
+        
+        {% set actions = null %}
+
+        {% block contenu %}
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
             {{ form_row(form.titre) }}
             {{ form_row(form.nom) }}
-            <button type="submit" class="btn btn-success">
-                <i class="fas fa-check"></i> Enregistrer
-            </button>
+            {{ 'Enregistrer' | BtnSubmitWithIcon('fa-check', 'success') }}
             {{ form_end(form) }}
-        </div>
-    </div>
+        {% endblock %}
+        
+    {% endembed %}
+
 {% endblock %}

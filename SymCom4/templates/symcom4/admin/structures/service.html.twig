@@ -1,37 +1,28 @@
-{% extends 'symcom4/admin/partials/_base_admin.html.twig' %}
+{% extends 'symcom4/admin/template_sb2/_base.html.twig' %}
 
-{% block title %}
-    {{ parent() }} - {{ service.structure.nom }}
+{% block titre %}
+    {{ parent() }} : {{ service.structure.nom }}
 {% endblock %}
 
 {% block content %}
 
-    <div class="row mb-3">
-        <div class="col-6">
+    <div class='row col-12'>
+        <div class='{{ taille(8, 12) }}'>
             {{ gestionService.gestionServiceBase(service.structure) }}
-            {# {% include 'symcom4/admin/partials/_liensrapides.html.twig' %} #}
             {{ gestionService.gestionLien(service.structure) }}
             {{ gestionService.gestionImage(service.structure) }}
         </div>
-        <div class="col-6">
-            {{ gestionService.gestionAdresses(service.structure) }}
-            {{ gestionService.gestionTelephones(service.structure) }}
-            {{ gestionService.gestionMails(service.structure) }}
-        </div>
-    </div>
-    
-    <div class="row mb-3">
-        <div class="col-12">
-            {{ gestionService.gestionStructureFonctions(service.structure) }}
+        <div class='{{ taille(4, 12) }}'>
+            {{ gestionService.gestionContacts(service.structure) }}
         </div>
     </div>
 
-    <!-- Affichage du bouton de suppression du service -->
-    <div id="delete_service" class="row">
-        <div class="card col-12">
-            <div class="card-body text-center">
-                {{ path('admin_structures_service_delete', {'idstructure': service.structure.id}) | SupprimerBouton(service.structure.nom) }}
-            </div>
+    <div class='row col-12'>
+        <div class='{{ taille(12, 12) }}'>
+            {{ gestionService.gestionStructureFonctions(service.structure) }}
+        </div>
+        <div class='{{ taille(12, 12) }}'>
+            <div class='text-center'>{{ path('admin_structures_service_delete', {'idstructure': service.structure.id}) | LienBtnWithIcon('Supprimer ' ~ service.structure.nom, 'fa-trash', 'danger') }}</div>
         </div>
     </div>
 

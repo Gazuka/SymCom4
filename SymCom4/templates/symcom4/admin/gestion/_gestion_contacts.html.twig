@@ -1,0 +1,15 @@
+{% embed 'symcom4/admin/template_sb2/elements/_card_with_menu.html.twig' with {'parent': parent, 'gestionService': gestionService} only %}
+    {% set titre = 'Contacts' %}
+    {% set actions =    {
+                        }
+    %}
+    {% block contenu %}
+        
+        {{ gestionService.gestionAdresses(parent) }}
+        <hr>
+        {{ gestionService.gestionTelephones(parent) }}
+        <hr>
+        {{ gestionService.gestionMails(parent) }}
+
+    {% endblock %}
+{% endembed %}

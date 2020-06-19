@@ -44,6 +44,11 @@ class Dossier
      */
     private $media;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $cote;
+
     public function __construct()
     {
         $this->enfants = new ArrayCollection();
@@ -175,5 +180,17 @@ class Dossier
         $filesystem = new Filesystem();
         $current_dir_path = getcwd();
         $filesystem->mkdir($current_dir_path.'/medias/'.$this->getChemin());
+    }
+
+    public function getCote(): ?string
+    {
+        return $this->cote;
+    }
+
+    public function setCote(?string $cote): self
+    {
+        $this->cote = $cote;
+
+        return $this;
     }
 }

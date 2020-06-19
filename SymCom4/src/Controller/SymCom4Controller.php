@@ -6,6 +6,7 @@ namespace App\Controller;
 use App\Entity\Page;
 use Gazuka\Outils\Outils;
 use App\Service\PageService;
+use App\Service\MediaService;
 use App\Service\ContactService;
 use App\Service\GestionService;
 use App\Controller\OutilsController;
@@ -22,10 +23,11 @@ class SymCom4Controller extends OutilsController
 
     protected $contactService;
     protected $gestionService;
+    protected $mediaService;
     protected $liensRapides = array();
     protected $request;    
 
-    public function __construct(EntityManagerInterface $manager, RequestStack $requestStack, PageService $pageService, GestionService $gestionService, ContactService $contactService)
+    public function __construct(EntityManagerInterface $manager, RequestStack $requestStack, PageService $pageService, GestionService $gestionService, ContactService $contactService, MediaService $mediaService)
     {
         //Création d'une instance de Gazuka/Outils
         $this->outilsBox = new Outils($manager, $requestStack, Page::class);
@@ -33,7 +35,8 @@ class SymCom4Controller extends OutilsController
         $this->pageService = $pageService;
         $this->gestionService = $gestionService;
         $this->contactService = $contactService;
-        
+        $this->mediaService = $mediaService;
+        $this->mediaService->setOutilsBox($this->outilsBox);
     }
 
     protected function jobControllerCreateByGazuka()

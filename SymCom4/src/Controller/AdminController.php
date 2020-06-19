@@ -88,7 +88,7 @@ class AdminController extends SymCom4Controller
                 $this->addLienRapide('admin_humain_new', 'Ajouter une personne', 'success', 'fas fa-plus');
             break;
             default:
-                $this->outilsBox->addParamTwig('nav_titre', '');
+                $this->outilsBox->addParamTwig('nav_titre', 'Tableau de bord');
             break;
         }
         //Transfert des liens rapides à Twig
