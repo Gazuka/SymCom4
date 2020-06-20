@@ -42,9 +42,10 @@
                         {{ humain.contacts | NbrContacts }}
                     </td>
                     <td>
-                        {{ path('admin_humain_addcontact', {'idhumain': humain.id, 'type': 'telephone'}) | LienBtnRond('Ajouter un n° de téléphone', 'fa-phone', 'success')}}
+                        {# {{ path('admin_humain_addcontact', {'idhumain': humain.id, 'type': 'telephone'}) | LienBtnRond('Ajouter un n° de téléphone', 'fa-phone', 'success')}}
                         {{ path('admin_humain_addcontact', {'idhumain': humain.id, 'type': 'mail'}) | LienBtnRond('Ajouter un e-mail', 'fa-at', 'success')}}
-                        {{ path('admin_humain_addcontact', {'idhumain': humain.id, 'type': 'adresse'}) | LienBtnRond('Ajouter une adresse', 'fa-home', 'success')}}
+                        {{ path('admin_humain_addcontact', {'idhumain': humain.id, 'type': 'adresse'}) | LienBtnRond('Ajouter une adresse', 'fa-home', 'success')}} #}
+                        {{ path('admin_humain', {'idhumain': humain.id}) | LienBtnRond('Voir', 'fa-eye', 'primary') }}
                         {{ path('admin_humain_edit', {'idhumain': humain.id}) | LienBtnRond('Editer', 'fa-edit', 'primary') }}
                         {{ path('admin_humain_delete', {'idhumain': humain.id}) | LienBtnRond('Supprimer', 'fa-trash', 'danger') }}
                     </td>

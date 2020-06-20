@@ -66,7 +66,7 @@ class AdminStructureController extends AdminController
      public function addlienStructure(int $idstructure, int $idpagemere):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->outilsBox->setPageParams(compact('idstructure', 'idpagemere'));
+        // $this->outilsBox->setPageParams(compact('idstructure', 'idpagemere'));
 
         //Récupérer l'objet Structure
         $structure = $this->outilsBox->findEntityById(Structure::class, $idstructure);
@@ -104,7 +104,7 @@ class AdminStructureController extends AdminController
     public function editLienStructure(int $idstructure, int $idlien, int $idpagemere):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->outilsBox->setPageParams(compact('idstructure', 'idlien', 'idpagemere'));
+        // $this->outilsBox->setPageParams(compact('idstructure', 'idlien', 'idpagemere'));
 
         //Récupérer l'objet Structure et l'objet lien
         $structure = $this->outilsBox->findEntityById(Structure::class, $idstructure);
@@ -144,7 +144,7 @@ class AdminStructureController extends AdminController
     public function deleteLienStructure(int $idstructure, int $idlien, int $idpagemere):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->outilsBox->setPageParams(compact('idstructure', 'idlien', 'idpagemere'));
+        // $this->outilsBox->setPageParams(compact('idstructure', 'idlien', 'idpagemere'));
 
         //Récupérer l'objet Structure et l'objet page
         $structure = $this->outilsBox->findEntityById(Structure::class, $idstructure);
@@ -187,7 +187,7 @@ class AdminStructureController extends AdminController
     public function choisirImageStructure(int $idstructure, int $idpagemere):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->outilsBox->setPageParams(compact('idstructure', 'idpagemere'));
+        // $this->outilsBox->setPageParams(compact('idstructure', 'idpagemere'));
 
         //Récupérer l'objet Structure
         $structure = $this->outilsBox->findEntityById(Structure::class, $idstructure);
@@ -272,7 +272,7 @@ class AdminStructureController extends AdminController
     public function editImageStructure(int $idstructure, int $idlien, int $idpagemere):Response
     {
         // //Donner les arguments de la page en cours au PageService
-        // $this->outilsBox->setPageParams(compact('idstructure', 'idlien', 'idpagemere'));
+        // // $this->outilsBox->setPageParams(compact('idstructure', 'idlien', 'idpagemere'));
 
         // //Récupérer l'objet Structure et l'objet lien
         // $structure = $this->outilsBox->findEntityById(Structure::class, $idstructure);
@@ -306,7 +306,7 @@ class AdminStructureController extends AdminController
     public function deleteImageStructure(int $idstructure, int $idlien, int $idpagemere):Response
     {
         // //Donner les arguments de la page en cours au PageService
-        // $this->outilsBox->setPageParams(compact('idstructure', 'idlien', 'idpagemere'));
+        // // $this->outilsBox->setPageParams(compact('idstructure', 'idlien', 'idpagemere'));
 
         // //Récupérer l'objet Structure et l'objet page
         // $structure = $this->outilsBox->findEntityById(Structure::class, $idstructure);
@@ -358,7 +358,7 @@ class AdminStructureController extends AdminController
     public function addcontactStructure(int $idstructure, int $idpagemere, string $type, ContactService $contactService):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->outilsBox->setPageParams(compact('idstructure', 'idpagemere', 'type'));
+        // $this->outilsBox->setPageParams(compact('idstructure', 'idpagemere', 'type'));
         
         //Récupérer l'objet Structure et l'objet page
         $structure = $this->outilsBox->findEntityById(Structure::class, $idstructure);
@@ -401,7 +401,7 @@ class AdminStructureController extends AdminController
     public function editcontactStructure(int $idstructure, int $idcontact, int $idpagemere, ContactService $contactService):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->outilsBox->setPageParams(compact('idstructure', 'idcontact', 'idpagemere'));
+        // $this->outilsBox->setPageParams(compact('idstructure', 'idcontact', 'idpagemere'));
 
         //Récupérer l'objet Structure, l'objet Contact et le type de contact
         $structure = $this->outilsBox->findEntityById(Structure::class, $idstructure);
@@ -444,7 +444,7 @@ class AdminStructureController extends AdminController
     public function deleteContactStructure(int $idstructure, int $idcontact, int $idpagemere):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->outilsBox->setPageParams(compact('idstructure', 'idcontact', 'idpagemere'));
+        // $this->outilsBox->setPageParams(compact('idstructure', 'idcontact', 'idpagemere'));
 
         //Récupérer l'objet Structure, l'objet contact et l'objet page
         $structure = $this->outilsBox->findEntityById(Structure::class, $idstructure);
@@ -493,7 +493,7 @@ class AdminStructureController extends AdminController
     public function addfonctionStructure(int $idstructure, int $idpagemere):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->outilsBox->setPageParams(compact('idstructure', 'idpagemere'));
+        // $this->outilsBox->setPageParams(compact('idstructure', 'idpagemere'));
 
         //Récupérer l'objet Structure
         $structure = $this->outilsBox->findEntityById(Structure::class, $idstructure);
@@ -532,7 +532,7 @@ class AdminStructureController extends AdminController
     public function editFonctionStructure(int $idstructure, int $idfonction, int $idpagemere):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->outilsBox->setPageParams(compact('idstructure', 'idfonction', 'idpagemere'));
+        // $this->outilsBox->setPageParams(compact('idstructure', 'idfonction', 'idpagemere'));
 
         //Récupérer l'objet Structure et l'objet Fonction
         $structure = $this->outilsBox->findEntityById(Structure::class, $idstructure);
@@ -572,7 +572,7 @@ class AdminStructureController extends AdminController
     public function deleteFonctionStructure(int $idstructure, int $idfonction, int $idpagemere):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->outilsBox->setPageParams(compact('idstructure', 'idfonction', 'idpagemere'));
+        // $this->outilsBox->setPageParams(compact('idstructure', 'idfonction', 'idpagemere'));
 
         //Récupérer l'objet Structure, l'objet fonction et l'objet page mère'
         $structure = $this->outilsBox->findEntityById(Structure::class, $idstructure);
@@ -622,7 +622,7 @@ class AdminStructureController extends AdminController
     public function addHumainFonctionStructure(int $idstructure, int $idfonction, int $idpagemere):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->outilsBox->setPageParams(compact('idstructure', 'idfonction', 'idpagemere'));
+        // $this->outilsBox->setPageParams(compact('idstructure', 'idfonction', 'idpagemere'));
 
         //Récupérer l'objet Structure et l'objet Fonction
         $structure = $this->outilsBox->findEntityById(Structure::class, $idstructure);
@@ -634,13 +634,12 @@ class AdminStructureController extends AdminController
         $this->outilsBox->setFormTwigFormulaire('symcom4/admin/general/form_fonction_humain.html.twig');
         $this->outilsBox->setFormTexteConfirmation("La fonction a bien été modifié !");
         
-        
-
         //Obtenir le titre et le menu rapide en fonction du type
         $this->initTwig($structure->getType());
 
         //Fournir les paramètres requis au Twig
         $this->outilsBox->addParamTwig('structure', $structure);
+        $this->outilsBox->addParamTwig('fonction', $fonction);
 
         //Laisser le controller faire son Job avec tout ça...
         return $this->jobController();
@@ -661,7 +660,7 @@ class AdminStructureController extends AdminController
     public function deleteHumainFonctionStructure(int $idstructure, int $idfonction, int $idpagemere):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->outilsBox->setPageParams(compact('idstructure', 'idfonction', 'idpagemere'));
+        // $this->outilsBox->setPageParams(compact('idstructure', 'idfonction', 'idpagemere'));
 
         //Récupérer l'objet Structure, l'objet fonction et l'objet page mère'
         $structure = $this->outilsBox->findEntityById(Structure::class, $idstructure);
@@ -760,7 +759,7 @@ class AdminStructureController extends AdminController
     public function service(int $idservice): Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->outilsBox->setPageParams(compact('idservice'));
+        // $this->outilsBox->setPageParams(compact('idservice'));
 
         //Récupérer l'objet Service
         $service = $this->outilsBox->findEntityById(Service::class, $idservice);
@@ -792,7 +791,7 @@ class AdminStructureController extends AdminController
     public function editService(int $idstructure, int $idpagemere):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->outilsBox->setPageParams(compact('idstructure', 'idpagemere'));
+        // $this->outilsBox->setPageParams(compact('idstructure', 'idpagemere'));
         
         //Récupérer l'objet Structure
         $structure = $this->outilsBox->findEntityById(Structure::class, $idstructure);
@@ -828,7 +827,7 @@ class AdminStructureController extends AdminController
     public function deleteService(int $idstructure):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->outilsBox->setPageParams(compact('idstructure'));
+        // $this->outilsBox->setPageParams(compact('idstructure'));
 
         //Supprimer le service de la BDD
         $this->outilsBox->deleteEntityById(Structure::class, $idstructure);
@@ -917,7 +916,7 @@ class AdminStructureController extends AdminController
     public function association(int $idassociation): Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->outilsBox->setPageParams(compact('idassociation'));
+        // $this->outilsBox->setPageParams(compact('idassociation'));
 
         //Récupérer l'objet Association
         $association = $this->outilsBox->findEntityById(Association::class, $idassociation);
@@ -948,7 +947,7 @@ class AdminStructureController extends AdminController
     public function editAssociation(int $idstructure, int $idpagemere):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->outilsBox->setPageParams(compact('idstructure', 'idpagemere'));
+        // $this->outilsBox->setPageParams(compact('idstructure', 'idpagemere'));
         
         //Récupérer l'objet Structure
         $structure = $this->outilsBox->findEntityById(Structure::class, $idstructure);
@@ -984,7 +983,7 @@ class AdminStructureController extends AdminController
     public function deleteAssociation(int $idstructure):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->outilsBox->setPageParams(compact('idstructure'));
+        // $this->outilsBox->setPageParams(compact('idstructure'));
 
         //Supprimer le service de la BDD
         $this->outilsBox->deleteEntityById(Structure::class, $idstructure);
@@ -1068,7 +1067,7 @@ class AdminStructureController extends AdminController
     public function editTypeAssociation(int $idtypeassociation):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->outilsBox->setPageParams(compact('idtypeassociation'));
+        // $this->outilsBox->setPageParams(compact('idtypeassociation'));
         
         //Récupérer l'objet Structure
         $typeAssociation = $this->outilsBox->findEntityById(TypeAssociation::class, $idtypeassociation);
@@ -1100,7 +1099,7 @@ class AdminStructureController extends AdminController
     public function deleteTypeAssociation(int $idtypeassociation):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->outilsBox->setPageParams(compact('idtypeassociation'));
+        // $this->outilsBox->setPageParams(compact('idtypeassociation'));
 
         //Supprimer le type d'association de la BDD
         $this->outilsBox->deleteEntityById(TypeAssociation::class, $idtypeassociation);
@@ -1135,7 +1134,7 @@ class AdminStructureController extends AdminController
     public function editAssociationType(int $idstructure, int $idpagemere):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->outilsBox->setPageParams(compact('idstructure', 'idpagemere'));
+        // $this->outilsBox->setPageParams(compact('idstructure', 'idpagemere'));
         
         //Récupérer l'objet Structure
         $structure = $this->outilsBox->findEntityById(Structure::class, $idstructure);
@@ -1224,7 +1223,7 @@ class AdminStructureController extends AdminController
     public function Entreprise(int $identreprise): Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->outilsBox->setPageParams(compact('identreprise'));
+        // $this->outilsBox->setPageParams(compact('identreprise'));
 
         //Récupérer l'objet Service
         $entreprise = $this->outilsBox->findEntityById(Entreprise::class, $identreprise);
@@ -1254,7 +1253,7 @@ class AdminStructureController extends AdminController
     public function editEntreprise(int $idstructure, int $idpagemere):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->outilsBox->setPageParams(compact('idstructure', 'idpagemere'));
+        // $this->outilsBox->setPageParams(compact('idstructure', 'idpagemere'));
         
         //Récupérer l'objet Structure
         $structure = $this->outilsBox->findEntityById(Structure::class, $idstructure);
@@ -1288,7 +1287,7 @@ class AdminStructureController extends AdminController
     public function deleteEntreprise(int $idstructure):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->outilsBox->setPageParams(compact('idstructure'));
+        // $this->outilsBox->setPageParams(compact('idstructure'));
 
         //Supprimer le service de la BDD
         $this->outilsBox->deleteEntityById(Structure::class, $idstructure);
@@ -1372,7 +1371,7 @@ class AdminStructureController extends AdminController
     public function editTypeEntreprise(int $idtypeentreprise):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->outilsBox->setPageParams(compact('idtypeentreprise'));
+        // $this->outilsBox->setPageParams(compact('idtypeentreprise'));
         
         //Récupérer l'objet Structure
         $typeEntreprise = $this->outilsBox->findEntityById(TypeEntreprise::class, $idtypeentreprise);
@@ -1404,7 +1403,7 @@ class AdminStructureController extends AdminController
     public function deleteTypeEntreprise(int $idtypeentreprise):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->outilsBox->setPageParams(compact('idtypeentreprise'));
+        // $this->outilsBox->setPageParams(compact('idtypeentreprise'));
 
         //Supprimer le type d'association de la BDD
         $this->outilsBox->deleteEntityById(TypeEntreprise::class, $idtypeentreprise);
@@ -1439,7 +1438,7 @@ class AdminStructureController extends AdminController
     public function editEntrepriseType(int $idstructure, int $idpagemere):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->outilsBox->setPageParams(compact('idstructure', 'idpagemere'));
+        // $this->outilsBox->setPageParams(compact('idstructure', 'idpagemere'));
         
         //Récupérer l'objet Structure
         $structure = $this->outilsBox->findEntityById(Structure::class, $idstructure);
@@ -1558,7 +1557,7 @@ class AdminStructureController extends AdminController
     public function editTypeFonction(int $idtypefonction):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->outilsBox->setPageParams(compact('idtypefonction'));
+        // $this->outilsBox->setPageParams(compact('idtypefonction'));
         
         //Récupérer l'objet TypeFonction
         $typeFonction = $this->outilsBox->findEntityById(TypeFonction::class, $idtypefonction);
@@ -1590,7 +1589,7 @@ class AdminStructureController extends AdminController
     public function deleteTypeFonction(int $idtypefonction):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->outilsBox->setPageParams(compact('idtypefonction'));
+        // $this->outilsBox->setPageParams(compact('idtypefonction'));
 
         //Supprimer le type d'association de la BDD
         $this->outilsBox->deleteEntityById(TypeFonction::class, $idtypefonction);
@@ -1630,7 +1629,7 @@ class AdminStructureController extends AdminController
     public function addcontactStructureFonction(int $idfonction, int $idpagemere, string $type, ContactService $contactService):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->outilsBox->setPageParams(compact('idfonction', 'idpagemere', 'type'));
+        // $this->outilsBox->setPageParams(compact('idfonction', 'idpagemere', 'type'));
 
         //Récupérer l'objet Fonction et l'objet Structure
         $fonction = $this->outilsBox->findEntityById(Fonction::class, $idfonction);
@@ -1674,7 +1673,7 @@ class AdminStructureController extends AdminController
     public function editcontactStructureFonction(int $idfonction, int $idcontact, int $idpagemere, ContactService $contactService):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->outilsBox->setPageParams(compact('idfonction', 'idcontact', 'idpagemere'));
+        // $this->outilsBox->setPageParams(compact('idfonction', 'idcontact', 'idpagemere'));
 
         //Récupérer l'objet Fonction, l'objet Structure et l'objet Contact
         $fonction = $this->outilsBox->findEntityById(Fonction::class, $idfonction);
@@ -1717,7 +1716,7 @@ class AdminStructureController extends AdminController
     public function deleteContactStructureFonction(int $idfonction, int $idcontact, int $idpagemere):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->outilsBox->setPageParams(compact('idfonction', 'idcontact', 'idpagemere'));
+        // $this->outilsBox->setPageParams(compact('idfonction', 'idcontact', 'idpagemere'));
 
         //Récupérer l'objet Fonction, l'objet Structure et l'objet Page mere
         $fonction = $this->outilsBox->findEntityById(Fonction::class, $idfonction);

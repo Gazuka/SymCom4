@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Mail;
+use App\Entity\Page;
 use App\Entity\Humain;
 use App\Entity\Adresse;
 use App\Entity\Contact;
@@ -14,6 +15,7 @@ use App\Form\NewAdresseType;
 use App\Service\PageService;
 use App\Form\UtilisateurType;
 use App\Form\NewTelephoneType;
+use App\Service\ContactService;
 use App\Controller\AdminController;
 use App\Form\HumainUtilisateurType;
 use App\Repository\HumainRepository;
@@ -59,6 +61,31 @@ class AdminContactController extends AdminController
     }
 
     /**
+     * Afficher un humain
+     * 
+     * @Route("/admin/humain/{idhumain}", name="admin_humain")
+     *
+     * @return Response
+     */
+    public function humain($idhumain):Response
+    {
+        //Récupérer l'humain
+        $humain = $this->outilsBox->findEntityById(Humain::class, $idhumain);
+
+        //Obtenir le titre et le menu rapide en fonction du type
+        $this->initTwig('humain');
+
+        //Définir le twig à afficher
+        $this->outilsBox->defineTwig('symcom4/admin/humains/humain.html.twig'); 
+        
+        //Fournir les paramètres requis au Twig
+        $this->outilsBox->addParamTwig('humain', $humain);
+
+        //Afficher la page
+        return $this->jobController();
+    }
+
+    /**
      * Créer un humain
      * 
      * @Route("/admin/humain/new", name="admin_humain_new")
@@ -93,7 +120,7 @@ class AdminContactController extends AdminController
     public function editHumain(int $idhumain):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->outilsBox->setPageParams(compact('idhumain'));
+        // $this->outilsBox->setPageParams(compact('idhumain'));
 
         //Récupérer l'objet Humain
         $humain = $this->outilsBox->findEntityById(Humain::class, $idhumain);
@@ -124,7 +151,7 @@ class AdminContactController extends AdminController
     public function deleteHumain(int $idhumain):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->outilsBox->setPageParams(compact('idhumain'));
+        // $this->outilsBox->setPageParams(compact('idhumain'));
 
         //Supprimer le contact de la BDD
         $this->outilsBox->deleteEntityById(Humain::class, $idhumain);
@@ -150,16 +177,16 @@ class AdminContactController extends AdminController
     /**
      * Ajouter un contact à un humain
      * 
-     * @Route("/admin/humain/addcontact/{idhumain}/{type}", name="admin_humain_addcontact")
+     * @Route("/admin/humain/addcontact/{idhumain}/{type}/{idpagemere}", name="admin_humain_addcontact")
      *
      * @param integer $idhumain
      * @param string $type
      * @return Response
      */
-    public function addcontactHumain(int $idhumain, string $type):Response
+    public function addcontactHumain(int $idhumain, string $type, int $idpagemere):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->outilsBox->setPageParams(compact('idhumain', 'type'));
+        // // $this->outilsBox->setPageParams(compact('idhumain', 'type'));
 
         //Récupérer l'objet Humain
         $humain = $this->outilsBox->findEntityById(Humain::class, $idhumain);
@@ -169,7 +196,7 @@ class AdminContactController extends AdminController
         $this->outilsBox->setFormClassType($this->contactService->getClassTypeFormulaire($type));
         $this->outilsBox->setFormTwigFormulaire('symcom4/admin/humains/add_contact.html.twig');
         $this->outilsBox->setFormTexteConfirmation("Le contact a bien été modifié !");
-        $this->outilsBox->setFormPageResultat('admin_humains');
+        // $this->outilsBox->setFormPageResultat('admin_humains');
         $this->outilsBox->setFormActions(array(['name' => 'action_addcontactHumain', 'params' => ['humain' => $humain]]));
 
         //Obtenir le titre et le menu rapide en fonction du type
@@ -180,6 +207,79 @@ class AdminContactController extends AdminController
         $this->outilsBox->addParamTwig('humain', $humain);
 
         //Afficher le formulaire ou la redirection
+        return $this->jobController();
+    }
+
+    /**
+     * Modifier le contact de la structure
+     *
+     * @Route("/admin/humain/editcontact/{idhumain}/{idcontact}/{idpagemere}", name="admin_humain_editcontact")
+     * 
+     */
+    public function editcontactHumain(int $idhumain, int $idcontact, int $idpagemere, ContactService $contactService):Response
+    {
+        //Donner les arguments de la page en cours au PageService
+        // $this->outilsBox->setPageParams(compact('idhumain', 'idcontact', 'idpagemere'));
+
+        //Récupérer l'objet Humain, l'objet Contact et le type de contact
+        $humain = $this->outilsBox->findEntityById(Humain::class, $idhumain);
+        $contact = $this->outilsBox->findEntityById(Contact::class, $idcontact);
+        $type = $contact->getType();
+
+        //Gérer le formulaire
+        $this->outilsBox->setFormElement($contactService->getElementFormulaire($type, $contact));
+        $this->outilsBox->setFormClassType($contactService->getClassTypeFormulaire($type));
+        $this->outilsBox->setFormTwigFormulaire('symcom4/admin/general/form_contact.html.twig');
+        $this->outilsBox->setFormTexteConfirmation("Le contact a bien été modifié !");
+        $this->outilsBox->addParamRedirect('idhumain', $idhumain);
+        
+        //Obtenir le titre et le menu rapide en fonction du type
+        $this->initTwig('humain');
+
+        //Fournir les paramètres requis au Twig
+        $this->outilsBox->addParamTwig('humain', $humain);
+        $this->outilsBox->addParamTwig('type', $type);
+
+        //Laisser le controller faire son Job avec tout ça...
+        return $this->jobController();
+    }
+
+    /**
+     * Supprimer un contact de l'humain
+     *
+     * @Route("/admin/humain/deletecontact/{idhumain}/{idcontact}/{idpagemere}", name="admin_humain_deletecontact")
+     * 
+     */
+    public function deleteContactHumain(int $idhumain, int $idcontact, int $idpagemere):Response
+    {
+        //Donner les arguments de la page en cours au PageService
+        // // $this->outilsBox->setPageParams(compact('idhumain', 'idcontact', 'idpagemere'));
+
+        //Récupérer l'objet humain, l'objet contact et l'objet page
+        $humain = $this->outilsBox->findEntityById(Humain::class, $idhumain);
+        $contact = $this->outilsBox->findEntityById(Contact::class, $idcontact);
+        $pageMere = $this->outilsBox->findEntityById(Page::class, $idpagemere);
+
+        //Supprimer le contact de la structure
+        $humain->removeContact($contact);
+        
+        //Supprimer le contact de la BDD
+        $this->outilsBox->deleteEntityById(Contact::class, $idcontact);
+        
+        //Afficher un message de validation
+        $this->addFlash('success', 'Le contact a bien été supprimé !');
+
+        //Obtenir le titre et le menu rapide en fonction du type
+        $this->initTwig('humain');
+
+        //Fournir les paramètres requis au Twig
+        $this->outilsBox->addParamTwig('humain', $humain);
+
+        //Définir la page de redirection
+        //$this->outilsBox->defineRedirection($this->outilsBox->getPagePageMere());
+        // $this->outilsBox->addParamsRedirect($pageMere->getParams());
+
+        //Afficher la redirection
         return $this->jobController();
     }
 
@@ -200,7 +300,7 @@ class AdminContactController extends AdminController
     public function addutilisateurHumain(int $idhumain, int $idpagemere):Response
     {
         //Donner les arguments de la page en cours au PageService
-        $this->outilsBox->setPageParams(compact('idhumain', 'idpagemere'));
+        // $this->outilsBox->setPageParams(compact('idhumain', 'idpagemere'));
 
         //Récupérer l'objet Structure et l'objet Fonction
         $humain = $this->outilsBox->findEntityById(Humain::class, $idhumain);

@@ -1,0 +1,22 @@
+{# Si il n'y a pas d'adresse le bouton sera en vert sinon en bleu... #}
+{% set couleur = 'success' %}
+
+{% if telephones | length > 0 %}
+    {% set couleur = 'primary' %}
+    {% embed 'symcom4/admin/template_sb2/elements/_table_mini.html.twig' with {'idPage': idPage, 'parent': parent, 'telephones': telephones} only %}
+        {% set nomColonnes = ['Numéro', 'Actions'] %}
+        {% block tbody %}
+            {% for telephone in telephones %}
+                <tr>
+                    <td>{{ telephone.numero }}</td>
+                    <td>
+                        {{ path('admin_humain_editcontact', {'idhumain': parent.id, 'idcontact': telephone.contact.id, 'idpagemere': idPage }) | LienBtnRond('Editer', 'fa-edit', 'primary') }}
+                        {{ path('admin_humain_deletecontact', {'idhumain': parent.id, 'idcontact': telephone.contact.id, 'idpagemere': idPage}) | LienBtnRond('Supprimer', 'fa-trash', 'danger') }}
+                    </td>
+                </tr>
+            {% endfor %}
+        {% endblock %}
+    {% endembed %}
+{% endif %}
+            
+<div class='text-center'>{{ path('admin_humain_addcontact', {'idhumain': parent.id, 'type': 'telephone', 'idpagemere': idPage}) | LienBtnWithIcon('Ajouter un numéro de téléphone', ['fa-plus', 'fa-phone'], couleur)}}</div>

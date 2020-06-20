@@ -2,7 +2,7 @@
 
 {% block content %}
 
-    {% embed 'symcom4/admin/template_sb2/elements/_card_with_menu.html.twig' with {'form': form, 'type': type} only %}
+    {% embed 'symcom4/admin/template_sb2/elements/_card_with_menu.html.twig' with {'form': form, 'type': type, 'humain': humain} only %}
         
         {% set titre = "Ajout d'un contact à " ~ humain.nom ~ ' ' ~ humain.prenom %}
         

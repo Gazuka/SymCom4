@@ -1,0 +1,22 @@
+{# Si il n'y a pas d'adresse le bouton sera en vert sinon en bleu... #}
+{% set couleur = 'success' %}
+
+{% if mails | length > 0 %}
+    {% set couleur = 'primary' %}
+    {% embed 'symcom4/admin/template_sb2/elements/_table_mini.html.twig' with {'idPage': idPage, 'parent': parent, 'mails': mails} only %}
+        {% set nomColonnes = ['E-mail', 'Actions'] %}
+        {% block tbody %}
+            {% for mail in mails %}
+                <tr>
+                    <td>{{ mail.adresse }}</td>
+                    <td>
+                        {{ path('admin_humain_editcontact', {'idhumain': parent.id, 'idcontact': mail.contact.id, 'idpagemere': idPage }) | LienBtnRond('Editer', 'fa-edit', 'primary') }}
+                        {{ path('admin_humain_deletecontact', {'idhumain': parent.id, 'idcontact': mail.contact.id, 'idpagemere': idPage}) | LienBtnRond('Supprimer', 'fa-trash', 'danger') }}
+                    </td>
+                </tr>
+            {% endfor %}
+        {% endblock %}
+    {% endembed %}
+{% endif %}
+            
+<div class='text-center'>{{ path('admin_humain_addcontact', {'idhumain': parent.id, 'type': 'mail', 'idpagemere': idPage}) | LienBtnWithIcon('Ajouter une adresse e-mail', ['fa-plus', 'fa-at'], couleur)}}</div>

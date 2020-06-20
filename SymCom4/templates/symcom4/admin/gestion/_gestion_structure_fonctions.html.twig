@@ -25,8 +25,10 @@
                                 {% endif %}
                                 <hr/>
                                 {% if fonction.humain != null %}
-                                    {{ fonction.humain.nom }} {{ fonction.humain.prenom }}
+                                    <a href='{{ path('admin_humain', {'idhumain': fonction.humain.id}) }}'>{{ fonction.humain.nom }} {{ fonction.humain.prenom }}</a>
                                     {{ path('admin_structure_fonction_deletehumain', {'idstructure': parent.id, 'idfonction': fonction.id, 'idpagemere': idPage}) | LienPetitBtnRond( 'Supprimer', 'fa-trash', 'danger')}}
+                                    <br/>
+                                    {{ fonction.humain.contacts | NbrContacts }}
                                 {% else %}
                                     {{ path('admin_structure_fonction_addhumain', {'idstructure': parent.id, 'idfonction': fonction.id, 'idpagemere': idPage}) | LienBtnWithIcon("Définir qui occupe cette fonction", ['fa-plus', 'fa-restroom'], 'primary')}}
                                 {% endif %}

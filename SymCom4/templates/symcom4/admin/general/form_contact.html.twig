@@ -2,52 +2,32 @@
 
 {% block content %}
 
-    {% embed 'symcom4/admin/template_sb2/elements/_card_with_menu.html.twig' with {'structure': structure, 'form': form} only %}
-        {% if structure is defined %}
-            {% set titre = "Ajout d'un contact à " ~ fonction.typefonction.titre ~ " de " ~ fonction.structure.nom %}
-        {% else %}
-            {% set titre = "Ajout d'un contact à " ~ structure.nom %}
-        {% endif %}
-
+    {% embed 'symcom4/admin/template_sb2/elements/_card_with_menu.html.twig' with {'form': form, 'type': type} only %}
+        
+        {% set titre = "Ajout d'un contact" %}
+        
         {% set actions = null %}
 
         {% block contenu %}
             {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
-            {{ form_row(form.structure.nom) }}
-            {{ form_row(form.sigle) }}
-            {{ form_row(form.structure.presentation) }}
-            {{ form_row(form.structure.local) }}
+            {% if type == 'telephone' %}
+                {{ form_row(form.numero) }}
+            {% endif %}
+            {% if type == 'mail' %}
+                {{ form_row(form.adresse) }}
+            {% endif %}
+            {% if type == 'adresse' %}
+                {{ form_row(form.numero) }}
+                {{ form_row(form.rue) }}
+                {{ form_row(form.complement) }}
+                {{ form_row(form.codePostal) }}
+                {{ form_row(form.ville) }}  
+            {% endif %}
+        {{ form_widget(form.contact) }}
             {{ 'Enregistrer' | BtnSubmitWithIcon('fa-check', 'success') }}
             {{ form_end(form) }}
         {% endblock %}
         
     {% endembed %}
 
-{% endblock %}
-
-
-            Ajout d'un contact à {{ fonction.typefonction.titre }} de {{fonction.structure.nom}}</h1>
-            {% else %}
-                <h1 class="h4">Ajout d'un contact à {{ structure.nom }}</h1>
-            {% endif %}
-            <p>Veuillez compléter le formulaire ci-dessous :</p>
-            {{ form_start(form) }}
-                {% if type == 'telephone' %}
-                    {{ form_row(form.numero) }}
-                {% endif %}
-                {% if type == 'mail' %}
-                    {{ form_row(form.adresse) }}
-                {% endif %}
-                {% if type == 'adresse' %}
-                    {{ form_row(form.numero) }}
-                    {{ form_row(form.rue) }}
-                    {{ form_row(form.complement) }}
-                    {{ form_row(form.codePostal) }}
-                    {{ form_row(form.ville) }}  
-                {% endif %}
-            {{ form_widget(form.contact) }}
-            {{ text_enregistrer | BtnSubmit }}
-            {{ form_end(form) }}
-        </div>
-    </div>
 {% endblock %}

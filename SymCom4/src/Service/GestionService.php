@@ -93,6 +93,9 @@ class GestionService {
             case 'Fonction':
                 $fichierTwig = 'symcom4/admin/gestion/_gestion_fonction_mails.html.twig';
             break;
+            case 'Humain':
+                $fichierTwig = 'symcom4/admin/gestion/_gestion_humain_mails.html.twig';
+            break;
         }
         $this->twig->display($fichierTwig,
         [
@@ -116,6 +119,9 @@ class GestionService {
             break;
             case 'Fonction':
                 $fichierTwig = 'symcom4/admin/gestion/_gestion_fonction_telephones.html.twig';
+            break;
+            case 'Humain':
+                $fichierTwig = 'symcom4/admin/gestion/_gestion_humain_telephones.html.twig';
             break;
         }
         $this->twig->display($fichierTwig,

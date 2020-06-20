@@ -1,0 +1,41 @@
+{% extends 'symcom4/admin/template_sb2/_base.html.twig' %}
+
+{% block titre %}
+    {{ parent() }} : {{ humain.nom ~ ' ' ~ humain.prenom }}
+{% endblock %}
+
+{% block content %}
+
+    <div class='row col-12'>
+        <div class='{{ taille(8, 12) }}'>
+            
+        </div>
+        <div class='{{ taille(4, 12) }}'>
+            {{ gestionService.gestionContacts(humain) }}
+        </div>
+    </div>
+
+    
+
+
+    {# <div class='row col-12'>
+        <div class='{{ taille(8, 12) }}'>
+            {{ gestionService.gestionServiceBase(service.structure) }}
+            {{ gestionService.gestionLien(service.structure) }}
+            {{ gestionService.gestionImage(service.structure) }}
+        </div>
+        <div class='{{ taille(4, 12) }}'>
+            {{ gestionService.gestionContacts(service.structure) }}
+        </div>
+    </div>
+
+    <div class='row col-12'>
+        <div class='{{ taille(12, 12) }}'>
+            {{ gestionService.gestionStructureFonctions(service.structure) }}
+        </div>
+        <div class='{{ taille(12, 12) }}'>
+            <div class='text-center'>{{ path('admin_structures_service_delete', {'idstructure': service.structure.id}) | LienBtnWithIcon('Supprimer ' ~ service.structure.nom, 'fa-trash', 'danger') }}</div>
+        </div>
+    </div> #}
+
+{% endblock %}
