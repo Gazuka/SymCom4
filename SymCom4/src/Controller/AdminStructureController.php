@@ -199,12 +199,12 @@ class AdminStructureController extends AdminController
         $this->outilsBox->defineTwig('symcom4/admin/general/form_structure_choix_image.html.twig');
 
         //Choisir les images disponibles
-        $dossier = $this->outilsBox->findEntityBy(Dossier::class, ['cote' => 'upload_image']);
+        $dossier = $this->outilsBox->findEntityBy(Dossier::class, ['cote' => 'upload_images']);
         $dossier = $dossier[0];
         $medias = $this->outilsBox->findEntityBy(Media::class, ['dossier' => $dossier]);
         
         //Fournir les paramètres requis au Twig
-        $this->outilsBox->addParamTwig('dossier', 'upload_image');
+        $this->outilsBox->addParamTwig('dossier', 'upload_images');
         $this->outilsBox->addParamTwig('structure', $structure);
         $this->outilsBox->addParamTwig('medias', $medias);
         $this->outilsBox->addParamTwig('idpagemere', $idpagemere);
