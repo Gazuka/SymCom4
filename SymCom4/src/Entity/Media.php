@@ -189,7 +189,8 @@ class Media
         }
 
         $this->nom = $now->getTimestamp().$this->nom;
-        $fichier->move(str_replace( "/", "\\", getcwd()."\medias\\".$this->dossier->getChemin()), $this->nom);
+        //$fichier->move(str_replace( "/", "\\", getcwd()."\medias\\".$this->dossier->getChemin()), $this->nom); Fonctionne en local mais pas sur OVH...
+        $fichier->move(str_replace( "\\", "/", getcwd()."\medias\\".$this->dossier->getChemin()), $this->nom); // Fonctionne sur OVH
     }
 
     public function recupAsset()
