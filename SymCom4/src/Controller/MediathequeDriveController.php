@@ -383,11 +383,7 @@ class MediathequeDriveController extends SymCom4Controller
         //On récupere l'emprunteur actif
         $emprunteur = $this->emprunteurActif($membre, $idemprunteur);
 
-        dd($membre->getCommandes());
-
         $commande = $emprunteur->getOneCommandeByEtat('USER_ENCOURS');
-
-        dd($commande);
 
         //Afficher le formulaire ou la redirection
         return $this->jobController();

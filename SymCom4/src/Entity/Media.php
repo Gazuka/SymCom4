@@ -189,7 +189,7 @@ class Media
         }
 
         $this->nom = $now->getTimestamp().$this->nom;
-        $fichier->move(str_replace ( "/", "\\", getcwd()."\medias\\".$this->dossier->getChemin()), $this->nom);
+        $fichier->move(str_replace( "/", "\\", getcwd()."\medias\\".$this->dossier->getChemin()), $this->nom);
     }
 
     public function recupAsset()
