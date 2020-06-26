@@ -42,6 +42,8 @@
 {% endif %}
 
 {# --- AFFICHAGE DES NUMEROS DE TELEPHONES --- #}
-{% for contact in telephones_principaux %}
-    {% include 'site/partials/entitys/contact/#contact_affichage_telephone.html.twig' with {'contact': contact} only %}
-{% endfor %}
+{% if telephones_principaux | length > 0 %}
+    {% for contact in telephones_principaux %}
+        {% include 'site/partials/entitys/contact/#contact_affichage_telephone.html.twig' with {'contact': contact} only %}
+    {% endfor %}
+{% endif %}

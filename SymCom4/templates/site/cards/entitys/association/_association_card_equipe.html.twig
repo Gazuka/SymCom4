@@ -1,11 +1,16 @@
 {# ==> require association only #}
 
+{# recupération des fonctions de l'association #}
+{% set fonctions = association.structure.fonctions %}
+
 {# --- AFFICHAGE DE LA CARD EQUIPE --- #}
-{% embed 'site/composants/_card_simple.html.twig' with {'association': association} only %}
-  {% set titre = "Bureau" %}
-  {% set contenu %}
-    {% for fonction in association.structure.fonctions %}
-        {% include 'site/partials/entitys/fonction/#fonction_affichage_humain.html.twig' with {'fonction': fonction} only %}
-    {% endfor %}
-  {% endset %}
-{% endembed %}
+{% if fonctions | length > 0 %}
+    {% embed 'site/composants/_card_simple.html.twig' with {'fonctions': fonctions} only %}
+    {% set titre = "Bureau" %}
+    {% set contenu %}
+        {% for fonction in fonctions %}
+            {% include 'site/partials/entitys/fonction/#fonction_affichage_humain.html.twig' with {'fonction': fonction} only %}
+        {% endfor %}
+    {% endset %}
+    {% endembed %}
+{% endif %}

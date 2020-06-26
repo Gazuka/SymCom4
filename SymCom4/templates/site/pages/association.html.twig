@@ -8,7 +8,12 @@
     {{ parent() }}
     <div class='row'>
         <div class='col-12'>
-            <h1 class='mb-0'>{{ structure.nom }} <small>({{ structure.association.sigle }})</small></h1>            
+            <h1 class='mb-0'>
+                {{ structure.nom }}
+                {% if structure.association.sigle != null %}
+                    <small>({{ structure.association.sigle }})</small>
+                {% endif %}
+            </h1>
             <p class='text-justify h6 mb-3'>Association 
                 {% for type in structure.association.types %}
                     {{ type.nom }}
