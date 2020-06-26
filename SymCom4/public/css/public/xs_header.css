@@ -1,0 +1,47 @@
+/******************************************/
+/*AJUSTEMENT POUR LES TELEPHONES **********/
+/******************************************/
+
+/* xs - telephone - <768px */
+
+/* Permet au contenu de ne pas être caché sous le header au chargement de la page */
+#content
+{
+    margin-top: 90px;
+}
+
+/* Couleur du background pour correspondre avec le menu */
+#header_body_XS
+{
+    background-color: #D9230F;
+}
+
+/* Liens de contact */
+#header_contact_XS
+{
+    font-size: 0.8em;
+}
+
+/* Affiche le logo dans la barre de menu */
+.sc4-header-logo
+{
+    background-image: url('../../templates/logo_guesnain.jpg');
+    background-size: contain;
+    background-position: left;
+    background-repeat: no-repeat;
+    padding-left: 2em;
+}
+
+/* Cache la zone qui ne correspond pas au téléphone portable */
+#header_body_MD
+{
+    visibility: hidden;
+    position: absolute;
+    z-index:500; /* Il doit toujours rester visible */
+}
+
+/* Hauteur du diaporama */
+.sc4-header-diaporama
+{
+    height: 330px;
+}

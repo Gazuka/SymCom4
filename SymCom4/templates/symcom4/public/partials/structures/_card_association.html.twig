@@ -3,7 +3,7 @@
     <a href='{{ path('structure', {'slugstructure': association.structure.slug }) }}'>
         <div class="card mb-3">
             {% if association.structure.image != null %}
-                <img src='{{ asset(association.structure.image.media.recupAsset()|imagine_filter('structureicone')) }}' alt='{{ association.structure.nom }}' class="card-img-top" />                
+                <img src='{{ asset(association.structure.image.media.recupAsset()|imagine_filter('structureicone')) }}' alt='{{ association.structure.nom }}' class="card-img-top" />
             {% else %}
                 <img src='http://placehold.it/286x180' alt='{{ association.structure.nom }}' class="card-img-top" />
             {% endif %}

@@ -6,20 +6,22 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('css/public/bootstrap_simplex.min.css') }}">
+    {# <link rel="stylesheet" href="{{ asset('css/public/bootstrap_simplex.min.css') }}"> #}
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/public/header.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&display=swap" rel="stylesheet">
 {% endblock %}
 
 {% block body %}
     <div class="container-fluid p-0">
         <header id="header">
-            {% include 'symcom4/public/partials/_header.html.twig' %}
+            {% include 'site/structures/_header.html.twig' %}
             {% block header %}{% endblock %}
         </header>
         <section id="content">
             <div class="container pt-1">
                 {% block content %}
-                    {% include 'symcom4/public/partials/_menu.html.twig' %}
+                    {% include 'site/structures/_menu.html.twig' %}
                 {% endblock %}
             </div>
         </content>

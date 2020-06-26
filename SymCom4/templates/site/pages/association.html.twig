@@ -1,0 +1,37 @@
+{% extends 'site/structures/_base_public.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - {{ structure.nom }}
+{% endblock %}
+
+{% block content %}
+    {{ parent() }}
+    <div class='row'>
+        <div class='col-12'>
+            <h1 class='mb-0'>{{ structure.nom }} <small>({{ structure.association.sigle }})</small></h1>            
+            <p class='text-justify h6 mb-3'>Association 
+                {% for type in structure.association.types %}
+                    {{ type.nom }}
+                {% endfor %}
+            </p>
+        </div>
+        <div class='col-md-8'>
+            {% if structure.image != null %}
+                <img src='{{ asset(structure.image.media.recupAsset()|imagine_filter('structureimage')) }}' alt='{{ structure.nom }}' class="img-thumbnail img-fluid mb-3" />
+            {% else %}
+                <img src='http://placehold.it/800x300' alt='{{ structure.nom }}' class='img-thumbnail img-fluid mb-3' />
+            {% endif %}
+            
+            <p class='text-justify'>{{ structure.presentation }}</p>
+
+            
+        </div>
+        <div class='col-md-4'>
+            {% include 'site/cards/entitys/association/_association_card_contacts.html.twig' with {'association': structure.association} only %}
+            {% include 'site/cards/entitys/association/_association_card_siteinternet.html.twig' with {'association': structure.association} only %}
+            {% include 'site/cards/entitys/association/_association_card_equipe.html.twig' with {'association': structure.association} only %}
+        </div>
+        {# {{ structure.fonctions  | length }}         #}
+        {# {{ structure.lien.label }}{{ structure.lien.url }} #}
+    </div>
+{% endblock %}

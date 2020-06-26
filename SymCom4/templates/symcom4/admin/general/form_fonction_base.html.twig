@@ -1,9 +1,12 @@
 {% extends 'symcom4/admin/template_sb2/_base.html.twig' %}
 
 {% block content %}
+    {% if fonction is not defined %}
+        {% set fonction = null %}
+    {% endif %}
 
-    {% embed 'symcom4/admin/template_sb2/elements/_card_with_menu.html.twig' with {'structure': structure, 'form': form} only %}
-        {% if structure is defined %}
+    {% embed 'symcom4/admin/template_sb2/elements/_card_with_menu.html.twig' with {'structure': structure, 'form': form, 'fonction': fonction} only %}
+        {% if fonction is not null %}
             {% set titre = "Edition de la fonction : " ~ fonction.typeFonction.titre %}
         {% else %}
             {% set titre = "Ajout d'une nouvelle fonction" %}

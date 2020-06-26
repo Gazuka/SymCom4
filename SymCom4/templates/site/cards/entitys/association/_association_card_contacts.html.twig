@@ -1,0 +1,20 @@
+{# ==> require association only #}
+
+{# recupération des numéros de telephone à afficher #}
+{% set telephones_principaux %}
+    {% include 'site/partials/entitys/association/#association_telephones_principaux.html.twig' with {'association': association} only %}            
+{% endset %}
+
+{# recupération des mails à afficher #}
+{% set mails_principaux %}
+    {% include 'site/partials/entitys/association/#association_mails_principaux.html.twig' with {'association': association} only %}            
+{% endset %}
+
+{# --- AFFICHAGE DE LA CARD CONTACTS --- #}
+{% embed 'site/composants/_card_simple.html.twig' with {'telephones_principaux': telephones_principaux, 'mails_principaux': mails_principaux} only %}
+  {% set titre = 'Contacts' %}
+  {% set contenu %}
+    {{ telephones_principaux }}
+    {{ mails_principaux }}
+  {% endset %}
+{% endembed %}

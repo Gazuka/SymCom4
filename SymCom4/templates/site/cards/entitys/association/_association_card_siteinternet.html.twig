@@ -1,0 +1,12 @@
+{# ==> require association only #}
+
+{# recupération du site Internet #}
+{% set lien = association.structure.lien %}
+
+{# --- AFFICHAGE DE LA CARD SITE INTERNET --- #}
+{% embed 'site/composants/_card_simple.html.twig' with {'lien': lien} only %}
+  {% set titre = 'Site Internet' %}
+  {% set contenu %}
+    {% include 'site/partials/entitys/lien/#lien_affichage_lien.html.twig' with {'lien': lien} only %}
+  {% endset %}
+{% endembed %}

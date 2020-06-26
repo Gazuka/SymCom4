@@ -1,0 +1,16 @@
+{# ==> require lien #}
+
+<div class='row'>
+    <div class='col-2 text-center'>
+        <i class="fas fa-link"></i>
+    </div>
+    <div class='col-10'>
+        <a href='{{ lien.url }}' target='_blank'>
+            {% if lien.label != null %}
+                {{ lien.label }}
+            {% else %} 
+                {{ lien.url }}
+            {% endif %}
+        </a>
+    </div>
+</div>

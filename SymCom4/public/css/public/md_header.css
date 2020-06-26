@@ -1,0 +1,155 @@
+/*****************************************************/
+/*AJUSTEMENT POUR LES ORDINATEURS PORTABLES **********/
+/*****************************************************/
+
+/* md - ordinateur portable - >=992px */
+
+#content
+{
+    margin-top:110px;
+}
+
+/* Cache la zone qui correspond au téléphone portable */
+#header_body_XS
+{
+    position: absolute;
+    visibility: hidden;
+}
+
+/* Affiche la zone qui ne correspond pas au téléphone portable */
+#header_body_MD
+{
+    position: relative;
+    visibility: visible;
+    margin: 0px;
+}
+
+/* Hauteur du diaporama */
+.sc4-header-diaporama
+{
+    height: 700px;
+}
+
+#header_top
+{
+    position: relative;
+}
+
+/* Affiche le bandeau rouge hors du container */
+.sc4-header-background
+{
+    position: absolute;
+    z-index: 1;
+    background-image: url('../../templates/bandeau_logo_cut.png');
+    background-position: top right;
+    margin-left: -1000px;
+}
+.sc4-header-big .sc4-header-background
+{
+    height: 240px;
+    width: 1000px;
+}
+.sc4-header-small .sc4-header-background
+{
+    height: 100%;
+    width: 1000px;
+}
+.sc4-header-mini .sc4-header-background
+{
+    height: 100%;
+    width: 1000px;
+}
+
+
+.sc4-header-zone-logo
+{
+    position: absolute;
+    z-index:2;
+    background-image: url('../../templates/bandeau_logo2.png');
+    background-position: top right;
+    text-align: right;
+}
+.sc4-header-big .sc4-header-zone-logo
+{
+    height: 240px;
+    width: 320px;    
+    padding-top: 3.5em;
+    padding-right: 2.5em;
+} 
+.sc4-header-small .sc4-header-zone-logo
+{
+    height: 100%;
+    width: 320px;
+    padding-top: 1.5em;
+    padding-right: 3.5em;
+}
+.sc4-header-mini .sc4-header-zone-logo
+{
+    height: 100%;
+    width: 320px;
+    padding-top: 0.5em;
+    padding-right: 4em;
+}
+
+
+
+.sc4-header-logo
+{
+    position: absolute;
+    width: 150px;
+}
+.sc4-header-big .sc4-header-logo
+{
+    margin-top: -1em;
+    height: 130px;
+    right:185px;
+}
+.sc4-header-small .sc4-header-logo
+{
+    margin-top: -1em;
+    height: 90px;
+    right: 145px;
+}
+.sc4-header-mini .sc4-header-logo
+{
+    height: 50px;
+    right: 80px;
+} 
+
+
+
+
+.sc4-header-guesnain
+{
+    color: white;
+    line-height: 0.8em;
+}
+.sc4-header-big .sc4-header-guesnain
+{
+    font-size: 3.5em;
+}
+.sc4-header-small .sc4-header-guesnain
+{
+    font-size: 2.6em;
+}
+.sc4-header-mini .sc4-header-guesnain
+{
+    font-size: 2em;
+}
+
+
+
+
+.sc4-header-mini .sc4-header-contact
+{
+    visibility: hidden;
+    position: absolute;
+}
+
+
+
+/* Largeur du menu dropdawn */
+.dropdown-menu {
+    width: 300px !important;
+    height: 200px !important;
+}

@@ -1,0 +1,112 @@
+<!--
+<div id="zone_alert" class="row sc4-bg-red">
+    <div class="col-12 alert mb-0 sc4-bold sc4-white sc4-size-2">
+        <div class="container">
+            Message d'alerte
+        </div>
+    </div>
+</div>
+-->
+{#######################################################################}
+{################ VERSION POUR LES TELEPHONES PORTABLES ################}
+{#######################################################################}
+<div id="header_body_XS" class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+                <a class="navbar-brand sc4-bold" href="#">Ville de Guesnain</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarColor01">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Démarches et services</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Vie municipale</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Activités et loisirs</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#"><i class="fas fa-search"></i> Recherche</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    <div id="header_contact_XS" class="row">
+        {# Zone avec les coordonnées #}
+        <div class="col-12 bg-secondary text-center">
+            <ul class="list-inline mb-0">
+                <li class="list-inline-item m-2 sc4-bold"><a href=""><span class="sc4-black"><i class="far fa-clock"></i> Horaire de la mairie</span></a></li>
+                <li class="list-inline-item m-2 sc4-bold"><a href=""><span class="sc4-black"><i class="fas fa-phone"></i> 03 27 92 05 12</span></a></li>
+                <li class="list-inline-item m-2 sc4-bold"><a href=""><span class="sc4-black"><i class="far fa-comments"></i> Nous contacter</span></a></li>                    
+            </ul>  
+        </div>
+    </div>       
+</div>
+
+
+{##############################################################}
+{################ VERSION POUR LES ORDINATEURS ################}
+{##############################################################}
+<div id="header_body_MD" class="sc4-header-small">
+    <div id="header_top" class="row">
+        <div class="container">
+            {# Permet d'avoir un bandeau de background sur le haut de la page #}
+            <div id="header_back" class='sc4-header-background'>
+                &nbsp;
+            </div>
+            {# Zone avec le logo et le nom de la ville #}
+            <div id="header_logo" class="sc4-header-zone-logo col-xs-12">
+                <div class="sc4-header-logo"></div>
+                <span class="sc4-header-guesnain">Ville de<br/>Guesnain</span>
+                {# <span class="sc4-header-soustitre">Site web officiel</span> #}
+            </div>
+        </div>
+        {# Zone avec les coordonnées #}
+        <div class="col-12 bg-secondary sc4-header-contact">
+            <div class="container">
+                <div class="float-right">
+                    <ul class="list-inline mb-0 sc4-bold sc4-size-2 sc4-bg-red">
+                        <li class="list-inline-item m-2"><a href=""><span class="sc4-black"><i class="far fa-clock"></i> Horaire de la mairie</span></a></li>
+                        <li class="list-inline-item m-2"><a href=""><span class="sc4-black"><i class="fas fa-phone"></i> 03 27 92 05 12</span></a></li>
+                        <li class="list-inline-item m-2"><a href=""><span class="sc4-black"><i class="far fa-comments"></i> Nous contacter</span></a></li>                    
+                    </ul>  
+                </div>
+            </div>
+        </div>
+        {# Zone avec le menu principal #}
+        <div class="col-12 bg-dark">
+            <div class="container">
+                <div class="float-right">
+                    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                        <div class="collapse navbar-collapse" id="navbarColor02">
+                            <ul class="navbar-nav mr-auto">
+                                <li class="nav-item">
+                                    <a class="nav-link sc4-size-4 ml-3" href="#">Démarches et services</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link sc4-size-4 ml-3" href="#">Vie municipale</a>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link sc4-size-4 ml-3 dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Activités et loisirs</a>
+                                    <div class="dropdown-menu">
+                                        {% include 'symcom4/public/partials/_menu_activites_loisirs.html.twig' %}
+                                    </div>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link sc4-size-4 ml-3" href="#"><i class="fas fa-search"></i></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

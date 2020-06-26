@@ -16,7 +16,7 @@ class SiteController extends SymCom4Controller
      */
     public function index()
     {
-        $this->outilsBox->defineTwig('symcom4/public/index.html.twig');
+        $this->outilsBox->defineTwig('site/index.html.twig');
         return $this->jobController();
     }
 
@@ -35,7 +35,7 @@ class SiteController extends SymCom4Controller
         switch($structure->getType())
         {
             case 'association':
-                $this->outilsBox->defineTwig('symcom4/public/association.html.twig'); 
+                $this->outilsBox->defineTwig('site/pages/association.html.twig'); 
             break;
             case 'service':
                 $this->outilsBox->defineTwig('symcom4/public/service.html.twig'); 
@@ -87,7 +87,7 @@ class SiteController extends SymCom4Controller
         //Récupérer le service
         $associations = $this->outilsBox->findAllEntity(Association::class);
         
-        $this->outilsBox->defineTwig('symcom4/public/associations.html.twig');
+        $this->outilsBox->defineTwig('site/pages/associations.html.twig');
 
         //Fournir les paramètres requis au Twig
         $this->outilsBox->addParamTwig('associations', $associations);

@@ -1,0 +1,28 @@
+{# ==> requipe fonction #}
+
+{% if fonction.humain != null %}
+    <div class='row'>
+        {% if fonction.humain.sexe == 'f' %}
+            <div class='col-2 text-center'>
+                <i class="fas fa-female"></i>
+            </div>
+            <div class='col-10'>
+                {{ fonction.typeFonction.titreFeminin }} :<br/>
+                {% include 'site/partials/entitys/humain/#humain_affichage.html.twig' with {'humain': fonction.humain} only %}
+            </div>
+        {% else %}
+            <div class='col-2 text-center'>
+                <i class="fas fa-male"></i>
+            </div>
+            <div class='col-10'>
+                {{ fonction.typeFonction.titre }} :<br/>
+                {% include 'site/partials/entitys/humain/#humain_affichage.html.twig' with {'humain': fonction.humain} only %}
+            </div>
+        {% endif %}
+
+
+
+        
+        
+    </div>
+{% endif %}

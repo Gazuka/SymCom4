@@ -23,3 +23,13 @@ liip_imagine:
                 thumbnail: # Filtre "Thumbnail"
                     size: [286, 180] # Taille de l'image de sortie
                     mode: outbound # Découpage de l'image
+            
+        structureimage:
+            quality: 85
+            filters: # Liste des filtres à appliquer
+                thumbnail: # Filtre "Thumbnail"
+                    size: [800, 400] # Taille de l'image de sortie
+                    mode: outbound # Découpage de l'image
+                fixed:
+                    width: 800
+                    height: 400

@@ -1,0 +1,47 @@
+{# ==> require association #}
+
+{# récupére les n° de téléphone à afficher en priorité pour une association (téléphone propre, téléphone de fonction ou en dernier recours téléphone perso du président) #}
+
+{% set structure = association.structure %}
+
+{% set telephones_principaux = [] %}
+{% set toto='jerome' %}
+{# On cherche un contact propre à l'association #}
+{% if structure.contacts | length > 0 %}
+    {% for contact in structure.contacts %}
+        {% if contact.type == 'telephone' %}
+            {% set telephones_principaux = telephones_principaux|merge([contact]) %}
+        {% endif %}
+    {% endfor %}
+{% endif %}
+{# Si pas de contact, on cherche le contact d'une fonction #}
+{% if telephones_principaux == [] %}
+    {% for fonction in structure.fonctions %}
+        {% if fonction.typeFonction.titre == 'Président' %}
+            {% for contact in fonction.contacts %}
+                {% if contact.type == 'telephone' %}
+                    {% set telephones_principaux = telephones_principaux|merge([contact]) %}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endfor %}
+    {# Si pas de contact pour la fonction de Président, on cherche le numéro perso du Président #}
+    {% if telephones_principaux == [] %}
+        {% for fonction in structure.fonctions %}
+            {% if fonction.typeFonction.titre == 'Président' %}
+                {% if fonction.humain != null %}
+                    {% for contact in fonction.humain.contacts %}
+                        {% if contact.type == 'telephone' %}
+                            {% set telephones_principaux = telephones_principaux|merge([contact]) %}
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+{% endif %}
+
+{# --- AFFICHAGE DES NUMEROS DE TELEPHONES --- #}
+{% for contact in telephones_principaux %}
+    {% include 'site/partials/entitys/contact/#contact_affichage_telephone.html.twig' with {'contact': contact} only %}
+{% endfor %}

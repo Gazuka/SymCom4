@@ -7,14 +7,17 @@
     </div>
 </div>
 -->
+
 {#######################################################################}
 {################ VERSION POUR LES TELEPHONES PORTABLES ################}
 {#######################################################################}
 <div id="header_body_XS" class="container-fluid">
     <div class="row">
         <div class="col-12">
-            <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-                <a class="navbar-brand sc4-bold" href="#">Ville de Guesnain</a>
+            <nav class="navbar navbar-expand-lg navbar-dark sc4-bg-rouge">
+                <a class="navbar-brand sc4-bold" href="#">
+                    <div class="sc4-header-logo">Ville de Guesnain</div>                    
+                </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -40,7 +43,7 @@
 
     <div id="header_contact_XS" class="row">
         {# Zone avec les coordonnées #}
-        <div class="col-12 bg-secondary text-center">
+        <div class="col-12 sc4-bg-white text-center">
             <ul class="list-inline mb-0">
                 <li class="list-inline-item m-2 sc4-bold"><a href=""><span class="sc4-black"><i class="far fa-clock"></i> Horaire de la mairie</span></a></li>
                 <li class="list-inline-item m-2 sc4-bold"><a href=""><span class="sc4-black"><i class="fas fa-phone"></i> 03 27 92 05 12</span></a></li>
@@ -65,17 +68,17 @@
             <div id="header_logo" class="sc4-header-zone-logo col-xs-12">
                 <div class="sc4-header-logo"></div>
                 <span class="sc4-header-guesnain">Ville de<br/>Guesnain</span>
-                <span class="sc4-header-soustitre">Site web officiel</span>
+                {# <span class="sc4-header-soustitre">Site web officiel</span> #}
             </div>
         </div>
         {# Zone avec les coordonnées #}
-        <div class="col-12 bg-secondary sc4-header-contact">
+        <div class="col-12 sc4-header-contact sc4-bg-white">
             <div class="container">
                 <div class="float-right">
                     <ul class="list-inline mb-0 sc4-bold sc4-size-2">
-                        <li class="list-inline-item m-2"><a href=""><span class="sc4-black"><i class="far fa-clock"></i> Horaire de la mairie</span></a></li>
-                        <li class="list-inline-item m-2"><a href=""><span class="sc4-black"><i class="fas fa-phone"></i> 03 27 92 05 12</span></a></li>
-                        <li class="list-inline-item m-2"><a href=""><span class="sc4-black"><i class="far fa-comments"></i> Nous contacter</span></a></li>                    
+                        <li class="list-inline-item m-2"><a href=""><span class="sc4-black h6"><i class="far fa-clock"></i> Horaire de la mairie</span></a></li>
+                        <li class="list-inline-item m-2"><a href=""><span class="sc4-black h6"><i class="fas fa-phone"></i> 03 27 92 05 12</span></a></li>
+                        <li class="list-inline-item m-2"><a href=""><span class="sc4-black h6"><i class="far fa-comments"></i> Nous contacter</span></a></li>                    
                     </ul>  
                 </div>
             </div>
@@ -88,13 +91,13 @@
                         <div class="collapse navbar-collapse" id="navbarColor02">
                             <ul class="navbar-nav mr-auto">
                                 <li class="nav-item">
-                                    <a class="nav-link sc4-size-4 ml-3" href="#">Démarches et services</a>
+                                    <a class="nav-link sc4-size-2 ml-3" href="#">Démarches et services</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link sc4-size-4 ml-3" href="#">Vie municipale</a>
+                                    <a class="nav-link sc4-size-2 ml-3" href="#">Vie municipale</a>
                                 </li>
                                 <li class="nav-item dropdown">
-                                    <a class="nav-link sc4-size-4 ml-3 dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Activités et loisirs</a>
+                                    <a class="nav-link sc4-size-2 ml-3 dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Activités et loisirs</a>
                                     <div class="dropdown-menu">
                                         {% include 'symcom4/public/partials/_menu_activites_loisirs.html.twig' %}
                                     </div>
