@@ -17,17 +17,20 @@ class StructureBaseType extends AbstractType
         $builder
             ->add('nom', TextType::class,
             [
-                'label' => "Nom complet :"
+                'label' => "Nom complet :",
+                'translation_domain' => 'false'
             ])
             ->add('presentation', CKEditorType::class,
             [
-                'label' => "Présentation :"
+                'label' => "Présentation :",
+                'translation_domain' => 'false'
             ])
             ->add('local', CheckboxType::class,
             [
                 'label_attr' => ['class' => 'switch-custom'],
                 'label' => "Cette structure est Guesninoise.",
-                'required' => false
+                'required' => false,
+                'translation_domain' => 'false'
             ])
         ;
     }
