@@ -63,7 +63,7 @@ class AdminContactController extends AdminController
     /**
      * Afficher un humain
      * 
-     * @Route("/admin/humain/{idhumain}", name="admin_humain")
+     * @Route("/admin/humain/{idhumain}", name="admin_humain", requirements={"idhumain"="\-?[0-9]+"})
      *
      * @return Response
      */
