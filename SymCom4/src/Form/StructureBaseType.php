@@ -4,11 +4,11 @@ namespace App\Form;
 
 use App\Entity\Structure;
 use Symfony\Component\Form\AbstractType;
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class StructureBaseType extends AbstractType
 {
@@ -19,7 +19,7 @@ class StructureBaseType extends AbstractType
             [
                 'label' => "Nom complet :"
             ])
-            ->add('presentation', TextareaType::class,
+            ->add('presentation', CKEditorType::class,
             [
                 'label' => "Présentation :"
             ])

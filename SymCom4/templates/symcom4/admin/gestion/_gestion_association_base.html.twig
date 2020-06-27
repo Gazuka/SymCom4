@@ -19,7 +19,7 @@
                 {% endif %}
             </div>
             <div class="{{ taille(11, 11) }}">
-                <p>{{ structure.presentation }}</p>
+                <p>{{ structure.presentation | raw }}</p>
             </div>
         </div>
     {% endblock %}

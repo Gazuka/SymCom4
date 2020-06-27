@@ -7,7 +7,7 @@
                 <i class="fas fa-female"></i>
             </div>
             <div class='col-10'>
-                {{ fonction.typeFonction.titreFeminin }} :<br/>
+                <b>{{ fonction.typeFonction.titreFeminin }} :</b><br/>
                 {% include 'site/partials/entitys/humain/#humain_affichage.html.twig' with {'humain': fonction.humain} only %}
             </div>
         {% else %}
@@ -15,7 +15,7 @@
                 <i class="fas fa-male"></i>
             </div>
             <div class='col-10'>
-                {{ fonction.typeFonction.titre }} :<br/>
+                <b>{{ fonction.typeFonction.titre }} :</b><br/>
                 {% include 'site/partials/entitys/humain/#humain_affichage.html.twig' with {'humain': fonction.humain} only %}
             </div>
         {% endif %}

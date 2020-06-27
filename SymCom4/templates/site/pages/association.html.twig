@@ -27,7 +27,7 @@
                 <img src='http://placehold.it/800x300' alt='{{ structure.nom }}' class='img-thumbnail img-fluid mb-3' />
             {% endif %}
             
-            <p class='text-justify'>{{ structure.presentation }}</p>
+            <p class='text-justify'>{{ structure.presentation | raw }}</p>
 
             
         </div>
