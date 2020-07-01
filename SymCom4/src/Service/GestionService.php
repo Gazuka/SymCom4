@@ -70,7 +70,20 @@ class GestionService {
      */
     public function gestionAdresses($parent)
     {
-        $this->twig->display('symcom4/admin/gestion/_gestion_structure_adresses.html.twig',
+        // Permet de choisir la bonne page twig en fonction du parent
+        switch(substr(strrchr(get_class($parent), "\\"), 1))
+        {
+            case 'Structure':
+                $fichierTwig = 'symcom4/admin/gestion/_gestion_structure_adresses.html.twig';
+            break;
+            case 'Fonction':
+                // $fichierTwig = 'symcom4/admin/gestion/_gestion_fonction_mails.html.twig';
+            break;
+            case 'Humain':
+                $fichierTwig = 'symcom4/admin/gestion/_gestion_humain_adresse.html.twig';
+            break;
+        }
+        $this->twig->display($fichierTwig,
         [
             'parent' => $parent,
             'adresses' => $this->contactService->getAdresses($parent),

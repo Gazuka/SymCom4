@@ -1,0 +1,30 @@
+{# require adresses #}
+
+{# Si il n'y a pas d'adresse le bouton sera en vert sinon en bleu... #}
+{% set couleur = 'success' %}
+
+{% if adresses | length > 0 %}
+    {% set couleur = 'primary' %}
+    {% embed 'symcom4/admin/template_sb2/elements/_table_mini.html.twig' with {'idPage': idPage, 'parent': parent, 'adresses': adresses} only %}
+        {% set nomColonnes = ['Adresse', 'Actions'] %}
+        {% block tbody %}
+            {% for adresse in adresses %}
+                <tr>
+                    <td>
+                        <address>
+                            {{ adresse.numero }} {{ adresse.rue }}<br/>
+                            {{ adresse.complement }} {% if adresse.complement != null %}<br/>{% endif %}
+                            {{ adresse.codePostal }} {{ adresse.ville }}
+                        </address>
+                    </td>
+                    <td class='text-center'>
+                        {{ path('admin_humain_editcontact', {'idhumain': parent.id, 'idcontact': adresse.contact.id, 'idpagemere': idPage }) | LienBtnRond('Editer', 'fa-edit', 'primary') }}
+                        {{ path('admin_humain_deletecontact', {'idhumain': parent.id, 'idcontact': adresse.contact.id, 'idpagemere': idPage}) | LienBtnRond('Supprimer', 'fa-trash', 'danger') }}
+                    </td>
+                </tr>
+            {% endfor %}
+        {% endblock %}
+    {% endembed %}
+{% endif %}
+            
+<div class='text-center'>{{ path('admin_humain_addcontact', {'idhumain': parent.id, 'type': 'adresse', 'idpagemere': idPage}) | LienBtnWithIcon('Ajouter une adresse', ['fa-plus', 'fa-home'], couleur)}}</div>
